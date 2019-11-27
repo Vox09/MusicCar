@@ -1,0 +1,4011 @@
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"lcd.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.Delay,"ax",%progbits
+  16              		.align	1
+  17              		.global	Delay
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	Delay:
+  25              	.LVL0:
+  26              	.LFB73:
+  27              		.file 1 "Src/lcd.c"
+   1:Src/lcd.c     **** #include "lcd.h"
+   2:Src/lcd.c     **** #include "ascii.h"	
+   3:Src/lcd.c     **** 
+   4:Src/lcd.c     **** void		LCD_REG_Config          ( void );
+   5:Src/lcd.c     **** void		LCD_FillColor           ( uint32_t ulAmout_Point, uint16_t usColor );
+   6:Src/lcd.c     **** uint16_t	LCD_Read_PixelData      ( void );
+   7:Src/lcd.c     **** 
+   8:Src/lcd.c     **** 
+   9:Src/lcd.c     **** 
+  10:Src/lcd.c     **** void Delay ( __IO uint32_t nCount ){  for ( ; nCount != 0; nCount -- );}
+  28              		.loc 1 10 36 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              		.loc 1 10 36 is_stmt 0 view .LVU1
+  34 0000 82B0     		sub	sp, sp, #8
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37 0002 0190     		str	r0, [sp, #4]
+  38              		.loc 1 10 39 is_stmt 1 view .LVU2
+  39              	.L2:
+  40              		.loc 1 10 54 is_stmt 0 discriminator 1 view .LVU3
+  41 0004 019B     		ldr	r3, [sp, #4]
+  42              		.loc 1 10 39 discriminator 1 view .LVU4
+  43 0006 1BB1     		cbz	r3, .L5
+  44              		.loc 1 10 71 is_stmt 1 discriminator 2 view .LVU5
+  45              		.loc 1 10 67 is_stmt 0 discriminator 2 view .LVU6
+  46 0008 019B     		ldr	r3, [sp, #4]
+  47 000a 013B     		subs	r3, r3, #1
+  48 000c 0193     		str	r3, [sp, #4]
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 2
+
+
+  49 000e F9E7     		b	.L2
+  50              	.L5:
+  51              		.loc 1 10 1 view .LVU7
+  52 0010 02B0     		add	sp, sp, #8
+  53              	.LCFI1:
+  54              		.cfi_def_cfa_offset 0
+  55              		@ sp needed
+  56 0012 7047     		bx	lr
+  57              		.cfi_endproc
+  58              	.LFE73:
+  60              		.section	.text.LCD_Rst,"ax",%progbits
+  61              		.align	1
+  62              		.global	LCD_Rst
+  63              		.syntax unified
+  64              		.thumb
+  65              		.thumb_func
+  66              		.fpu softvfp
+  68              	LCD_Rst:
+  69              	.LFB75:
+  11:Src/lcd.c     **** 
+  12:Src/lcd.c     **** void LCD_INIT ( void )
+  13:Src/lcd.c     **** {
+  14:Src/lcd.c     **** 	LCD_BackLed_Control(ENABLE);      
+  15:Src/lcd.c     **** 	LCD_Rst();
+  16:Src/lcd.c     **** 	LCD_REG_Config();
+  17:Src/lcd.c     **** 	LCD_Clear (0, 0, 240, 320, BACKGROUND);
+  18:Src/lcd.c     **** }
+  19:Src/lcd.c     **** 
+  20:Src/lcd.c     **** 
+  21:Src/lcd.c     **** 
+  22:Src/lcd.c     **** void LCD_Rst ( void )
+  23:Src/lcd.c     **** {			
+  70              		.loc 1 23 1 is_stmt 1 view -0
+  71              		.cfi_startproc
+  72              		@ args = 0, pretend = 0, frame = 0
+  73              		@ frame_needed = 0, uses_anonymous_args = 0
+  74 0000 38B5     		push	{r3, r4, r5, lr}
+  75              	.LCFI2:
+  76              		.cfi_def_cfa_offset 16
+  77              		.cfi_offset 3, -16
+  78              		.cfi_offset 4, -12
+  79              		.cfi_offset 5, -8
+  80              		.cfi_offset 14, -4
+  24:Src/lcd.c     **** 	HAL_GPIO_WritePin(LCD_RST_PORT,LCD_RST_PIN,GPIO_PIN_RESET);
+  81              		.loc 1 24 2 view .LVU9
+  82 0002 094D     		ldr	r5, .L8
+  83 0004 0022     		movs	r2, #0
+  84 0006 0221     		movs	r1, #2
+  85 0008 2846     		mov	r0, r5
+  86 000a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  87              	.LVL1:
+  25:Src/lcd.c     **** 	Delay ( 0xAFFf<<2 ); 					   
+  88              		.loc 1 25 2 view .LVU10
+  89 000e 074C     		ldr	r4, .L8+4
+  90 0010 2046     		mov	r0, r4
+  91 0012 FFF7FEFF 		bl	Delay
+  92              	.LVL2:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 3
+
+
+  26:Src/lcd.c     **** 	HAL_GPIO_WritePin(LCD_RST_PORT,LCD_RST_PIN,GPIO_PIN_SET);
+  93              		.loc 1 26 2 view .LVU11
+  94 0016 0122     		movs	r2, #1
+  95 0018 0221     		movs	r1, #2
+  96 001a 2846     		mov	r0, r5
+  97 001c FFF7FEFF 		bl	HAL_GPIO_WritePin
+  98              	.LVL3:
+  27:Src/lcd.c     **** 	Delay ( 0xAFFf<<2 ); 	
+  99              		.loc 1 27 2 view .LVU12
+ 100 0020 2046     		mov	r0, r4
+ 101 0022 FFF7FEFF 		bl	Delay
+ 102              	.LVL4:
+  28:Src/lcd.c     **** }
+ 103              		.loc 1 28 1 is_stmt 0 view .LVU13
+ 104 0026 38BD     		pop	{r3, r4, r5, pc}
+ 105              	.L9:
+ 106              		.align	2
+ 107              	.L8:
+ 108 0028 00180140 		.word	1073813504
+ 109 002c FCBF0200 		.word	180220
+ 110              		.cfi_endproc
+ 111              	.LFE75:
+ 113              		.section	.text.LCD_BackLed_Control,"ax",%progbits
+ 114              		.align	1
+ 115              		.global	LCD_BackLed_Control
+ 116              		.syntax unified
+ 117              		.thumb
+ 118              		.thumb_func
+ 119              		.fpu softvfp
+ 121              	LCD_BackLed_Control:
+ 122              	.LVL5:
+ 123              	.LFB76:
+  29:Src/lcd.c     **** 
+  30:Src/lcd.c     **** 
+  31:Src/lcd.c     **** void LCD_BackLed_Control ( FunctionalState enumState )
+  32:Src/lcd.c     **** {
+ 124              		.loc 1 32 1 is_stmt 1 view -0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 0
+ 127              		@ frame_needed = 0, uses_anonymous_args = 0
+ 128              		.loc 1 32 1 is_stmt 0 view .LVU15
+ 129 0000 08B5     		push	{r3, lr}
+ 130              	.LCFI3:
+ 131              		.cfi_def_cfa_offset 8
+ 132              		.cfi_offset 3, -8
+ 133              		.cfi_offset 14, -4
+  33:Src/lcd.c     **** 	if ( enumState )
+ 134              		.loc 1 33 2 is_stmt 1 view .LVU16
+ 135              		.loc 1 33 5 is_stmt 0 view .LVU17
+ 136 0002 30B1     		cbz	r0, .L11
+  34:Src/lcd.c     **** 		HAL_GPIO_WritePin(LCD_BK_PORT,LCD_BK_PIN,GPIO_PIN_RESET);	
+ 137              		.loc 1 34 3 is_stmt 1 view .LVU18
+ 138 0004 0022     		movs	r2, #0
+ 139 0006 4FF48051 		mov	r1, #4096
+ 140 000a 0548     		ldr	r0, .L14
+ 141              	.LVL6:
+ 142              		.loc 1 34 3 is_stmt 0 view .LVU19
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 4
+
+
+ 143 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 144              	.LVL7:
+ 145              	.L10:
+  35:Src/lcd.c     **** 	else
+  36:Src/lcd.c     **** 		HAL_GPIO_WritePin(LCD_BK_PORT,LCD_BK_PIN,GPIO_PIN_SET);			
+  37:Src/lcd.c     **** }
+ 146              		.loc 1 37 1 view .LVU20
+ 147 0010 08BD     		pop	{r3, pc}
+ 148              	.LVL8:
+ 149              	.L11:
+  36:Src/lcd.c     **** }
+ 150              		.loc 1 36 3 is_stmt 1 view .LVU21
+ 151 0012 0122     		movs	r2, #1
+ 152 0014 4FF48051 		mov	r1, #4096
+ 153 0018 0148     		ldr	r0, .L14
+ 154              	.LVL9:
+  36:Src/lcd.c     **** }
+ 155              		.loc 1 36 3 is_stmt 0 view .LVU22
+ 156 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 157              	.LVL10:
+ 158              		.loc 1 37 1 view .LVU23
+ 159 001e F7E7     		b	.L10
+ 160              	.L15:
+ 161              		.align	2
+ 162              	.L14:
+ 163 0020 00140140 		.word	1073812480
+ 164              		.cfi_endproc
+ 165              	.LFE76:
+ 167              		.section	.text.LCD_Write_Cmd,"ax",%progbits
+ 168              		.align	1
+ 169              		.global	LCD_Write_Cmd
+ 170              		.syntax unified
+ 171              		.thumb
+ 172              		.thumb_func
+ 173              		.fpu softvfp
+ 175              	LCD_Write_Cmd:
+ 176              	.LVL11:
+ 177              	.LFB77:
+  38:Src/lcd.c     **** 
+  39:Src/lcd.c     **** 
+  40:Src/lcd.c     **** 
+  41:Src/lcd.c     **** 
+  42:Src/lcd.c     **** void LCD_Write_Cmd ( uint16_t usCmd )
+  43:Src/lcd.c     **** {
+ 178              		.loc 1 43 1 is_stmt 1 view -0
+ 179              		.cfi_startproc
+ 180              		@ args = 0, pretend = 0, frame = 0
+ 181              		@ frame_needed = 0, uses_anonymous_args = 0
+ 182              		@ link register save eliminated.
+  44:Src/lcd.c     **** 	* ( __IO uint16_t * ) ( FSMC_Addr_LCD_CMD ) = usCmd;
+ 183              		.loc 1 44 2 view .LVU25
+ 184              		.loc 1 44 46 is_stmt 0 view .LVU26
+ 185 0000 4FF0C043 		mov	r3, #1610612736
+ 186 0004 1880     		strh	r0, [r3]	@ movhi
+  45:Src/lcd.c     **** }
+ 187              		.loc 1 45 1 view .LVU27
+ 188 0006 7047     		bx	lr
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 5
+
+
+ 189              		.cfi_endproc
+ 190              	.LFE77:
+ 192              		.section	.text.LCD_Write_Data,"ax",%progbits
+ 193              		.align	1
+ 194              		.global	LCD_Write_Data
+ 195              		.syntax unified
+ 196              		.thumb
+ 197              		.thumb_func
+ 198              		.fpu softvfp
+ 200              	LCD_Write_Data:
+ 201              	.LVL12:
+ 202              	.LFB78:
+  46:Src/lcd.c     **** 
+  47:Src/lcd.c     **** 
+  48:Src/lcd.c     **** 
+  49:Src/lcd.c     **** 
+  50:Src/lcd.c     **** void LCD_Write_Data ( uint16_t usData )
+  51:Src/lcd.c     **** {
+ 203              		.loc 1 51 1 is_stmt 1 view -0
+ 204              		.cfi_startproc
+ 205              		@ args = 0, pretend = 0, frame = 0
+ 206              		@ frame_needed = 0, uses_anonymous_args = 0
+ 207              		@ link register save eliminated.
+  52:Src/lcd.c     **** 	* ( __IO uint16_t * ) ( FSMC_Addr_LCD_DATA ) = usData;
+ 208              		.loc 1 52 2 view .LVU29
+ 209              		.loc 1 52 47 is_stmt 0 view .LVU30
+ 210 0000 014B     		ldr	r3, .L18
+ 211 0002 1880     		strh	r0, [r3]	@ movhi
+  53:Src/lcd.c     **** }
+ 212              		.loc 1 53 1 view .LVU31
+ 213 0004 7047     		bx	lr
+ 214              	.L19:
+ 215 0006 00BF     		.align	2
+ 216              	.L18:
+ 217 0008 00000260 		.word	1610743808
+ 218              		.cfi_endproc
+ 219              	.LFE78:
+ 221              		.section	.text.LCD_Read_Data,"ax",%progbits
+ 222              		.align	1
+ 223              		.global	LCD_Read_Data
+ 224              		.syntax unified
+ 225              		.thumb
+ 226              		.thumb_func
+ 227              		.fpu softvfp
+ 229              	LCD_Read_Data:
+ 230              	.LFB79:
+  54:Src/lcd.c     **** 
+  55:Src/lcd.c     **** 
+  56:Src/lcd.c     **** 
+  57:Src/lcd.c     **** 
+  58:Src/lcd.c     **** uint16_t LCD_Read_Data ( void )
+  59:Src/lcd.c     **** {
+ 231              		.loc 1 59 1 is_stmt 1 view -0
+ 232              		.cfi_startproc
+ 233              		@ args = 0, pretend = 0, frame = 0
+ 234              		@ frame_needed = 0, uses_anonymous_args = 0
+ 235              		@ link register save eliminated.
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 6
+
+
+  60:Src/lcd.c     **** 	return ( * ( __IO uint16_t * ) ( FSMC_Addr_LCD_DATA ) );	
+ 236              		.loc 1 60 2 view .LVU33
+ 237              		.loc 1 60 11 is_stmt 0 view .LVU34
+ 238 0000 014B     		ldr	r3, .L21
+ 239 0002 1888     		ldrh	r0, [r3]
+  61:Src/lcd.c     **** }
+ 240              		.loc 1 61 1 view .LVU35
+ 241 0004 7047     		bx	lr
+ 242              	.L22:
+ 243 0006 00BF     		.align	2
+ 244              	.L21:
+ 245 0008 00000260 		.word	1610743808
+ 246              		.cfi_endproc
+ 247              	.LFE79:
+ 249              		.section	.text.LCD_REG_Config,"ax",%progbits
+ 250              		.align	1
+ 251              		.global	LCD_REG_Config
+ 252              		.syntax unified
+ 253              		.thumb
+ 254              		.thumb_func
+ 255              		.fpu softvfp
+ 257              	LCD_REG_Config:
+ 258              	.LFB80:
+  62:Src/lcd.c     **** 
+  63:Src/lcd.c     **** 
+  64:Src/lcd.c     **** void LCD_REG_Config ( void )
+  65:Src/lcd.c     **** {
+ 259              		.loc 1 65 1 is_stmt 1 view -0
+ 260              		.cfi_startproc
+ 261              		@ args = 0, pretend = 0, frame = 0
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 263 0000 08B5     		push	{r3, lr}
+ 264              	.LCFI4:
+ 265              		.cfi_def_cfa_offset 8
+ 266              		.cfi_offset 3, -8
+ 267              		.cfi_offset 14, -4
+  66:Src/lcd.c     **** 	/*  Power control B (CFh)  */
+  67:Src/lcd.c     **** 	DEBUG_DELAY  ();
+ 268              		.loc 1 67 17 view .LVU37
+  68:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xCF  );
+ 269              		.loc 1 68 2 view .LVU38
+ 270 0002 CF20     		movs	r0, #207
+ 271 0004 FFF7FEFF 		bl	LCD_Write_Cmd
+ 272              	.LVL13:
+  69:Src/lcd.c     **** 	LCD_Write_Data ( 0x00  );
+ 273              		.loc 1 69 2 view .LVU39
+ 274 0008 0020     		movs	r0, #0
+ 275 000a FFF7FEFF 		bl	LCD_Write_Data
+ 276              	.LVL14:
+  70:Src/lcd.c     **** 	LCD_Write_Data ( 0x81  );
+ 277              		.loc 1 70 2 view .LVU40
+ 278 000e 8120     		movs	r0, #129
+ 279 0010 FFF7FEFF 		bl	LCD_Write_Data
+ 280              	.LVL15:
+  71:Src/lcd.c     **** 	LCD_Write_Data ( 0x30  );
+ 281              		.loc 1 71 2 view .LVU41
+ 282 0014 3020     		movs	r0, #48
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 7
+
+
+ 283 0016 FFF7FEFF 		bl	LCD_Write_Data
+ 284              	.LVL16:
+  72:Src/lcd.c     **** 	
+  73:Src/lcd.c     **** 	/*  Power on sequence control (EDh) */
+  74:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 285              		.loc 1 74 16 view .LVU42
+  75:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xED );
+ 286              		.loc 1 75 2 view .LVU43
+ 287 001a ED20     		movs	r0, #237
+ 288 001c FFF7FEFF 		bl	LCD_Write_Cmd
+ 289              	.LVL17:
+  76:Src/lcd.c     **** 	LCD_Write_Data ( 0x64 );
+ 290              		.loc 1 76 2 view .LVU44
+ 291 0020 6420     		movs	r0, #100
+ 292 0022 FFF7FEFF 		bl	LCD_Write_Data
+ 293              	.LVL18:
+  77:Src/lcd.c     **** 	LCD_Write_Data ( 0x03 );
+ 294              		.loc 1 77 2 view .LVU45
+ 295 0026 0320     		movs	r0, #3
+ 296 0028 FFF7FEFF 		bl	LCD_Write_Data
+ 297              	.LVL19:
+  78:Src/lcd.c     **** 	LCD_Write_Data ( 0x12 );
+ 298              		.loc 1 78 2 view .LVU46
+ 299 002c 1220     		movs	r0, #18
+ 300 002e FFF7FEFF 		bl	LCD_Write_Data
+ 301              	.LVL20:
+  79:Src/lcd.c     **** 	LCD_Write_Data ( 0x81 );
+ 302              		.loc 1 79 2 view .LVU47
+ 303 0032 8120     		movs	r0, #129
+ 304 0034 FFF7FEFF 		bl	LCD_Write_Data
+ 305              	.LVL21:
+  80:Src/lcd.c     **** 	
+  81:Src/lcd.c     **** 	/*  Driver timing control A (E8h) */
+  82:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 306              		.loc 1 82 16 view .LVU48
+  83:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xE8 );
+ 307              		.loc 1 83 2 view .LVU49
+ 308 0038 E820     		movs	r0, #232
+ 309 003a FFF7FEFF 		bl	LCD_Write_Cmd
+ 310              	.LVL22:
+  84:Src/lcd.c     **** 	LCD_Write_Data ( 0x85 );
+ 311              		.loc 1 84 2 view .LVU50
+ 312 003e 8520     		movs	r0, #133
+ 313 0040 FFF7FEFF 		bl	LCD_Write_Data
+ 314              	.LVL23:
+  85:Src/lcd.c     **** 	LCD_Write_Data ( 0x10 );
+ 315              		.loc 1 85 2 view .LVU51
+ 316 0044 1020     		movs	r0, #16
+ 317 0046 FFF7FEFF 		bl	LCD_Write_Data
+ 318              	.LVL24:
+  86:Src/lcd.c     **** 	LCD_Write_Data ( 0x78 );
+ 319              		.loc 1 86 2 view .LVU52
+ 320 004a 7820     		movs	r0, #120
+ 321 004c FFF7FEFF 		bl	LCD_Write_Data
+ 322              	.LVL25:
+  87:Src/lcd.c     **** 	
+  88:Src/lcd.c     **** 	/*  Power control A (CBh) */
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 8
+
+
+  89:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 323              		.loc 1 89 16 view .LVU53
+  90:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xCB );
+ 324              		.loc 1 90 2 view .LVU54
+ 325 0050 CB20     		movs	r0, #203
+ 326 0052 FFF7FEFF 		bl	LCD_Write_Cmd
+ 327              	.LVL26:
+  91:Src/lcd.c     **** 	LCD_Write_Data ( 0x39 );
+ 328              		.loc 1 91 2 view .LVU55
+ 329 0056 3920     		movs	r0, #57
+ 330 0058 FFF7FEFF 		bl	LCD_Write_Data
+ 331              	.LVL27:
+  92:Src/lcd.c     **** 	LCD_Write_Data ( 0x2C );
+ 332              		.loc 1 92 2 view .LVU56
+ 333 005c 2C20     		movs	r0, #44
+ 334 005e FFF7FEFF 		bl	LCD_Write_Data
+ 335              	.LVL28:
+  93:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 336              		.loc 1 93 2 view .LVU57
+ 337 0062 0020     		movs	r0, #0
+ 338 0064 FFF7FEFF 		bl	LCD_Write_Data
+ 339              	.LVL29:
+  94:Src/lcd.c     **** 	LCD_Write_Data ( 0x34 );
+ 340              		.loc 1 94 2 view .LVU58
+ 341 0068 3420     		movs	r0, #52
+ 342 006a FFF7FEFF 		bl	LCD_Write_Data
+ 343              	.LVL30:
+  95:Src/lcd.c     **** 	LCD_Write_Data ( 0x02 );
+ 344              		.loc 1 95 2 view .LVU59
+ 345 006e 0220     		movs	r0, #2
+ 346 0070 FFF7FEFF 		bl	LCD_Write_Data
+ 347              	.LVL31:
+  96:Src/lcd.c     **** 	
+  97:Src/lcd.c     **** 	/* Pump ratio control (F7h) */
+  98:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 348              		.loc 1 98 16 view .LVU60
+  99:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xF7 );
+ 349              		.loc 1 99 2 view .LVU61
+ 350 0074 F720     		movs	r0, #247
+ 351 0076 FFF7FEFF 		bl	LCD_Write_Cmd
+ 352              	.LVL32:
+ 100:Src/lcd.c     **** 	LCD_Write_Data ( 0x20 );
+ 353              		.loc 1 100 2 view .LVU62
+ 354 007a 2020     		movs	r0, #32
+ 355 007c FFF7FEFF 		bl	LCD_Write_Data
+ 356              	.LVL33:
+ 101:Src/lcd.c     **** 	
+ 102:Src/lcd.c     **** 	/* Driver timing control B */
+ 103:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 357              		.loc 1 103 16 view .LVU63
+ 104:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xEA );
+ 358              		.loc 1 104 2 view .LVU64
+ 359 0080 EA20     		movs	r0, #234
+ 360 0082 FFF7FEFF 		bl	LCD_Write_Cmd
+ 361              	.LVL34:
+ 105:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 362              		.loc 1 105 2 view .LVU65
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 9
+
+
+ 363 0086 0020     		movs	r0, #0
+ 364 0088 FFF7FEFF 		bl	LCD_Write_Data
+ 365              	.LVL35:
+ 106:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 366              		.loc 1 106 2 view .LVU66
+ 367 008c 0020     		movs	r0, #0
+ 368 008e FFF7FEFF 		bl	LCD_Write_Data
+ 369              	.LVL36:
+ 107:Src/lcd.c     **** 	
+ 108:Src/lcd.c     **** 	/* Frame Rate Control (In Normal Mode/Full Colors) (B1h) */
+ 109:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 370              		.loc 1 109 16 view .LVU67
+ 110:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xB1 );
+ 371              		.loc 1 110 2 view .LVU68
+ 372 0092 B120     		movs	r0, #177
+ 373 0094 FFF7FEFF 		bl	LCD_Write_Cmd
+ 374              	.LVL37:
+ 111:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 375              		.loc 1 111 2 view .LVU69
+ 376 0098 0020     		movs	r0, #0
+ 377 009a FFF7FEFF 		bl	LCD_Write_Data
+ 378              	.LVL38:
+ 112:Src/lcd.c     **** 	LCD_Write_Data ( 0x1B );
+ 379              		.loc 1 112 2 view .LVU70
+ 380 009e 1B20     		movs	r0, #27
+ 381 00a0 FFF7FEFF 		bl	LCD_Write_Data
+ 382              	.LVL39:
+ 113:Src/lcd.c     **** 	
+ 114:Src/lcd.c     **** 	/*  Display Function Control (B6h) */
+ 115:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 383              		.loc 1 115 16 view .LVU71
+ 116:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xB6 );
+ 384              		.loc 1 116 2 view .LVU72
+ 385 00a4 B620     		movs	r0, #182
+ 386 00a6 FFF7FEFF 		bl	LCD_Write_Cmd
+ 387              	.LVL40:
+ 117:Src/lcd.c     **** 	LCD_Write_Data ( 0x0A );
+ 388              		.loc 1 117 2 view .LVU73
+ 389 00aa 0A20     		movs	r0, #10
+ 390 00ac FFF7FEFF 		bl	LCD_Write_Data
+ 391              	.LVL41:
+ 118:Src/lcd.c     **** 	LCD_Write_Data ( 0xA2 );
+ 392              		.loc 1 118 2 view .LVU74
+ 393 00b0 A220     		movs	r0, #162
+ 394 00b2 FFF7FEFF 		bl	LCD_Write_Data
+ 395              	.LVL42:
+ 119:Src/lcd.c     **** 	
+ 120:Src/lcd.c     **** 	/* Power Control 1 (C0h) */
+ 121:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 396              		.loc 1 121 16 view .LVU75
+ 122:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xC0 );
+ 397              		.loc 1 122 2 view .LVU76
+ 398 00b6 C020     		movs	r0, #192
+ 399 00b8 FFF7FEFF 		bl	LCD_Write_Cmd
+ 400              	.LVL43:
+ 123:Src/lcd.c     **** 	LCD_Write_Data ( 0x35 );
+ 401              		.loc 1 123 2 view .LVU77
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 10
+
+
+ 402 00bc 3520     		movs	r0, #53
+ 403 00be FFF7FEFF 		bl	LCD_Write_Data
+ 404              	.LVL44:
+ 124:Src/lcd.c     **** 	
+ 125:Src/lcd.c     **** 	/* Power Control 2 (C1h) */
+ 126:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 405              		.loc 1 126 16 view .LVU78
+ 127:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xC1 );
+ 406              		.loc 1 127 2 view .LVU79
+ 407 00c2 C120     		movs	r0, #193
+ 408 00c4 FFF7FEFF 		bl	LCD_Write_Cmd
+ 409              	.LVL45:
+ 128:Src/lcd.c     **** 	LCD_Write_Data ( 0x11 );
+ 410              		.loc 1 128 2 view .LVU80
+ 411 00c8 1120     		movs	r0, #17
+ 412 00ca FFF7FEFF 		bl	LCD_Write_Data
+ 413              	.LVL46:
+ 129:Src/lcd.c     **** 	
+ 130:Src/lcd.c     **** 	/* VCOM Control 1 (C5h) */
+ 131:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xC5 );
+ 414              		.loc 1 131 2 view .LVU81
+ 415 00ce C520     		movs	r0, #197
+ 416 00d0 FFF7FEFF 		bl	LCD_Write_Cmd
+ 417              	.LVL47:
+ 132:Src/lcd.c     **** 	LCD_Write_Data ( 0x45 );
+ 418              		.loc 1 132 2 view .LVU82
+ 419 00d4 4520     		movs	r0, #69
+ 420 00d6 FFF7FEFF 		bl	LCD_Write_Data
+ 421              	.LVL48:
+ 133:Src/lcd.c     **** 	LCD_Write_Data ( 0x45 );
+ 422              		.loc 1 133 2 view .LVU83
+ 423 00da 4520     		movs	r0, #69
+ 424 00dc FFF7FEFF 		bl	LCD_Write_Data
+ 425              	.LVL49:
+ 134:Src/lcd.c     **** 	
+ 135:Src/lcd.c     **** 	/*  VCOM Control 2 (C7h)  */
+ 136:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xC7 );
+ 426              		.loc 1 136 2 view .LVU84
+ 427 00e0 C720     		movs	r0, #199
+ 428 00e2 FFF7FEFF 		bl	LCD_Write_Cmd
+ 429              	.LVL50:
+ 137:Src/lcd.c     **** 	LCD_Write_Data ( 0xA2 );
+ 430              		.loc 1 137 2 view .LVU85
+ 431 00e6 A220     		movs	r0, #162
+ 432 00e8 FFF7FEFF 		bl	LCD_Write_Data
+ 433              	.LVL51:
+ 138:Src/lcd.c     **** 	
+ 139:Src/lcd.c     **** 	/* Enable 3G (F2h) */
+ 140:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xF2 );
+ 434              		.loc 1 140 2 view .LVU86
+ 435 00ec F220     		movs	r0, #242
+ 436 00ee FFF7FEFF 		bl	LCD_Write_Cmd
+ 437              	.LVL52:
+ 141:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 438              		.loc 1 141 2 view .LVU87
+ 439 00f2 0020     		movs	r0, #0
+ 440 00f4 FFF7FEFF 		bl	LCD_Write_Data
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 11
+
+
+ 441              	.LVL53:
+ 142:Src/lcd.c     **** 	
+ 143:Src/lcd.c     **** 	/* Gamma Set (26h) */
+ 144:Src/lcd.c     **** 	LCD_Write_Cmd ( 0x26 );
+ 442              		.loc 1 144 2 view .LVU88
+ 443 00f8 2620     		movs	r0, #38
+ 444 00fa FFF7FEFF 		bl	LCD_Write_Cmd
+ 445              	.LVL54:
+ 145:Src/lcd.c     **** 	LCD_Write_Data ( 0x01 );
+ 446              		.loc 1 145 2 view .LVU89
+ 447 00fe 0120     		movs	r0, #1
+ 448 0100 FFF7FEFF 		bl	LCD_Write_Data
+ 449              	.LVL55:
+ 146:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 450              		.loc 1 146 16 view .LVU90
+ 147:Src/lcd.c     **** 	
+ 148:Src/lcd.c     **** 	/* Positive Gamma Correction */
+ 149:Src/lcd.c     **** 	LCD_Write_Cmd ( 0xE0 ); //Set Gamma
+ 451              		.loc 1 149 2 view .LVU91
+ 452 0104 E020     		movs	r0, #224
+ 453 0106 FFF7FEFF 		bl	LCD_Write_Cmd
+ 454              	.LVL56:
+ 150:Src/lcd.c     **** 	LCD_Write_Data ( 0x0F );
+ 455              		.loc 1 150 2 view .LVU92
+ 456 010a 0F20     		movs	r0, #15
+ 457 010c FFF7FEFF 		bl	LCD_Write_Data
+ 458              	.LVL57:
+ 151:Src/lcd.c     **** 	LCD_Write_Data ( 0x26 );
+ 459              		.loc 1 151 2 view .LVU93
+ 460 0110 2620     		movs	r0, #38
+ 461 0112 FFF7FEFF 		bl	LCD_Write_Data
+ 462              	.LVL58:
+ 152:Src/lcd.c     **** 	LCD_Write_Data ( 0x24 );
+ 463              		.loc 1 152 2 view .LVU94
+ 464 0116 2420     		movs	r0, #36
+ 465 0118 FFF7FEFF 		bl	LCD_Write_Data
+ 466              	.LVL59:
+ 153:Src/lcd.c     **** 	LCD_Write_Data ( 0x0B );
+ 467              		.loc 1 153 2 view .LVU95
+ 468 011c 0B20     		movs	r0, #11
+ 469 011e FFF7FEFF 		bl	LCD_Write_Data
+ 470              	.LVL60:
+ 154:Src/lcd.c     **** 	LCD_Write_Data ( 0x0E );
+ 471              		.loc 1 154 2 view .LVU96
+ 472 0122 0E20     		movs	r0, #14
+ 473 0124 FFF7FEFF 		bl	LCD_Write_Data
+ 474              	.LVL61:
+ 155:Src/lcd.c     **** 	LCD_Write_Data ( 0x09 );
+ 475              		.loc 1 155 2 view .LVU97
+ 476 0128 0920     		movs	r0, #9
+ 477 012a FFF7FEFF 		bl	LCD_Write_Data
+ 478              	.LVL62:
+ 156:Src/lcd.c     **** 	LCD_Write_Data ( 0x54 );
+ 479              		.loc 1 156 2 view .LVU98
+ 480 012e 5420     		movs	r0, #84
+ 481 0130 FFF7FEFF 		bl	LCD_Write_Data
+ 482              	.LVL63:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 12
+
+
+ 157:Src/lcd.c     **** 	LCD_Write_Data ( 0xA8 );
+ 483              		.loc 1 157 2 view .LVU99
+ 484 0134 A820     		movs	r0, #168
+ 485 0136 FFF7FEFF 		bl	LCD_Write_Data
+ 486              	.LVL64:
+ 158:Src/lcd.c     **** 	LCD_Write_Data ( 0x46 );
+ 487              		.loc 1 158 2 view .LVU100
+ 488 013a 4620     		movs	r0, #70
+ 489 013c FFF7FEFF 		bl	LCD_Write_Data
+ 490              	.LVL65:
+ 159:Src/lcd.c     **** 	LCD_Write_Data ( 0x0C );
+ 491              		.loc 1 159 2 view .LVU101
+ 492 0140 0C20     		movs	r0, #12
+ 493 0142 FFF7FEFF 		bl	LCD_Write_Data
+ 494              	.LVL66:
+ 160:Src/lcd.c     **** 	LCD_Write_Data ( 0x17 );
+ 495              		.loc 1 160 2 view .LVU102
+ 496 0146 1720     		movs	r0, #23
+ 497 0148 FFF7FEFF 		bl	LCD_Write_Data
+ 498              	.LVL67:
+ 161:Src/lcd.c     **** 	LCD_Write_Data ( 0x09 );
+ 499              		.loc 1 161 2 view .LVU103
+ 500 014c 0920     		movs	r0, #9
+ 501 014e FFF7FEFF 		bl	LCD_Write_Data
+ 502              	.LVL68:
+ 162:Src/lcd.c     **** 	LCD_Write_Data ( 0x0F );
+ 503              		.loc 1 162 2 view .LVU104
+ 504 0152 0F20     		movs	r0, #15
+ 505 0154 FFF7FEFF 		bl	LCD_Write_Data
+ 506              	.LVL69:
+ 163:Src/lcd.c     **** 	LCD_Write_Data ( 0x07 );
+ 507              		.loc 1 163 2 view .LVU105
+ 508 0158 0720     		movs	r0, #7
+ 509 015a FFF7FEFF 		bl	LCD_Write_Data
+ 510              	.LVL70:
+ 164:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 511              		.loc 1 164 2 view .LVU106
+ 512 015e 0020     		movs	r0, #0
+ 513 0160 FFF7FEFF 		bl	LCD_Write_Data
+ 514              	.LVL71:
+ 165:Src/lcd.c     **** 	
+ 166:Src/lcd.c     **** 	/* Negative Gamma Correction (E1h) */
+ 167:Src/lcd.c     **** 	LCD_Write_Cmd ( 0XE1 ); //Set Gamma
+ 515              		.loc 1 167 2 view .LVU107
+ 516 0164 E120     		movs	r0, #225
+ 517 0166 FFF7FEFF 		bl	LCD_Write_Cmd
+ 518              	.LVL72:
+ 168:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 519              		.loc 1 168 2 view .LVU108
+ 520 016a 0020     		movs	r0, #0
+ 521 016c FFF7FEFF 		bl	LCD_Write_Data
+ 522              	.LVL73:
+ 169:Src/lcd.c     **** 	LCD_Write_Data ( 0x19 );
+ 523              		.loc 1 169 2 view .LVU109
+ 524 0170 1920     		movs	r0, #25
+ 525 0172 FFF7FEFF 		bl	LCD_Write_Data
+ 526              	.LVL74:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 13
+
+
+ 170:Src/lcd.c     **** 	LCD_Write_Data ( 0x1B );
+ 527              		.loc 1 170 2 view .LVU110
+ 528 0176 1B20     		movs	r0, #27
+ 529 0178 FFF7FEFF 		bl	LCD_Write_Data
+ 530              	.LVL75:
+ 171:Src/lcd.c     **** 	LCD_Write_Data ( 0x04 );
+ 531              		.loc 1 171 2 view .LVU111
+ 532 017c 0420     		movs	r0, #4
+ 533 017e FFF7FEFF 		bl	LCD_Write_Data
+ 534              	.LVL76:
+ 172:Src/lcd.c     **** 	LCD_Write_Data ( 0x10 );
+ 535              		.loc 1 172 2 view .LVU112
+ 536 0182 1020     		movs	r0, #16
+ 537 0184 FFF7FEFF 		bl	LCD_Write_Data
+ 538              	.LVL77:
+ 173:Src/lcd.c     **** 	LCD_Write_Data ( 0x07 );
+ 539              		.loc 1 173 2 view .LVU113
+ 540 0188 0720     		movs	r0, #7
+ 541 018a FFF7FEFF 		bl	LCD_Write_Data
+ 542              	.LVL78:
+ 174:Src/lcd.c     **** 	LCD_Write_Data ( 0x2A );
+ 543              		.loc 1 174 2 view .LVU114
+ 544 018e 2A20     		movs	r0, #42
+ 545 0190 FFF7FEFF 		bl	LCD_Write_Data
+ 546              	.LVL79:
+ 175:Src/lcd.c     **** 	LCD_Write_Data ( 0x47 );
+ 547              		.loc 1 175 2 view .LVU115
+ 548 0194 4720     		movs	r0, #71
+ 549 0196 FFF7FEFF 		bl	LCD_Write_Data
+ 550              	.LVL80:
+ 176:Src/lcd.c     **** 	LCD_Write_Data ( 0x39 );
+ 551              		.loc 1 176 2 view .LVU116
+ 552 019a 3920     		movs	r0, #57
+ 553 019c FFF7FEFF 		bl	LCD_Write_Data
+ 554              	.LVL81:
+ 177:Src/lcd.c     **** 	LCD_Write_Data ( 0x03 );
+ 555              		.loc 1 177 2 view .LVU117
+ 556 01a0 0320     		movs	r0, #3
+ 557 01a2 FFF7FEFF 		bl	LCD_Write_Data
+ 558              	.LVL82:
+ 178:Src/lcd.c     **** 	LCD_Write_Data ( 0x06 );
+ 559              		.loc 1 178 2 view .LVU118
+ 560 01a6 0620     		movs	r0, #6
+ 561 01a8 FFF7FEFF 		bl	LCD_Write_Data
+ 562              	.LVL83:
+ 179:Src/lcd.c     **** 	LCD_Write_Data ( 0x06 );
+ 563              		.loc 1 179 2 view .LVU119
+ 564 01ac 0620     		movs	r0, #6
+ 565 01ae FFF7FEFF 		bl	LCD_Write_Data
+ 566              	.LVL84:
+ 180:Src/lcd.c     **** 	LCD_Write_Data ( 0x30 );
+ 567              		.loc 1 180 2 view .LVU120
+ 568 01b2 3020     		movs	r0, #48
+ 569 01b4 FFF7FEFF 		bl	LCD_Write_Data
+ 570              	.LVL85:
+ 181:Src/lcd.c     **** 	LCD_Write_Data ( 0x38 );
+ 571              		.loc 1 181 2 view .LVU121
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 14
+
+
+ 572 01b8 3820     		movs	r0, #56
+ 573 01ba FFF7FEFF 		bl	LCD_Write_Data
+ 574              	.LVL86:
+ 182:Src/lcd.c     **** 	LCD_Write_Data ( 0x0F );
+ 575              		.loc 1 182 2 view .LVU122
+ 576 01be 0F20     		movs	r0, #15
+ 577 01c0 FFF7FEFF 		bl	LCD_Write_Data
+ 578              	.LVL87:
+ 183:Src/lcd.c     **** 	
+ 184:Src/lcd.c     **** 	/* memory access control set */
+ 185:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 579              		.loc 1 185 16 view .LVU123
+ 186:Src/lcd.c     **** 	LCD_Write_Cmd ( 0x36 ); 	
+ 580              		.loc 1 186 2 view .LVU124
+ 581 01c4 3620     		movs	r0, #54
+ 582 01c6 FFF7FEFF 		bl	LCD_Write_Cmd
+ 583              	.LVL88:
+ 187:Src/lcd.c     **** 	LCD_Write_Data ( 0xC8 );    
+ 584              		.loc 1 187 2 view .LVU125
+ 585 01ca C820     		movs	r0, #200
+ 586 01cc FFF7FEFF 		bl	LCD_Write_Data
+ 587              	.LVL89:
+ 188:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 588              		.loc 1 188 16 view .LVU126
+ 189:Src/lcd.c     **** 	
+ 190:Src/lcd.c     **** 	/* column address control set */
+ 191:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_Set_COLUMN ); 
+ 589              		.loc 1 191 2 view .LVU127
+ 590 01d0 2A20     		movs	r0, #42
+ 591 01d2 FFF7FEFF 		bl	LCD_Write_Cmd
+ 592              	.LVL90:
+ 192:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 593              		.loc 1 192 2 view .LVU128
+ 594 01d6 0020     		movs	r0, #0
+ 595 01d8 FFF7FEFF 		bl	LCD_Write_Data
+ 596              	.LVL91:
+ 193:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 597              		.loc 1 193 2 view .LVU129
+ 598 01dc 0020     		movs	r0, #0
+ 599 01de FFF7FEFF 		bl	LCD_Write_Data
+ 600              	.LVL92:
+ 194:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 601              		.loc 1 194 2 view .LVU130
+ 602 01e2 0020     		movs	r0, #0
+ 603 01e4 FFF7FEFF 		bl	LCD_Write_Data
+ 604              	.LVL93:
+ 195:Src/lcd.c     **** 	LCD_Write_Data ( 0xEF );
+ 605              		.loc 1 195 2 view .LVU131
+ 606 01e8 EF20     		movs	r0, #239
+ 607 01ea FFF7FEFF 		bl	LCD_Write_Data
+ 608              	.LVL94:
+ 196:Src/lcd.c     **** 	
+ 197:Src/lcd.c     **** 	/* page address control set */
+ 198:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 609              		.loc 1 198 16 view .LVU132
+ 199:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_Set_PAGE ); 
+ 610              		.loc 1 199 2 view .LVU133
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 15
+
+
+ 611 01ee 2B20     		movs	r0, #43
+ 612 01f0 FFF7FEFF 		bl	LCD_Write_Cmd
+ 613              	.LVL95:
+ 200:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 614              		.loc 1 200 2 view .LVU134
+ 615 01f4 0020     		movs	r0, #0
+ 616 01f6 FFF7FEFF 		bl	LCD_Write_Data
+ 617              	.LVL96:
+ 201:Src/lcd.c     **** 	LCD_Write_Data ( 0x00 );
+ 618              		.loc 1 201 2 view .LVU135
+ 619 01fa 0020     		movs	r0, #0
+ 620 01fc FFF7FEFF 		bl	LCD_Write_Data
+ 621              	.LVL97:
+ 202:Src/lcd.c     **** 	LCD_Write_Data ( 0x01 );
+ 622              		.loc 1 202 2 view .LVU136
+ 623 0200 0120     		movs	r0, #1
+ 624 0202 FFF7FEFF 		bl	LCD_Write_Data
+ 625              	.LVL98:
+ 203:Src/lcd.c     **** 	LCD_Write_Data ( 0x3F );
+ 626              		.loc 1 203 2 view .LVU137
+ 627 0206 3F20     		movs	r0, #63
+ 628 0208 FFF7FEFF 		bl	LCD_Write_Data
+ 629              	.LVL99:
+ 204:Src/lcd.c     **** 	
+ 205:Src/lcd.c     **** 	/*  Pixel Format Set (3Ah)  */
+ 206:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 630              		.loc 1 206 16 view .LVU138
+ 207:Src/lcd.c     **** 	LCD_Write_Cmd ( 0x3a ); 
+ 631              		.loc 1 207 2 view .LVU139
+ 632 020c 3A20     		movs	r0, #58
+ 633 020e FFF7FEFF 		bl	LCD_Write_Cmd
+ 634              	.LVL100:
+ 208:Src/lcd.c     **** 	LCD_Write_Data ( 0x55 );
+ 635              		.loc 1 208 2 view .LVU140
+ 636 0212 5520     		movs	r0, #85
+ 637 0214 FFF7FEFF 		bl	LCD_Write_Data
+ 638              	.LVL101:
+ 209:Src/lcd.c     **** 	
+ 210:Src/lcd.c     **** 	/* Sleep Out (11h)  */
+ 211:Src/lcd.c     **** 	LCD_Write_Cmd ( 0x11 );	
+ 639              		.loc 1 211 2 view .LVU141
+ 640 0218 1120     		movs	r0, #17
+ 641 021a FFF7FEFF 		bl	LCD_Write_Cmd
+ 642              	.LVL102:
+ 212:Src/lcd.c     **** 	Delay ( 0xAFFf<<2 );
+ 643              		.loc 1 212 2 view .LVU142
+ 644 021e 0348     		ldr	r0, .L25
+ 645 0220 FFF7FEFF 		bl	Delay
+ 646              	.LVL103:
+ 213:Src/lcd.c     **** 	DEBUG_DELAY ();
+ 647              		.loc 1 213 16 view .LVU143
+ 214:Src/lcd.c     **** 	
+ 215:Src/lcd.c     **** 	/* Display ON (29h) */
+ 216:Src/lcd.c     **** 	LCD_Write_Cmd ( 0x29 ); 
+ 648              		.loc 1 216 2 view .LVU144
+ 649 0224 2920     		movs	r0, #41
+ 650 0226 FFF7FEFF 		bl	LCD_Write_Cmd
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 16
+
+
+ 651              	.LVL104:
+ 217:Src/lcd.c     **** 	
+ 218:Src/lcd.c     **** 	
+ 219:Src/lcd.c     **** }
+ 652              		.loc 1 219 1 is_stmt 0 view .LVU145
+ 653 022a 08BD     		pop	{r3, pc}
+ 654              	.L26:
+ 655              		.align	2
+ 656              	.L25:
+ 657 022c FCBF0200 		.word	180220
+ 658              		.cfi_endproc
+ 659              	.LFE80:
+ 661              		.section	.text.LCD_OpenWindow,"ax",%progbits
+ 662              		.align	1
+ 663              		.global	LCD_OpenWindow
+ 664              		.syntax unified
+ 665              		.thumb
+ 666              		.thumb_func
+ 667              		.fpu softvfp
+ 669              	LCD_OpenWindow:
+ 670              	.LVL105:
+ 671              	.LFB81:
+ 220:Src/lcd.c     **** 
+ 221:Src/lcd.c     **** 
+ 222:Src/lcd.c     **** 
+ 223:Src/lcd.c     **** void LCD_OpenWindow ( uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usWidth, uint16_t usHeight )
+ 224:Src/lcd.c     **** {	
+ 672              		.loc 1 224 1 is_stmt 1 view -0
+ 673              		.cfi_startproc
+ 674              		@ args = 0, pretend = 0, frame = 0
+ 675              		@ frame_needed = 0, uses_anonymous_args = 0
+ 676              		.loc 1 224 1 is_stmt 0 view .LVU147
+ 677 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 678              	.LCFI5:
+ 679              		.cfi_def_cfa_offset 24
+ 680              		.cfi_offset 3, -24
+ 681              		.cfi_offset 4, -20
+ 682              		.cfi_offset 5, -16
+ 683              		.cfi_offset 6, -12
+ 684              		.cfi_offset 7, -8
+ 685              		.cfi_offset 14, -4
+ 686 0002 0546     		mov	r5, r0
+ 687 0004 0C46     		mov	r4, r1
+ 688 0006 1746     		mov	r7, r2
+ 689 0008 1E46     		mov	r6, r3
+ 225:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_Set_COLUMN ); 				
+ 690              		.loc 1 225 2 is_stmt 1 view .LVU148
+ 691 000a 2A20     		movs	r0, #42
+ 692              	.LVL106:
+ 693              		.loc 1 225 2 is_stmt 0 view .LVU149
+ 694 000c FFF7FEFF 		bl	LCD_Write_Cmd
+ 695              	.LVL107:
+ 226:Src/lcd.c     **** 	LCD_Write_Data ( usCOLUMN >> 8  );	 
+ 696              		.loc 1 226 2 is_stmt 1 view .LVU150
+ 697 0010 280A     		lsrs	r0, r5, #8
+ 698 0012 FFF7FEFF 		bl	LCD_Write_Data
+ 699              	.LVL108:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 17
+
+
+ 227:Src/lcd.c     **** 	LCD_Write_Data ( usCOLUMN & 0xff  );	 
+ 700              		.loc 1 227 2 view .LVU151
+ 701 0016 E8B2     		uxtb	r0, r5
+ 702 0018 FFF7FEFF 		bl	LCD_Write_Data
+ 703              	.LVL109:
+ 228:Src/lcd.c     **** 	LCD_Write_Data ( ( usCOLUMN + usWidth - 1 ) >> 8  );
+ 704              		.loc 1 228 2 view .LVU152
+ 705              		.loc 1 228 30 is_stmt 0 view .LVU153
+ 706 001c 3D44     		add	r5, r5, r7
+ 707              		.loc 1 228 40 view .LVU154
+ 708 001e 681E     		subs	r0, r5, #1
+ 709              		.loc 1 228 2 view .LVU155
+ 710 0020 C0F30F20 		ubfx	r0, r0, #8, #16
+ 711 0024 FFF7FEFF 		bl	LCD_Write_Data
+ 712              	.LVL110:
+ 229:Src/lcd.c     **** 	LCD_Write_Data ( ( usCOLUMN + usWidth - 1 ) & 0xff  );
+ 713              		.loc 1 229 2 is_stmt 1 view .LVU156
+ 714              		.loc 1 229 30 is_stmt 0 view .LVU157
+ 715 0028 ADB2     		uxth	r5, r5
+ 716              		.loc 1 229 40 view .LVU158
+ 717 002a 681E     		subs	r0, r5, #1
+ 718              		.loc 1 229 2 view .LVU159
+ 719 002c C0B2     		uxtb	r0, r0
+ 720 002e FFF7FEFF 		bl	LCD_Write_Data
+ 721              	.LVL111:
+ 230:Src/lcd.c     **** 
+ 231:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_Set_PAGE ); 			     
+ 722              		.loc 1 231 2 is_stmt 1 view .LVU160
+ 723 0032 2B20     		movs	r0, #43
+ 724 0034 FFF7FEFF 		bl	LCD_Write_Cmd
+ 725              	.LVL112:
+ 232:Src/lcd.c     **** 	LCD_Write_Data ( usPAGE >> 8  );
+ 726              		.loc 1 232 2 view .LVU161
+ 727 0038 200A     		lsrs	r0, r4, #8
+ 728 003a FFF7FEFF 		bl	LCD_Write_Data
+ 729              	.LVL113:
+ 233:Src/lcd.c     **** 	LCD_Write_Data ( usPAGE & 0xff  );
+ 730              		.loc 1 233 2 view .LVU162
+ 731 003e E0B2     		uxtb	r0, r4
+ 732 0040 FFF7FEFF 		bl	LCD_Write_Data
+ 733              	.LVL114:
+ 234:Src/lcd.c     **** 	LCD_Write_Data ( ( usPAGE + usHeight - 1 ) >> 8 );
+ 734              		.loc 1 234 2 view .LVU163
+ 735              		.loc 1 234 28 is_stmt 0 view .LVU164
+ 736 0044 3444     		add	r4, r4, r6
+ 737              		.loc 1 234 39 view .LVU165
+ 738 0046 601E     		subs	r0, r4, #1
+ 739              		.loc 1 234 2 view .LVU166
+ 740 0048 C0F30F20 		ubfx	r0, r0, #8, #16
+ 741 004c FFF7FEFF 		bl	LCD_Write_Data
+ 742              	.LVL115:
+ 235:Src/lcd.c     **** 	LCD_Write_Data ( ( usPAGE + usHeight - 1) & 0xff );
+ 743              		.loc 1 235 2 is_stmt 1 view .LVU167
+ 744              		.loc 1 235 28 is_stmt 0 view .LVU168
+ 745 0050 A4B2     		uxth	r4, r4
+ 746              		.loc 1 235 39 view .LVU169
+ 747 0052 601E     		subs	r0, r4, #1
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 18
+
+
+ 748              		.loc 1 235 2 view .LVU170
+ 749 0054 C0B2     		uxtb	r0, r0
+ 750 0056 FFF7FEFF 		bl	LCD_Write_Data
+ 751              	.LVL116:
+ 236:Src/lcd.c     **** 	
+ 237:Src/lcd.c     **** }
+ 752              		.loc 1 237 1 view .LVU171
+ 753 005a F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 754              		.cfi_endproc
+ 755              	.LFE81:
+ 757              		.section	.text.LCD_FillColor,"ax",%progbits
+ 758              		.align	1
+ 759              		.global	LCD_FillColor
+ 760              		.syntax unified
+ 761              		.thumb
+ 762              		.thumb_func
+ 763              		.fpu softvfp
+ 765              	LCD_FillColor:
+ 766              	.LVL117:
+ 767              	.LFB82:
+ 238:Src/lcd.c     **** 
+ 239:Src/lcd.c     **** 
+ 240:Src/lcd.c     **** void LCD_FillColor ( uint32_t usPoint, uint16_t usColor )
+ 241:Src/lcd.c     **** {
+ 768              		.loc 1 241 1 is_stmt 1 view -0
+ 769              		.cfi_startproc
+ 770              		@ args = 0, pretend = 0, frame = 0
+ 771              		@ frame_needed = 0, uses_anonymous_args = 0
+ 772              		.loc 1 241 1 is_stmt 0 view .LVU173
+ 773 0000 70B5     		push	{r4, r5, r6, lr}
+ 774              	.LCFI6:
+ 775              		.cfi_def_cfa_offset 16
+ 776              		.cfi_offset 4, -16
+ 777              		.cfi_offset 5, -12
+ 778              		.cfi_offset 6, -8
+ 779              		.cfi_offset 14, -4
+ 780 0002 0546     		mov	r5, r0
+ 781 0004 0E46     		mov	r6, r1
+ 242:Src/lcd.c     **** 	uint32_t i = 0;
+ 782              		.loc 1 242 2 is_stmt 1 view .LVU174
+ 783              	.LVL118:
+ 243:Src/lcd.c     **** 	
+ 244:Src/lcd.c     **** 	/* memory write */
+ 245:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_SetPixel );	
+ 784              		.loc 1 245 2 view .LVU175
+ 785 0006 2C20     		movs	r0, #44
+ 786              	.LVL119:
+ 787              		.loc 1 245 2 is_stmt 0 view .LVU176
+ 788 0008 FFF7FEFF 		bl	LCD_Write_Cmd
+ 789              	.LVL120:
+ 246:Src/lcd.c     **** 		
+ 247:Src/lcd.c     **** 	for ( i = 0; i < usPoint; i ++ )
+ 790              		.loc 1 247 2 is_stmt 1 view .LVU177
+ 791              		.loc 1 247 10 is_stmt 0 view .LVU178
+ 792 000c 0024     		movs	r4, #0
+ 793              	.LVL121:
+ 794              	.L30:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 19
+
+
+ 795              		.loc 1 247 2 discriminator 1 view .LVU179
+ 796 000e AC42     		cmp	r4, r5
+ 797 0010 04D2     		bcs	.L33
+ 248:Src/lcd.c     **** 		LCD_Write_Data ( usColor );
+ 798              		.loc 1 248 3 is_stmt 1 discriminator 3 view .LVU180
+ 799 0012 3046     		mov	r0, r6
+ 800 0014 FFF7FEFF 		bl	LCD_Write_Data
+ 801              	.LVL122:
+ 247:Src/lcd.c     **** 		LCD_Write_Data ( usColor );
+ 802              		.loc 1 247 30 is_stmt 0 discriminator 3 view .LVU181
+ 803 0018 0134     		adds	r4, r4, #1
+ 804              	.LVL123:
+ 247:Src/lcd.c     **** 		LCD_Write_Data ( usColor );
+ 805              		.loc 1 247 30 discriminator 3 view .LVU182
+ 806 001a F8E7     		b	.L30
+ 807              	.L33:
+ 249:Src/lcd.c     **** 		
+ 250:Src/lcd.c     **** }
+ 808              		.loc 1 250 1 view .LVU183
+ 809 001c 70BD     		pop	{r4, r5, r6, pc}
+ 810              		.loc 1 250 1 view .LVU184
+ 811              		.cfi_endproc
+ 812              	.LFE82:
+ 814              		.section	.text.LCD_Clear,"ax",%progbits
+ 815              		.align	1
+ 816              		.global	LCD_Clear
+ 817              		.syntax unified
+ 818              		.thumb
+ 819              		.thumb_func
+ 820              		.fpu softvfp
+ 822              	LCD_Clear:
+ 823              	.LVL124:
+ 824              	.LFB83:
+ 251:Src/lcd.c     **** 
+ 252:Src/lcd.c     **** 
+ 253:Src/lcd.c     **** 
+ 254:Src/lcd.c     **** 
+ 255:Src/lcd.c     **** void LCD_Clear ( uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usWidth, uint16_t usHeight, uint16_t 
+ 256:Src/lcd.c     **** {
+ 825              		.loc 1 256 1 is_stmt 1 view -0
+ 826              		.cfi_startproc
+ 827              		@ args = 4, pretend = 0, frame = 0
+ 828              		@ frame_needed = 0, uses_anonymous_args = 0
+ 829              		.loc 1 256 1 is_stmt 0 view .LVU186
+ 830 0000 38B5     		push	{r3, r4, r5, lr}
+ 831              	.LCFI7:
+ 832              		.cfi_def_cfa_offset 16
+ 833              		.cfi_offset 3, -16
+ 834              		.cfi_offset 4, -12
+ 835              		.cfi_offset 5, -8
+ 836              		.cfi_offset 14, -4
+ 837 0002 1446     		mov	r4, r2
+ 838 0004 1D46     		mov	r5, r3
+ 257:Src/lcd.c     **** 	LCD_OpenWindow ( usCOLUMN, usPAGE, usWidth, usHeight );
+ 839              		.loc 1 257 2 is_stmt 1 view .LVU187
+ 840 0006 FFF7FEFF 		bl	LCD_OpenWindow
+ 841              	.LVL125:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 20
+
+
+ 258:Src/lcd.c     **** 
+ 259:Src/lcd.c     **** 	LCD_FillColor ( usWidth * usHeight, usColor );		
+ 842              		.loc 1 259 2 view .LVU188
+ 843 000a BDF81010 		ldrh	r1, [sp, #16]
+ 844 000e 05FB04F0 		mul	r0, r5, r4
+ 845 0012 FFF7FEFF 		bl	LCD_FillColor
+ 846              	.LVL126:
+ 260:Src/lcd.c     **** 	
+ 261:Src/lcd.c     **** }
+ 847              		.loc 1 261 1 is_stmt 0 view .LVU189
+ 848 0016 38BD     		pop	{r3, r4, r5, pc}
+ 849              		.loc 1 261 1 view .LVU190
+ 850              		.cfi_endproc
+ 851              	.LFE83:
+ 853              		.section	.text.LCD_INIT,"ax",%progbits
+ 854              		.align	1
+ 855              		.global	LCD_INIT
+ 856              		.syntax unified
+ 857              		.thumb
+ 858              		.thumb_func
+ 859              		.fpu softvfp
+ 861              	LCD_INIT:
+ 862              	.LFB74:
+  13:Src/lcd.c     **** 	LCD_BackLed_Control(ENABLE);      
+ 863              		.loc 1 13 1 is_stmt 1 view -0
+ 864              		.cfi_startproc
+ 865              		@ args = 0, pretend = 0, frame = 0
+ 866              		@ frame_needed = 0, uses_anonymous_args = 0
+ 867 0000 00B5     		push	{lr}
+ 868              	.LCFI8:
+ 869              		.cfi_def_cfa_offset 4
+ 870              		.cfi_offset 14, -4
+ 871 0002 83B0     		sub	sp, sp, #12
+ 872              	.LCFI9:
+ 873              		.cfi_def_cfa_offset 16
+  14:Src/lcd.c     **** 	LCD_Rst();
+ 874              		.loc 1 14 2 view .LVU192
+ 875 0004 0120     		movs	r0, #1
+ 876 0006 FFF7FEFF 		bl	LCD_BackLed_Control
+ 877              	.LVL127:
+  15:Src/lcd.c     **** 	LCD_REG_Config();
+ 878              		.loc 1 15 2 view .LVU193
+ 879 000a FFF7FEFF 		bl	LCD_Rst
+ 880              	.LVL128:
+  16:Src/lcd.c     **** 	LCD_Clear (0, 0, 240, 320, BACKGROUND);
+ 881              		.loc 1 16 2 view .LVU194
+ 882 000e FFF7FEFF 		bl	LCD_REG_Config
+ 883              	.LVL129:
+  17:Src/lcd.c     **** }
+ 884              		.loc 1 17 2 view .LVU195
+ 885 0012 4FF6FF73 		movw	r3, #65535
+ 886 0016 0093     		str	r3, [sp]
+ 887 0018 4FF4A073 		mov	r3, #320
+ 888 001c F022     		movs	r2, #240
+ 889 001e 0021     		movs	r1, #0
+ 890 0020 0846     		mov	r0, r1
+ 891 0022 FFF7FEFF 		bl	LCD_Clear
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 21
+
+
+ 892              	.LVL130:
+  18:Src/lcd.c     **** 
+ 893              		.loc 1 18 1 is_stmt 0 view .LVU196
+ 894 0026 03B0     		add	sp, sp, #12
+ 895              	.LCFI10:
+ 896              		.cfi_def_cfa_offset 4
+ 897              		@ sp needed
+ 898 0028 5DF804FB 		ldr	pc, [sp], #4
+ 899              		.cfi_endproc
+ 900              	.LFE74:
+ 902              		.section	.text.LCD_Read_PixelData,"ax",%progbits
+ 903              		.align	1
+ 904              		.global	LCD_Read_PixelData
+ 905              		.syntax unified
+ 906              		.thumb
+ 907              		.thumb_func
+ 908              		.fpu softvfp
+ 910              	LCD_Read_PixelData:
+ 911              	.LFB84:
+ 262:Src/lcd.c     **** 
+ 263:Src/lcd.c     **** 
+ 264:Src/lcd.c     **** 
+ 265:Src/lcd.c     **** uint16_t LCD_Read_PixelData ( void )	
+ 266:Src/lcd.c     **** {	
+ 912              		.loc 1 266 1 is_stmt 1 view -0
+ 913              		.cfi_startproc
+ 914              		@ args = 0, pretend = 0, frame = 0
+ 915              		@ frame_needed = 0, uses_anonymous_args = 0
+ 916 0000 38B5     		push	{r3, r4, r5, lr}
+ 917              	.LCFI11:
+ 918              		.cfi_def_cfa_offset 16
+ 919              		.cfi_offset 3, -16
+ 920              		.cfi_offset 4, -12
+ 921              		.cfi_offset 5, -8
+ 922              		.cfi_offset 14, -4
+ 267:Src/lcd.c     **** 	uint16_t usR=0, usG=0, usB=0 ;
+ 923              		.loc 1 267 2 view .LVU198
+ 924              	.LVL131:
+ 268:Src/lcd.c     **** 
+ 269:Src/lcd.c     **** 	
+ 270:Src/lcd.c     **** 	LCD_Write_Cmd ( 0x2E ); 
+ 925              		.loc 1 270 2 view .LVU199
+ 926 0002 2E20     		movs	r0, #46
+ 927 0004 FFF7FEFF 		bl	LCD_Write_Cmd
+ 928              	.LVL132:
+ 271:Src/lcd.c     **** 	
+ 272:Src/lcd.c     **** 	usR = LCD_Read_Data (); 	/*FIRST READ OUT DUMMY DATA*/
+ 929              		.loc 1 272 2 view .LVU200
+ 930              		.loc 1 272 8 is_stmt 0 view .LVU201
+ 931 0008 FFF7FEFF 		bl	LCD_Read_Data
+ 932              	.LVL133:
+ 273:Src/lcd.c     **** 	
+ 274:Src/lcd.c     **** 	usR = LCD_Read_Data ();  	/*READ OUT RED DATA  */
+ 933              		.loc 1 274 2 is_stmt 1 view .LVU202
+ 934              		.loc 1 274 8 is_stmt 0 view .LVU203
+ 935 000c FFF7FEFF 		bl	LCD_Read_Data
+ 936              	.LVL134:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 22
+
+
+ 937 0010 0446     		mov	r4, r0
+ 938              	.LVL135:
+ 275:Src/lcd.c     **** 	usB = LCD_Read_Data ();  	/*READ OUT BLUE DATA*/
+ 939              		.loc 1 275 2 is_stmt 1 view .LVU204
+ 940              		.loc 1 275 8 is_stmt 0 view .LVU205
+ 941 0012 FFF7FEFF 		bl	LCD_Read_Data
+ 942              	.LVL136:
+ 943 0016 0546     		mov	r5, r0
+ 944              	.LVL137:
+ 276:Src/lcd.c     **** 	usG = LCD_Read_Data ();  	/*READ OUT GREEN DATA*/	
+ 945              		.loc 1 276 2 is_stmt 1 view .LVU206
+ 946              		.loc 1 276 8 is_stmt 0 view .LVU207
+ 947 0018 FFF7FEFF 		bl	LCD_Read_Data
+ 948              	.LVL138:
+ 277:Src/lcd.c     **** 	
+ 278:Src/lcd.c     ****   return ( ( ( usR >> 11 ) << 11 ) | ( ( usG >> 10 ) << 5 ) | ( usB >> 11 ) );
+ 949              		.loc 1 278 3 is_stmt 1 view .LVU208
+ 950              		.loc 1 278 20 is_stmt 0 view .LVU209
+ 951 001c C4F3CF24 		ubfx	r4, r4, #11, #16
+ 952              	.LVL139:
+ 953              		.loc 1 278 46 view .LVU210
+ 954 0020 C0F38F20 		ubfx	r0, r0, #10, #16
+ 955              	.LVL140:
+ 956              		.loc 1 278 54 view .LVU211
+ 957 0024 4001     		lsls	r0, r0, #5
+ 958              		.loc 1 278 36 view .LVU212
+ 959 0026 40EAC420 		orr	r0, r0, r4, lsl #11
+ 960 002a 00B2     		sxth	r0, r0
+ 961              		.loc 1 278 61 view .LVU213
+ 962 002c 40EAD520 		orr	r0, r0, r5, lsr #11
+ 279:Src/lcd.c     **** 	
+ 280:Src/lcd.c     **** }
+ 963              		.loc 1 280 1 view .LVU214
+ 964 0030 80B2     		uxth	r0, r0
+ 965 0032 38BD     		pop	{r3, r4, r5, pc}
+ 966              		.loc 1 280 1 view .LVU215
+ 967              		.cfi_endproc
+ 968              	.LFE84:
+ 970              		.section	.text.LCD_GetPointPixel,"ax",%progbits
+ 971              		.align	1
+ 972              		.global	LCD_GetPointPixel
+ 973              		.syntax unified
+ 974              		.thumb
+ 975              		.thumb_func
+ 976              		.fpu softvfp
+ 978              	LCD_GetPointPixel:
+ 979              	.LVL141:
+ 980              	.LFB85:
+ 281:Src/lcd.c     **** 
+ 282:Src/lcd.c     **** 
+ 283:Src/lcd.c     **** 
+ 284:Src/lcd.c     **** 
+ 285:Src/lcd.c     **** uint16_t LCD_GetPointPixel ( uint16_t usCOLUMN, uint16_t usPAGE )
+ 286:Src/lcd.c     **** { 
+ 981              		.loc 1 286 1 is_stmt 1 view -0
+ 982              		.cfi_startproc
+ 983              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 23
+
+
+ 984              		@ frame_needed = 0, uses_anonymous_args = 0
+ 985              		.loc 1 286 1 is_stmt 0 view .LVU217
+ 986 0000 08B5     		push	{r3, lr}
+ 987              	.LCFI12:
+ 988              		.cfi_def_cfa_offset 8
+ 989              		.cfi_offset 3, -8
+ 990              		.cfi_offset 14, -4
+ 287:Src/lcd.c     **** 	uint16_t usPixelData;
+ 991              		.loc 1 287 2 is_stmt 1 view .LVU218
+ 288:Src/lcd.c     **** 
+ 289:Src/lcd.c     **** 	LCD_OpenWindow ( usCOLUMN, usPAGE, 1, 1 );
+ 992              		.loc 1 289 2 view .LVU219
+ 993 0002 0123     		movs	r3, #1
+ 994 0004 1A46     		mov	r2, r3
+ 995 0006 FFF7FEFF 		bl	LCD_OpenWindow
+ 996              	.LVL142:
+ 290:Src/lcd.c     **** 	
+ 291:Src/lcd.c     **** 	usPixelData = LCD_Read_PixelData ();
+ 997              		.loc 1 291 2 view .LVU220
+ 998              		.loc 1 291 16 is_stmt 0 view .LVU221
+ 999 000a FFF7FEFF 		bl	LCD_Read_PixelData
+ 1000              	.LVL143:
+ 292:Src/lcd.c     **** 	
+ 293:Src/lcd.c     **** 	return usPixelData;
+ 1001              		.loc 1 293 2 is_stmt 1 view .LVU222
+ 294:Src/lcd.c     **** 	
+ 295:Src/lcd.c     **** }
+ 1002              		.loc 1 295 1 is_stmt 0 view .LVU223
+ 1003 000e 08BD     		pop	{r3, pc}
+ 1004              		.cfi_endproc
+ 1005              	.LFE85:
+ 1007              		.section	.text.LCD_DrawChar,"ax",%progbits
+ 1008              		.align	1
+ 1009              		.global	LCD_DrawChar
+ 1010              		.syntax unified
+ 1011              		.thumb
+ 1012              		.thumb_func
+ 1013              		.fpu softvfp
+ 1015              	LCD_DrawChar:
+ 1016              	.LVL144:
+ 1017              	.LFB87:
+ 296:Src/lcd.c     **** 
+ 297:Src/lcd.c     **** 
+ 298:Src/lcd.c     **** 
+ 299:Src/lcd.c     **** void LCD_DrawLine ( uint16_t usC1, uint16_t usP1, uint16_t usC2, uint16_t usP2, uint16_t usColor )
+ 300:Src/lcd.c     **** {
+ 301:Src/lcd.c     **** 	uint16_t us; 
+ 302:Src/lcd.c     **** 	uint16_t usC_Current, usP_Current;
+ 303:Src/lcd.c     **** 	
+ 304:Src/lcd.c     **** 	int32_t lError_C = 0, lError_P = 0, lDelta_C, lDelta_P, lDistance; 
+ 305:Src/lcd.c     **** 	int32_t lIncrease_C, lIncrease_P; 	
+ 306:Src/lcd.c     **** 	
+ 307:Src/lcd.c     **** 	
+ 308:Src/lcd.c     **** 	lDelta_C = usC2 - usC1;
+ 309:Src/lcd.c     **** 	lDelta_P = usP2 - usP1; 
+ 310:Src/lcd.c     **** 	
+ 311:Src/lcd.c     **** 	usC_Current = usC1; 
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 24
+
+
+ 312:Src/lcd.c     **** 	usP_Current = usP1; 
+ 313:Src/lcd.c     **** 	
+ 314:Src/lcd.c     **** 	
+ 315:Src/lcd.c     **** 	if ( lDelta_C > 0 ) 
+ 316:Src/lcd.c     **** 		lIncrease_C = 1;  
+ 317:Src/lcd.c     **** 	
+ 318:Src/lcd.c     **** 	else if ( lDelta_C == 0 ) 
+ 319:Src/lcd.c     **** 		lIncrease_C = 0;
+ 320:Src/lcd.c     **** 	
+ 321:Src/lcd.c     **** 	else 
+ 322:Src/lcd.c     ****   	{ 
+ 323:Src/lcd.c     ****     		lIncrease_C = -1;
+ 324:Src/lcd.c     ****     		lDelta_C = - lDelta_C;
+ 325:Src/lcd.c     ****   	} 
+ 326:Src/lcd.c     **** 
+ 327:Src/lcd.c     **** 	
+ 328:Src/lcd.c     **** 	if ( lDelta_P > 0 )
+ 329:Src/lcd.c     **** 		lIncrease_P = 1; 
+ 330:Src/lcd.c     **** 	
+ 331:Src/lcd.c     **** 	else if ( lDelta_P == 0 )
+ 332:Src/lcd.c     **** 		lIncrease_P = 0;
+ 333:Src/lcd.c     **** 	else 
+ 334:Src/lcd.c     **** 	{
+ 335:Src/lcd.c     ****   		lIncrease_P = -1;
+ 336:Src/lcd.c     ****     		lDelta_P = - lDelta_P;
+ 337:Src/lcd.c     ****  	} 
+ 338:Src/lcd.c     **** 
+ 339:Src/lcd.c     **** 	if (  lDelta_C > lDelta_P )
+ 340:Src/lcd.c     **** 		lDistance = lDelta_C; 
+ 341:Src/lcd.c     **** 	
+ 342:Src/lcd.c     **** 	else 
+ 343:Src/lcd.c     **** 		lDistance = lDelta_P; 
+ 344:Src/lcd.c     **** 	
+ 345:Src/lcd.c     **** 	
+ 346:Src/lcd.c     **** 	for ( us = 0; us <= lDistance + 1; us ++ ) 
+ 347:Src/lcd.c     **** 	{  
+ 348:Src/lcd.c     **** 		LCD_DrawDot ( usC_Current, usP_Current, usColor );
+ 349:Src/lcd.c     **** 		
+ 350:Src/lcd.c     **** 		lError_C += lDelta_C ; 
+ 351:Src/lcd.c     **** 		lError_P += lDelta_P ; 
+ 352:Src/lcd.c     **** 		
+ 353:Src/lcd.c     **** 		if ( lError_C > lDistance ) 
+ 354:Src/lcd.c     **** 		{ 
+ 355:Src/lcd.c     **** 			lError_C -= lDistance; 
+ 356:Src/lcd.c     **** 			usC_Current += lIncrease_C; 
+ 357:Src/lcd.c     **** 		}  
+ 358:Src/lcd.c     **** 		
+ 359:Src/lcd.c     **** 		if ( lError_P > lDistance ) 
+ 360:Src/lcd.c     **** 		{ 
+ 361:Src/lcd.c     **** 			lError_P -= lDistance; 
+ 362:Src/lcd.c     **** 			usP_Current += lIncrease_P; 
+ 363:Src/lcd.c     **** 		} 
+ 364:Src/lcd.c     **** 		
+ 365:Src/lcd.c     **** 	}  
+ 366:Src/lcd.c     **** 	
+ 367:Src/lcd.c     **** 	
+ 368:Src/lcd.c     **** }   
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 25
+
+
+ 369:Src/lcd.c     **** 
+ 370:Src/lcd.c     **** 
+ 371:Src/lcd.c     **** void LCD_DrawChar ( uint16_t usC, uint16_t usP, const char cChar )
+ 372:Src/lcd.c     **** {
+ 1018              		.loc 1 372 1 is_stmt 1 view -0
+ 1019              		.cfi_startproc
+ 1020              		@ args = 0, pretend = 0, frame = 0
+ 1021              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1022              		.loc 1 372 1 is_stmt 0 view .LVU225
+ 1023 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1024              	.LCFI13:
+ 1025              		.cfi_def_cfa_offset 24
+ 1026              		.cfi_offset 3, -24
+ 1027              		.cfi_offset 4, -20
+ 1028              		.cfi_offset 5, -16
+ 1029              		.cfi_offset 6, -12
+ 1030              		.cfi_offset 7, -8
+ 1031              		.cfi_offset 14, -4
+ 373:Src/lcd.c     **** 	uint8_t ucTemp, ucRelativePositon, ucPage, ucColumn;
+ 1032              		.loc 1 373 2 is_stmt 1 view .LVU226
+ 374:Src/lcd.c     **** 
+ 375:Src/lcd.c     **** 	
+ 376:Src/lcd.c     **** 	ucRelativePositon = cChar - ' ';
+ 1033              		.loc 1 376 2 view .LVU227
+ 1034              		.loc 1 376 20 is_stmt 0 view .LVU228
+ 1035 0002 203A     		subs	r2, r2, #32
+ 1036              	.LVL145:
+ 1037              		.loc 1 376 20 view .LVU229
+ 1038 0004 D7B2     		uxtb	r7, r2
+ 1039              	.LVL146:
+ 377:Src/lcd.c     **** 	
+ 378:Src/lcd.c     **** 	LCD_OpenWindow ( usC, usP, WIDTH_EN_CHAR, HEIGHT_EN_CHAR );
+ 1040              		.loc 1 378 2 is_stmt 1 view .LVU230
+ 1041 0006 1023     		movs	r3, #16
+ 1042 0008 0822     		movs	r2, #8
+ 1043 000a FFF7FEFF 		bl	LCD_OpenWindow
+ 1044              	.LVL147:
+ 379:Src/lcd.c     **** 	
+ 380:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_SetPixel );	
+ 1045              		.loc 1 380 2 view .LVU231
+ 1046 000e 2C20     		movs	r0, #44
+ 1047 0010 FFF7FEFF 		bl	LCD_Write_Cmd
+ 1048              	.LVL148:
+ 381:Src/lcd.c     **** 	
+ 382:Src/lcd.c     **** 	for ( ucPage = 0; ucPage < HEIGHT_EN_CHAR; ucPage ++ )
+ 1049              		.loc 1 382 2 view .LVU232
+ 1050              		.loc 1 382 15 is_stmt 0 view .LVU233
+ 1051 0014 0026     		movs	r6, #0
+ 1052              		.loc 1 382 2 view .LVU234
+ 1053 0016 11E0     		b	.L43
+ 1054              	.LVL149:
+ 1055              	.L45:
+ 383:Src/lcd.c     **** 	{
+ 384:Src/lcd.c     **** 		ucTemp = ucAscii_1608 [ ucRelativePositon ] [ ucPage ];
+ 385:Src/lcd.c     **** 		
+ 386:Src/lcd.c     **** 		for ( ucColumn = 0; ucColumn < WIDTH_EN_CHAR; ucColumn ++ )
+ 387:Src/lcd.c     **** 		{
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 26
+
+
+ 388:Src/lcd.c     **** 			if ( ucTemp & 0x01 )
+ 389:Src/lcd.c     **** 				LCD_Write_Data ( 0x001F );
+ 390:Src/lcd.c     **** 			
+ 391:Src/lcd.c     **** 			else
+ 392:Src/lcd.c     **** 				LCD_Write_Data (  0xFFFF );								
+ 1056              		.loc 1 392 5 is_stmt 1 view .LVU235
+ 1057 0018 4FF6FF70 		movw	r0, #65535
+ 1058 001c FFF7FEFF 		bl	LCD_Write_Data
+ 1059              	.LVL150:
+ 1060              	.L46:
+ 393:Src/lcd.c     **** 			
+ 394:Src/lcd.c     **** 			ucTemp >>= 1;		
+ 1061              		.loc 1 394 4 discriminator 2 view .LVU236
+ 1062              		.loc 1 394 11 is_stmt 0 discriminator 2 view .LVU237
+ 1063 0020 6D08     		lsrs	r5, r5, #1
+ 1064              	.LVL151:
+ 386:Src/lcd.c     **** 		{
+ 1065              		.loc 1 386 58 discriminator 2 view .LVU238
+ 1066 0022 0134     		adds	r4, r4, #1
+ 1067              	.LVL152:
+ 386:Src/lcd.c     **** 		{
+ 1068              		.loc 1 386 58 discriminator 2 view .LVU239
+ 1069 0024 E4B2     		uxtb	r4, r4
+ 1070              	.LVL153:
+ 1071              	.L44:
+ 386:Src/lcd.c     **** 		{
+ 1072              		.loc 1 386 3 discriminator 1 view .LVU240
+ 1073 0026 072C     		cmp	r4, #7
+ 1074 0028 06D8     		bhi	.L50
+ 388:Src/lcd.c     **** 				LCD_Write_Data ( 0x001F );
+ 1075              		.loc 1 388 4 is_stmt 1 view .LVU241
+ 388:Src/lcd.c     **** 				LCD_Write_Data ( 0x001F );
+ 1076              		.loc 1 388 7 is_stmt 0 view .LVU242
+ 1077 002a 15F0010F 		tst	r5, #1
+ 1078 002e F3D0     		beq	.L45
+ 389:Src/lcd.c     **** 			
+ 1079              		.loc 1 389 5 is_stmt 1 view .LVU243
+ 1080 0030 1F20     		movs	r0, #31
+ 1081 0032 FFF7FEFF 		bl	LCD_Write_Data
+ 1082              	.LVL154:
+ 1083 0036 F3E7     		b	.L46
+ 1084              	.L50:
+ 382:Src/lcd.c     **** 	{
+ 1085              		.loc 1 382 52 is_stmt 0 discriminator 2 view .LVU244
+ 1086 0038 0136     		adds	r6, r6, #1
+ 1087              	.LVL155:
+ 382:Src/lcd.c     **** 	{
+ 1088              		.loc 1 382 52 discriminator 2 view .LVU245
+ 1089 003a F6B2     		uxtb	r6, r6
+ 1090              	.LVL156:
+ 1091              	.L43:
+ 382:Src/lcd.c     **** 	{
+ 1092              		.loc 1 382 2 discriminator 1 view .LVU246
+ 1093 003c 0F2E     		cmp	r6, #15
+ 1094 003e 05D8     		bhi	.L51
+ 384:Src/lcd.c     **** 		
+ 1095              		.loc 1 384 3 is_stmt 1 view .LVU247
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 27
+
+
+ 384:Src/lcd.c     **** 		
+ 1096              		.loc 1 384 10 is_stmt 0 view .LVU248
+ 1097 0040 034B     		ldr	r3, .L52
+ 1098 0042 03EB0713 		add	r3, r3, r7, lsl #4
+ 1099 0046 9D5D     		ldrb	r5, [r3, r6]	@ zero_extendqisi2
+ 1100              	.LVL157:
+ 386:Src/lcd.c     **** 		{
+ 1101              		.loc 1 386 3 is_stmt 1 view .LVU249
+ 386:Src/lcd.c     **** 		{
+ 1102              		.loc 1 386 18 is_stmt 0 view .LVU250
+ 1103 0048 0024     		movs	r4, #0
+ 386:Src/lcd.c     **** 		{
+ 1104              		.loc 1 386 3 view .LVU251
+ 1105 004a ECE7     		b	.L44
+ 1106              	.LVL158:
+ 1107              	.L51:
+ 395:Src/lcd.c     **** 			
+ 396:Src/lcd.c     **** 		}
+ 397:Src/lcd.c     **** 		
+ 398:Src/lcd.c     **** 	}
+ 399:Src/lcd.c     **** 	
+ 400:Src/lcd.c     **** }
+ 1108              		.loc 1 400 1 view .LVU252
+ 1109 004c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 1110              	.LVL159:
+ 1111              	.L53:
+ 1112              		.loc 1 400 1 view .LVU253
+ 1113 004e 00BF     		.align	2
+ 1114              	.L52:
+ 1115 0050 00000000 		.word	.LANCHOR0
+ 1116              		.cfi_endproc
+ 1117              	.LFE87:
+ 1119              		.section	.text.LCD_DrawString,"ax",%progbits
+ 1120              		.align	1
+ 1121              		.global	LCD_DrawString
+ 1122              		.syntax unified
+ 1123              		.thumb
+ 1124              		.thumb_func
+ 1125              		.fpu softvfp
+ 1127              	LCD_DrawString:
+ 1128              	.LVL160:
+ 1129              	.LFB88:
+ 401:Src/lcd.c     **** 
+ 402:Src/lcd.c     **** 
+ 403:Src/lcd.c     **** 
+ 404:Src/lcd.c     **** 
+ 405:Src/lcd.c     **** void LCD_DrawString ( uint16_t usC, uint16_t usP, const char * pStr )
+ 406:Src/lcd.c     **** {
+ 1130              		.loc 1 406 1 is_stmt 1 view -0
+ 1131              		.cfi_startproc
+ 1132              		@ args = 0, pretend = 0, frame = 0
+ 1133              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1134              		.loc 1 406 1 is_stmt 0 view .LVU255
+ 1135 0000 70B5     		push	{r4, r5, r6, lr}
+ 1136              	.LCFI14:
+ 1137              		.cfi_def_cfa_offset 16
+ 1138              		.cfi_offset 4, -16
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 28
+
+
+ 1139              		.cfi_offset 5, -12
+ 1140              		.cfi_offset 6, -8
+ 1141              		.cfi_offset 14, -4
+ 1142 0002 0446     		mov	r4, r0
+ 1143 0004 0D46     		mov	r5, r1
+ 1144 0006 1646     		mov	r6, r2
+ 407:Src/lcd.c     **** 	while ( * pStr != '\0' )
+ 1145              		.loc 1 407 2 is_stmt 1 view .LVU256
+ 1146              		.loc 1 407 8 is_stmt 0 view .LVU257
+ 1147 0008 0BE0     		b	.L55
+ 1148              	.LVL161:
+ 1149              	.L56:
+ 408:Src/lcd.c     **** 	{
+ 409:Src/lcd.c     **** 		if ( ( usC - LCD_DispWindow_Start_COLUMN + WIDTH_EN_CHAR ) > LCD_DispWindow_COLUMN )
+ 410:Src/lcd.c     **** 		{
+ 411:Src/lcd.c     **** 			usC = LCD_DispWindow_Start_COLUMN;
+ 412:Src/lcd.c     **** 			usP += HEIGHT_EN_CHAR;
+ 413:Src/lcd.c     **** 		}
+ 414:Src/lcd.c     **** 		
+ 415:Src/lcd.c     **** 		if ( ( usP - LCD_DispWindow_Start_PAGE + HEIGHT_EN_CHAR ) > LCD_DispWindow_PAGE )
+ 1150              		.loc 1 415 3 is_stmt 1 view .LVU258
+ 1151              		.loc 1 415 6 is_stmt 0 view .LVU259
+ 1152 000a B5F5987F 		cmp	r5, #304
+ 1153 000e 01D9     		bls	.L57
+ 416:Src/lcd.c     **** 		{
+ 417:Src/lcd.c     **** 			usC = LCD_DispWindow_Start_COLUMN;
+ 418:Src/lcd.c     **** 			usP = LCD_DispWindow_Start_PAGE;
+ 1154              		.loc 1 418 8 view .LVU260
+ 1155 0010 0025     		movs	r5, #0
+ 1156              	.LVL162:
+ 417:Src/lcd.c     **** 			usP = LCD_DispWindow_Start_PAGE;
+ 1157              		.loc 1 417 8 view .LVU261
+ 1158 0012 2C46     		mov	r4, r5
+ 1159              	.LVL163:
+ 1160              	.L57:
+ 419:Src/lcd.c     **** 		}
+ 420:Src/lcd.c     **** 		
+ 421:Src/lcd.c     **** 		LCD_DrawChar ( usC, usP, * pStr );
+ 1161              		.loc 1 421 3 is_stmt 1 view .LVU262
+ 1162 0014 2946     		mov	r1, r5
+ 1163 0016 2046     		mov	r0, r4
+ 1164 0018 FFF7FEFF 		bl	LCD_DrawChar
+ 1165              	.LVL164:
+ 422:Src/lcd.c     **** 		
+ 423:Src/lcd.c     **** 		pStr ++;
+ 1166              		.loc 1 423 3 view .LVU263
+ 1167              		.loc 1 423 8 is_stmt 0 view .LVU264
+ 1168 001c 0136     		adds	r6, r6, #1
+ 1169              	.LVL165:
+ 424:Src/lcd.c     **** 		
+ 425:Src/lcd.c     **** 		usC += WIDTH_EN_CHAR;
+ 1170              		.loc 1 425 3 is_stmt 1 view .LVU265
+ 1171              		.loc 1 425 7 is_stmt 0 view .LVU266
+ 1172 001e 0834     		adds	r4, r4, #8
+ 1173              	.LVL166:
+ 1174              		.loc 1 425 7 view .LVU267
+ 1175 0020 A4B2     		uxth	r4, r4
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 29
+
+
+ 1176              	.LVL167:
+ 1177              	.L55:
+ 407:Src/lcd.c     **** 	{
+ 1178              		.loc 1 407 10 view .LVU268
+ 1179 0022 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 407:Src/lcd.c     **** 	{
+ 1180              		.loc 1 407 8 view .LVU269
+ 1181 0024 2AB1     		cbz	r2, .L61
+ 409:Src/lcd.c     **** 		{
+ 1182              		.loc 1 409 3 is_stmt 1 view .LVU270
+ 409:Src/lcd.c     **** 		{
+ 1183              		.loc 1 409 6 is_stmt 0 view .LVU271
+ 1184 0026 E82C     		cmp	r4, #232
+ 1185 0028 EFD9     		bls	.L56
+ 411:Src/lcd.c     **** 			usP += HEIGHT_EN_CHAR;
+ 1186              		.loc 1 411 4 is_stmt 1 view .LVU272
+ 1187              	.LVL168:
+ 412:Src/lcd.c     **** 		}
+ 1188              		.loc 1 412 4 view .LVU273
+ 412:Src/lcd.c     **** 		}
+ 1189              		.loc 1 412 8 is_stmt 0 view .LVU274
+ 1190 002a 1035     		adds	r5, r5, #16
+ 1191              	.LVL169:
+ 412:Src/lcd.c     **** 		}
+ 1192              		.loc 1 412 8 view .LVU275
+ 1193 002c ADB2     		uxth	r5, r5
+ 1194              	.LVL170:
+ 411:Src/lcd.c     **** 			usP += HEIGHT_EN_CHAR;
+ 1195              		.loc 1 411 8 view .LVU276
+ 1196 002e 0024     		movs	r4, #0
+ 1197 0030 EBE7     		b	.L56
+ 1198              	.LVL171:
+ 1199              	.L61:
+ 426:Src/lcd.c     **** 		
+ 427:Src/lcd.c     **** 	}
+ 428:Src/lcd.c     **** 	
+ 429:Src/lcd.c     **** }
+ 1200              		.loc 1 429 1 view .LVU277
+ 1201 0032 70BD     		pop	{r4, r5, r6, pc}
+ 1202              		.loc 1 429 1 view .LVU278
+ 1203              		.cfi_endproc
+ 1204              	.LFE88:
+ 1206              		.section	.text.LCD_DrawDot,"ax",%progbits
+ 1207              		.align	1
+ 1208              		.global	LCD_DrawDot
+ 1209              		.syntax unified
+ 1210              		.thumb
+ 1211              		.thumb_func
+ 1212              		.fpu softvfp
+ 1214              	LCD_DrawDot:
+ 1215              	.LVL172:
+ 1216              	.LFB89:
+ 430:Src/lcd.c     **** 
+ 431:Src/lcd.c     **** 
+ 432:Src/lcd.c     **** //Task 2
+ 433:Src/lcd.c     **** void LCD_DrawDot(uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usColor)	
+ 434:Src/lcd.c     **** {	
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 30
+
+
+ 1217              		.loc 1 434 1 is_stmt 1 view -0
+ 1218              		.cfi_startproc
+ 1219              		@ args = 0, pretend = 0, frame = 0
+ 1220              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1221              		.loc 1 434 1 is_stmt 0 view .LVU280
+ 1222 0000 10B5     		push	{r4, lr}
+ 1223              	.LCFI15:
+ 1224              		.cfi_def_cfa_offset 8
+ 1225              		.cfi_offset 4, -8
+ 1226              		.cfi_offset 14, -4
+ 1227 0002 1446     		mov	r4, r2
+ 435:Src/lcd.c     **** 	/*
+ 436:Src/lcd.c     **** 	 *  Task 2 : Implement the LCD_DrawDot to turn on a particular dot on the LCD.
+ 437:Src/lcd.c     **** 	 */
+ 438:Src/lcd.c     **** 	// void 	LCD_OpenWindow ( uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usWidth, uint16_t usHeight 
+ 439:Src/lcd.c     **** 	LCD_OpenWindow(usCOLUMN, usPAGE, 1, 1);
+ 1228              		.loc 1 439 2 is_stmt 1 view .LVU281
+ 1229 0004 0123     		movs	r3, #1
+ 1230 0006 1A46     		mov	r2, r3
+ 1231              	.LVL173:
+ 1232              		.loc 1 439 2 is_stmt 0 view .LVU282
+ 1233 0008 FFF7FEFF 		bl	LCD_OpenWindow
+ 1234              	.LVL174:
+ 440:Src/lcd.c     **** 	// void		LCD_FillColor		( uint32_t usPoint, uint16_t usColor );
+ 441:Src/lcd.c     **** 	LCD_FillColor(1,usColor);
+ 1235              		.loc 1 441 2 is_stmt 1 view .LVU283
+ 1236 000c 2146     		mov	r1, r4
+ 1237 000e 0120     		movs	r0, #1
+ 1238 0010 FFF7FEFF 		bl	LCD_FillColor
+ 1239              	.LVL175:
+ 442:Src/lcd.c     **** }
+ 1240              		.loc 1 442 1 is_stmt 0 view .LVU284
+ 1241 0014 10BD     		pop	{r4, pc}
+ 1242              		.cfi_endproc
+ 1243              	.LFE89:
+ 1245              		.section	.text.LCD_DrawLine,"ax",%progbits
+ 1246              		.align	1
+ 1247              		.global	LCD_DrawLine
+ 1248              		.syntax unified
+ 1249              		.thumb
+ 1250              		.thumb_func
+ 1251              		.fpu softvfp
+ 1253              	LCD_DrawLine:
+ 1254              	.LVL176:
+ 1255              	.LFB86:
+ 300:Src/lcd.c     **** 	uint16_t us; 
+ 1256              		.loc 1 300 1 is_stmt 1 view -0
+ 1257              		.cfi_startproc
+ 1258              		@ args = 4, pretend = 0, frame = 16
+ 1259              		@ frame_needed = 0, uses_anonymous_args = 0
+ 300:Src/lcd.c     **** 	uint16_t us; 
+ 1260              		.loc 1 300 1 is_stmt 0 view .LVU286
+ 1261 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1262              	.LCFI16:
+ 1263              		.cfi_def_cfa_offset 36
+ 1264              		.cfi_offset 4, -36
+ 1265              		.cfi_offset 5, -32
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 31
+
+
+ 1266              		.cfi_offset 6, -28
+ 1267              		.cfi_offset 7, -24
+ 1268              		.cfi_offset 8, -20
+ 1269              		.cfi_offset 9, -16
+ 1270              		.cfi_offset 10, -12
+ 1271              		.cfi_offset 11, -8
+ 1272              		.cfi_offset 14, -4
+ 1273 0004 85B0     		sub	sp, sp, #20
+ 1274              	.LCFI17:
+ 1275              		.cfi_def_cfa_offset 56
+ 1276 0006 8046     		mov	r8, r0
+ 1277 0008 8946     		mov	r9, r1
+ 1278 000a BDF83810 		ldrh	r1, [sp, #56]
+ 1279              	.LVL177:
+ 300:Src/lcd.c     **** 	uint16_t us; 
+ 1280              		.loc 1 300 1 view .LVU287
+ 1281 000e 0191     		str	r1, [sp, #4]
+ 301:Src/lcd.c     **** 	uint16_t usC_Current, usP_Current;
+ 1282              		.loc 1 301 2 is_stmt 1 view .LVU288
+ 302:Src/lcd.c     **** 	
+ 1283              		.loc 1 302 2 view .LVU289
+ 304:Src/lcd.c     **** 	int32_t lIncrease_C, lIncrease_P; 	
+ 1284              		.loc 1 304 2 view .LVU290
+ 1285              	.LVL178:
+ 305:Src/lcd.c     **** 	
+ 1286              		.loc 1 305 2 view .LVU291
+ 308:Src/lcd.c     **** 	lDelta_P = usP2 - usP1; 
+ 1287              		.loc 1 308 2 view .LVU292
+ 308:Src/lcd.c     **** 	lDelta_P = usP2 - usP1; 
+ 1288              		.loc 1 308 11 is_stmt 0 view .LVU293
+ 1289 0010 A2EB000A 		sub	r10, r2, r0
+ 1290              	.LVL179:
+ 309:Src/lcd.c     **** 	
+ 1291              		.loc 1 309 2 is_stmt 1 view .LVU294
+ 309:Src/lcd.c     **** 	
+ 1292              		.loc 1 309 18 is_stmt 0 view .LVU295
+ 1293 0014 4946     		mov	r1, r9
+ 309:Src/lcd.c     **** 	
+ 1294              		.loc 1 309 11 view .LVU296
+ 1295 0016 A3EB090B 		sub	fp, r3, r9
+ 1296              	.LVL180:
+ 311:Src/lcd.c     **** 	usP_Current = usP1; 
+ 1297              		.loc 1 311 2 is_stmt 1 view .LVU297
+ 312:Src/lcd.c     **** 	
+ 1298              		.loc 1 312 2 view .LVU298
+ 315:Src/lcd.c     **** 		lIncrease_C = 1;  
+ 1299              		.loc 1 315 2 view .LVU299
+ 315:Src/lcd.c     **** 		lIncrease_C = 1;  
+ 1300              		.loc 1 315 5 is_stmt 0 view .LVU300
+ 1301 001a BAF1000F 		cmp	r10, #0
+ 1302 001e 0DDD     		ble	.L78
+ 316:Src/lcd.c     **** 	
+ 1303              		.loc 1 316 15 view .LVU301
+ 1304 0020 0122     		movs	r2, #1
+ 1305              	.LVL181:
+ 316:Src/lcd.c     **** 	
+ 1306              		.loc 1 316 15 view .LVU302
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 32
+
+
+ 1307 0022 0292     		str	r2, [sp, #8]
+ 1308              	.L65:
+ 1309              	.LVL182:
+ 328:Src/lcd.c     **** 		lIncrease_P = 1; 
+ 1310              		.loc 1 328 2 is_stmt 1 view .LVU303
+ 328:Src/lcd.c     **** 		lIncrease_P = 1; 
+ 1311              		.loc 1 328 5 is_stmt 0 view .LVU304
+ 1312 0024 BBF1000F 		cmp	fp, #0
+ 1313 0028 14DD     		ble	.L79
+ 329:Src/lcd.c     **** 	
+ 1314              		.loc 1 329 15 view .LVU305
+ 1315 002a 0123     		movs	r3, #1
+ 1316              	.LVL183:
+ 329:Src/lcd.c     **** 	
+ 1317              		.loc 1 329 15 view .LVU306
+ 1318 002c 0393     		str	r3, [sp, #12]
+ 1319              	.L66:
+ 1320              	.LVL184:
+ 339:Src/lcd.c     **** 		lDistance = lDelta_C; 
+ 1321              		.loc 1 339 2 is_stmt 1 view .LVU307
+ 339:Src/lcd.c     **** 		lDistance = lDelta_C; 
+ 1322              		.loc 1 339 5 is_stmt 0 view .LVU308
+ 1323 002e DA45     		cmp	r10, fp
+ 1324 0030 1CDD     		ble	.L76
+ 340:Src/lcd.c     **** 	
+ 1325              		.loc 1 340 13 view .LVU309
+ 1326 0032 5646     		mov	r6, r10
+ 1327              	.L67:
+ 1328              	.LVL185:
+ 346:Src/lcd.c     **** 	{  
+ 1329              		.loc 1 346 2 is_stmt 1 view .LVU310
+ 304:Src/lcd.c     **** 	int32_t lIncrease_C, lIncrease_P; 	
+ 1330              		.loc 1 304 24 is_stmt 0 view .LVU311
+ 1331 0034 0025     		movs	r5, #0
+ 304:Src/lcd.c     **** 	int32_t lIncrease_C, lIncrease_P; 	
+ 1332              		.loc 1 304 10 view .LVU312
+ 1333 0036 2F46     		mov	r7, r5
+ 346:Src/lcd.c     **** 	{  
+ 1334              		.loc 1 346 11 view .LVU313
+ 1335 0038 2C46     		mov	r4, r5
+ 346:Src/lcd.c     **** 	{  
+ 1336              		.loc 1 346 2 view .LVU314
+ 1337 003a 1BE0     		b	.L68
+ 1338              	.LVL186:
+ 1339              	.L78:
+ 318:Src/lcd.c     **** 		lIncrease_C = 0;
+ 1340              		.loc 1 318 7 is_stmt 1 view .LVU315
+ 318:Src/lcd.c     **** 		lIncrease_C = 0;
+ 1341              		.loc 1 318 10 is_stmt 0 view .LVU316
+ 1342 003c BAF1000F 		cmp	r10, #0
+ 1343 0040 05D0     		beq	.L73
+ 323:Src/lcd.c     ****     		lDelta_C = - lDelta_C;
+ 1344              		.loc 1 323 7 is_stmt 1 view .LVU317
+ 1345              	.LVL187:
+ 324:Src/lcd.c     ****   	} 
+ 1346              		.loc 1 324 7 view .LVU318
+ 324:Src/lcd.c     ****   	} 
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 33
+
+
+ 1347              		.loc 1 324 16 is_stmt 0 view .LVU319
+ 1348 0042 A0EB020A 		sub	r10, r0, r2
+ 1349              	.LVL188:
+ 323:Src/lcd.c     ****     		lDelta_C = - lDelta_C;
+ 1350              		.loc 1 323 19 view .LVU320
+ 1351 0046 4FF0FF32 		mov	r2, #-1
+ 1352              	.LVL189:
+ 323:Src/lcd.c     ****     		lDelta_C = - lDelta_C;
+ 1353              		.loc 1 323 19 view .LVU321
+ 1354 004a 0292     		str	r2, [sp, #8]
+ 1355 004c EAE7     		b	.L65
+ 1356              	.LVL190:
+ 1357              	.L73:
+ 319:Src/lcd.c     **** 	
+ 1358              		.loc 1 319 15 view .LVU322
+ 1359 004e CDF808A0 		str	r10, [sp, #8]
+ 1360 0052 E7E7     		b	.L65
+ 1361              	.LVL191:
+ 1362              	.L79:
+ 331:Src/lcd.c     **** 		lIncrease_P = 0;
+ 1363              		.loc 1 331 7 is_stmt 1 view .LVU323
+ 331:Src/lcd.c     **** 		lIncrease_P = 0;
+ 1364              		.loc 1 331 10 is_stmt 0 view .LVU324
+ 1365 0054 BBF1000F 		cmp	fp, #0
+ 1366 0058 05D0     		beq	.L75
+ 335:Src/lcd.c     ****     		lDelta_P = - lDelta_P;
+ 1367              		.loc 1 335 5 is_stmt 1 view .LVU325
+ 1368              	.LVL192:
+ 336:Src/lcd.c     ****  	} 
+ 1369              		.loc 1 336 7 view .LVU326
+ 336:Src/lcd.c     ****  	} 
+ 1370              		.loc 1 336 16 is_stmt 0 view .LVU327
+ 1371 005a A1EB030B 		sub	fp, r1, r3
+ 1372              	.LVL193:
+ 335:Src/lcd.c     ****     		lDelta_P = - lDelta_P;
+ 1373              		.loc 1 335 17 view .LVU328
+ 1374 005e 4FF0FF33 		mov	r3, #-1
+ 1375              	.LVL194:
+ 335:Src/lcd.c     ****     		lDelta_P = - lDelta_P;
+ 1376              		.loc 1 335 17 view .LVU329
+ 1377 0062 0393     		str	r3, [sp, #12]
+ 1378 0064 E3E7     		b	.L66
+ 1379              	.LVL195:
+ 1380              	.L75:
+ 332:Src/lcd.c     **** 	else 
+ 1381              		.loc 1 332 15 view .LVU330
+ 1382 0066 CDF80CB0 		str	fp, [sp, #12]
+ 1383 006a E0E7     		b	.L66
+ 1384              	.LVL196:
+ 1385              	.L76:
+ 343:Src/lcd.c     **** 	
+ 1386              		.loc 1 343 13 view .LVU331
+ 1387 006c 5E46     		mov	r6, fp
+ 1388 006e E1E7     		b	.L67
+ 1389              	.LVL197:
+ 1390              	.L70:
+ 346:Src/lcd.c     **** 	{  
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 34
+
+
+ 1391              		.loc 1 346 40 discriminator 2 view .LVU332
+ 1392 0070 0134     		adds	r4, r4, #1
+ 1393              	.LVL198:
+ 346:Src/lcd.c     **** 	{  
+ 1394              		.loc 1 346 40 discriminator 2 view .LVU333
+ 1395 0072 A4B2     		uxth	r4, r4
+ 1396              	.LVL199:
+ 1397              	.L68:
+ 346:Src/lcd.c     **** 	{  
+ 1398              		.loc 1 346 32 discriminator 1 view .LVU334
+ 1399 0074 731C     		adds	r3, r6, #1
+ 346:Src/lcd.c     **** 	{  
+ 1400              		.loc 1 346 2 discriminator 1 view .LVU335
+ 1401 0076 9C42     		cmp	r4, r3
+ 1402 0078 15DC     		bgt	.L80
+ 348:Src/lcd.c     **** 		
+ 1403              		.loc 1 348 3 is_stmt 1 view .LVU336
+ 1404 007a 019A     		ldr	r2, [sp, #4]
+ 1405 007c 4946     		mov	r1, r9
+ 1406 007e 4046     		mov	r0, r8
+ 1407 0080 FFF7FEFF 		bl	LCD_DrawDot
+ 1408              	.LVL200:
+ 350:Src/lcd.c     **** 		lError_P += lDelta_P ; 
+ 1409              		.loc 1 350 3 view .LVU337
+ 350:Src/lcd.c     **** 		lError_P += lDelta_P ; 
+ 1410              		.loc 1 350 12 is_stmt 0 view .LVU338
+ 1411 0084 5744     		add	r7, r7, r10
+ 1412              	.LVL201:
+ 351:Src/lcd.c     **** 		
+ 1413              		.loc 1 351 3 is_stmt 1 view .LVU339
+ 351:Src/lcd.c     **** 		
+ 1414              		.loc 1 351 12 is_stmt 0 view .LVU340
+ 1415 0086 5D44     		add	r5, r5, fp
+ 1416              	.LVL202:
+ 353:Src/lcd.c     **** 		{ 
+ 1417              		.loc 1 353 3 is_stmt 1 view .LVU341
+ 353:Src/lcd.c     **** 		{ 
+ 1418              		.loc 1 353 6 is_stmt 0 view .LVU342
+ 1419 0088 BE42     		cmp	r6, r7
+ 1420 008a 04DA     		bge	.L69
+ 355:Src/lcd.c     **** 			usC_Current += lIncrease_C; 
+ 1421              		.loc 1 355 4 is_stmt 1 view .LVU343
+ 355:Src/lcd.c     **** 			usC_Current += lIncrease_C; 
+ 1422              		.loc 1 355 13 is_stmt 0 view .LVU344
+ 1423 008c BF1B     		subs	r7, r7, r6
+ 1424              	.LVL203:
+ 356:Src/lcd.c     **** 		}  
+ 1425              		.loc 1 356 4 is_stmt 1 view .LVU345
+ 356:Src/lcd.c     **** 		}  
+ 1426              		.loc 1 356 16 is_stmt 0 view .LVU346
+ 1427 008e 029B     		ldr	r3, [sp, #8]
+ 1428 0090 9844     		add	r8, r8, r3
+ 1429              	.LVL204:
+ 356:Src/lcd.c     **** 		}  
+ 1430              		.loc 1 356 16 view .LVU347
+ 1431 0092 1FFA88F8 		uxth	r8, r8
+ 1432              	.LVL205:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 35
+
+
+ 1433              	.L69:
+ 359:Src/lcd.c     **** 		{ 
+ 1434              		.loc 1 359 3 is_stmt 1 view .LVU348
+ 359:Src/lcd.c     **** 		{ 
+ 1435              		.loc 1 359 6 is_stmt 0 view .LVU349
+ 1436 0096 AE42     		cmp	r6, r5
+ 1437 0098 EADA     		bge	.L70
+ 361:Src/lcd.c     **** 			usP_Current += lIncrease_P; 
+ 1438              		.loc 1 361 4 is_stmt 1 view .LVU350
+ 361:Src/lcd.c     **** 			usP_Current += lIncrease_P; 
+ 1439              		.loc 1 361 13 is_stmt 0 view .LVU351
+ 1440 009a AD1B     		subs	r5, r5, r6
+ 1441              	.LVL206:
+ 362:Src/lcd.c     **** 		} 
+ 1442              		.loc 1 362 4 is_stmt 1 view .LVU352
+ 362:Src/lcd.c     **** 		} 
+ 1443              		.loc 1 362 16 is_stmt 0 view .LVU353
+ 1444 009c 039B     		ldr	r3, [sp, #12]
+ 1445 009e 9944     		add	r9, r9, r3
+ 1446              	.LVL207:
+ 362:Src/lcd.c     **** 		} 
+ 1447              		.loc 1 362 16 view .LVU354
+ 1448 00a0 1FFA89F9 		uxth	r9, r9
+ 1449              	.LVL208:
+ 362:Src/lcd.c     **** 		} 
+ 1450              		.loc 1 362 16 view .LVU355
+ 1451 00a4 E4E7     		b	.L70
+ 1452              	.L80:
+ 368:Src/lcd.c     **** 
+ 1453              		.loc 1 368 1 view .LVU356
+ 1454 00a6 05B0     		add	sp, sp, #20
+ 1455              	.LCFI18:
+ 1456              		.cfi_def_cfa_offset 36
+ 1457              		@ sp needed
+ 1458 00a8 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 368:Src/lcd.c     **** 
+ 1459              		.loc 1 368 1 view .LVU357
+ 1460              		.cfi_endproc
+ 1461              	.LFE86:
+ 1463              		.section	.text.LCD_DrawCircle,"ax",%progbits
+ 1464              		.align	1
+ 1465              		.global	LCD_DrawCircle
+ 1466              		.syntax unified
+ 1467              		.thumb
+ 1468              		.thumb_func
+ 1469              		.fpu softvfp
+ 1471              	LCD_DrawCircle:
+ 1472              	.LVL209:
+ 1473              	.LFB90:
+ 443:Src/lcd.c     **** 
+ 444:Src/lcd.c     **** //Task 3
+ 445:Src/lcd.c     **** void LCD_DrawCircle ( uint16_t usC, uint16_t usP, uint16_t R, uint16_t usColor)
+ 446:Src/lcd.c     **** {
+ 1474              		.loc 1 446 1 is_stmt 1 view -0
+ 1475              		.cfi_startproc
+ 1476              		@ args = 0, pretend = 0, frame = 40
+ 1477              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 36
+
+
+ 1478              		.loc 1 446 1 is_stmt 0 view .LVU359
+ 1479 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1480              	.LCFI19:
+ 1481              		.cfi_def_cfa_offset 36
+ 1482              		.cfi_offset 4, -36
+ 1483              		.cfi_offset 5, -32
+ 1484              		.cfi_offset 6, -28
+ 1485              		.cfi_offset 7, -24
+ 1486              		.cfi_offset 8, -20
+ 1487              		.cfi_offset 9, -16
+ 1488              		.cfi_offset 10, -12
+ 1489              		.cfi_offset 11, -8
+ 1490              		.cfi_offset 14, -4
+ 1491 0004 8BB0     		sub	sp, sp, #44
+ 1492              	.LCFI20:
+ 1493              		.cfi_def_cfa_offset 80
+ 447:Src/lcd.c     **** 	/*
+ 448:Src/lcd.c     **** 	 *  Task 3 : Implement LCD_DrawCircle by using LCD_DrawDot
+ 449:Src/lcd.c     **** 	 */
+ 450:Src/lcd.c     **** 	if(usC-R<0 || usC+R>240 || usP-R<0 || usP+R>320) return;
+ 1494              		.loc 1 450 2 is_stmt 1 view .LVU360
+ 1495              		.loc 1 450 8 is_stmt 0 view .LVU361
+ 1496 0006 0490     		str	r0, [sp, #16]
+ 1497 0008 0592     		str	r2, [sp, #20]
+ 1498 000a 841A     		subs	r4, r0, r2
+ 1499              		.loc 1 450 4 view .LVU362
+ 1500 000c 002C     		cmp	r4, #0
+ 1501 000e C0F28180 		blt	.L81
+ 1502              		.loc 1 450 19 discriminator 2 view .LVU363
+ 1503 0012 8418     		adds	r4, r0, r2
+ 1504 0014 0694     		str	r4, [sp, #24]
+ 1505              		.loc 1 450 13 discriminator 2 view .LVU364
+ 1506 0016 F02C     		cmp	r4, #240
+ 1507 0018 7CDC     		bgt	.L81
+ 1508              		.loc 1 450 32 discriminator 4 view .LVU365
+ 1509 001a 0291     		str	r1, [sp, #8]
+ 1510 001c 8C1A     		subs	r4, r1, r2
+ 1511              		.loc 1 450 26 discriminator 4 view .LVU366
+ 1512 001e 002C     		cmp	r4, #0
+ 1513 0020 78DB     		blt	.L81
+ 1514              		.loc 1 450 43 discriminator 6 view .LVU367
+ 1515 0022 5418     		adds	r4, r2, r1
+ 1516              		.loc 1 450 37 discriminator 6 view .LVU368
+ 1517 0024 B4F5A07F 		cmp	r4, #320
+ 1518 0028 74DC     		bgt	.L81
+ 1519 002a 0193     		str	r3, [sp, #4]
+ 1520 002c 0992     		str	r2, [sp, #36]
+ 1521 002e 0391     		str	r1, [sp, #12]
+ 1522 0030 0790     		str	r0, [sp, #28]
+ 451:Src/lcd.c     **** 	uint16_t cit = usC;
+ 1523              		.loc 1 451 2 is_stmt 1 view .LVU369
+ 1524              	.LVL210:
+ 452:Src/lcd.c     **** 	uint16_t pit = usP-R;
+ 1525              		.loc 1 452 2 view .LVU370
+ 1526              		.loc 1 452 11 is_stmt 0 view .LVU371
+ 1527 0032 8B1A     		subs	r3, r1, r2
+ 1528              	.LVL211:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 37
+
+
+ 1529              		.loc 1 452 11 view .LVU372
+ 1530 0034 9BB2     		uxth	r3, r3
+ 1531 0036 0893     		str	r3, [sp, #32]
+ 1532              	.LVL212:
+ 453:Src/lcd.c     **** 	while(cit<usC+R)
+ 1533              		.loc 1 453 2 is_stmt 1 view .LVU373
+ 452:Src/lcd.c     **** 	uint16_t pit = usP-R;
+ 1534              		.loc 1 452 11 is_stmt 0 view .LVU374
+ 1535 0038 1C46     		mov	r4, r3
+ 451:Src/lcd.c     **** 	uint16_t cit = usC;
+ 1536              		.loc 1 451 11 view .LVU375
+ 1537 003a 0546     		mov	r5, r0
+ 1538              	.LVL213:
+ 1539              	.L83:
+ 1540              		.loc 1 453 7 view .LVU376
+ 1541 003c 069B     		ldr	r3, [sp, #24]
+ 1542 003e AB42     		cmp	r3, r5
+ 1543 0040 5BDD     		ble	.L89
+ 454:Src/lcd.c     **** 	{
+ 455:Src/lcd.c     **** 		LCD_DrawDot(cit,pit,usColor);
+ 1544              		.loc 1 455 3 is_stmt 1 view .LVU377
+ 1545 0042 DDF80480 		ldr	r8, [sp, #4]
+ 1546 0046 4246     		mov	r2, r8
+ 1547 0048 2146     		mov	r1, r4
+ 1548 004a 2846     		mov	r0, r5
+ 1549 004c FFF7FEFF 		bl	LCD_DrawDot
+ 1550              	.LVL214:
+ 456:Src/lcd.c     **** 		LCD_DrawDot(2*usC-cit,2*usP-pit,usColor);
+ 1551              		.loc 1 456 3 view .LVU378
+ 1552 0050 079B     		ldr	r3, [sp, #28]
+ 1553 0052 4FEA430A 		lsl	r10, r3, #1
+ 1554 0056 1FFA8AFA 		uxth	r10, r10
+ 1555 005a AAEB0506 		sub	r6, r10, r5
+ 1556 005e B6B2     		uxth	r6, r6
+ 1557 0060 039B     		ldr	r3, [sp, #12]
+ 1558 0062 4FEA4309 		lsl	r9, r3, #1
+ 1559 0066 1FFA89F9 		uxth	r9, r9
+ 1560 006a A9EB0407 		sub	r7, r9, r4
+ 1561 006e BFB2     		uxth	r7, r7
+ 1562 0070 4246     		mov	r2, r8
+ 1563 0072 3946     		mov	r1, r7
+ 1564 0074 3046     		mov	r0, r6
+ 1565 0076 FFF7FEFF 		bl	LCD_DrawDot
+ 1566              	.LVL215:
+ 457:Src/lcd.c     **** 		LCD_DrawDot(cit,2*usP-pit,usColor);
+ 1567              		.loc 1 457 3 view .LVU379
+ 1568 007a 4246     		mov	r2, r8
+ 1569 007c 3946     		mov	r1, r7
+ 1570 007e 2846     		mov	r0, r5
+ 1571 0080 FFF7FEFF 		bl	LCD_DrawDot
+ 1572              	.LVL216:
+ 458:Src/lcd.c     **** 		LCD_DrawDot(2*usC-cit,pit,usColor);
+ 1573              		.loc 1 458 3 view .LVU380
+ 1574 0084 4246     		mov	r2, r8
+ 1575 0086 2146     		mov	r1, r4
+ 1576 0088 3046     		mov	r0, r6
+ 1577 008a FFF7FEFF 		bl	LCD_DrawDot
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 38
+
+
+ 1578              	.LVL217:
+ 459:Src/lcd.c     **** 		if(cit<usC+R)++cit;
+ 1579              		.loc 1 459 3 view .LVU381
+ 1580              		.loc 1 459 16 view .LVU382
+ 1581 008e 0135     		adds	r5, r5, #1
+ 1582              	.LVL218:
+ 1583              		.loc 1 459 16 is_stmt 0 view .LVU383
+ 1584 0090 ADB2     		uxth	r5, r5
+ 1585              	.LVL219:
+ 460:Src/lcd.c     **** 		if((cit-usC)*(cit-usC) + (pit-usP)*(pit-usP)>=R*R)
+ 1586              		.loc 1 460 3 is_stmt 1 view .LVU384
+ 1587              		.loc 1 460 10 is_stmt 0 view .LVU385
+ 1588 0092 049B     		ldr	r3, [sp, #16]
+ 1589 0094 A5EB0308 		sub	r8, r5, r3
+ 1590              		.loc 1 460 15 view .LVU386
+ 1591 0098 08FB08F8 		mul	r8, r8, r8
+ 1592              		.loc 1 460 32 view .LVU387
+ 1593 009c 029B     		ldr	r3, [sp, #8]
+ 1594 009e E31A     		subs	r3, r4, r3
+ 1595              		.loc 1 460 26 view .LVU388
+ 1596 00a0 03FB0383 		mla	r3, r3, r3, r8
+ 1597              		.loc 1 460 50 view .LVU389
+ 1598 00a4 059A     		ldr	r2, [sp, #20]
+ 1599 00a6 02FB02FB 		mul	fp, r2, r2
+ 1600              		.loc 1 460 5 view .LVU390
+ 1601 00aa 5B45     		cmp	r3, fp
+ 1602 00ac C6DB     		blt	.L83
+ 1603              	.L85:
+ 461:Src/lcd.c     **** 		{
+ 462:Src/lcd.c     **** 			do
+ 1604              		.loc 1 462 4 is_stmt 1 discriminator 2 view .LVU391
+ 463:Src/lcd.c     **** 			{
+ 464:Src/lcd.c     **** 				++pit;
+ 1605              		.loc 1 464 5 discriminator 2 view .LVU392
+ 1606 00ae 0134     		adds	r4, r4, #1
+ 1607              	.LVL220:
+ 1608              		.loc 1 464 5 is_stmt 0 discriminator 2 view .LVU393
+ 1609 00b0 A4B2     		uxth	r4, r4
+ 1610              	.LVL221:
+ 465:Src/lcd.c     **** 				LCD_DrawDot(cit,pit,usColor);
+ 1611              		.loc 1 465 5 is_stmt 1 discriminator 2 view .LVU394
+ 1612 00b2 019A     		ldr	r2, [sp, #4]
+ 1613 00b4 2146     		mov	r1, r4
+ 1614 00b6 2846     		mov	r0, r5
+ 1615 00b8 FFF7FEFF 		bl	LCD_DrawDot
+ 1616              	.LVL222:
+ 466:Src/lcd.c     **** 				LCD_DrawDot(2*usC-cit,2*usP-pit,usColor);
+ 1617              		.loc 1 466 5 discriminator 2 view .LVU395
+ 1618 00bc AAEB0506 		sub	r6, r10, r5
+ 1619 00c0 B6B2     		uxth	r6, r6
+ 1620 00c2 A9EB0407 		sub	r7, r9, r4
+ 1621 00c6 BFB2     		uxth	r7, r7
+ 1622 00c8 019A     		ldr	r2, [sp, #4]
+ 1623 00ca 3946     		mov	r1, r7
+ 1624 00cc 3046     		mov	r0, r6
+ 1625 00ce FFF7FEFF 		bl	LCD_DrawDot
+ 1626              	.LVL223:
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 39
+
+
+ 467:Src/lcd.c     **** 				LCD_DrawDot(cit,2*usP-pit,usColor);
+ 1627              		.loc 1 467 5 discriminator 2 view .LVU396
+ 1628 00d2 019A     		ldr	r2, [sp, #4]
+ 1629 00d4 3946     		mov	r1, r7
+ 1630 00d6 2846     		mov	r0, r5
+ 1631 00d8 FFF7FEFF 		bl	LCD_DrawDot
+ 1632              	.LVL224:
+ 468:Src/lcd.c     **** 				LCD_DrawDot(2*usC-cit,pit,usColor);
+ 1633              		.loc 1 468 5 discriminator 2 view .LVU397
+ 1634 00dc 019A     		ldr	r2, [sp, #4]
+ 1635 00de 2146     		mov	r1, r4
+ 1636 00e0 3046     		mov	r0, r6
+ 1637 00e2 FFF7FEFF 		bl	LCD_DrawDot
+ 1638              	.LVL225:
+ 469:Src/lcd.c     **** 			}while((cit-usC)*(cit-usC) + (pit-usP)*(pit-usP)>=R*R && pit<usP);
+ 1639              		.loc 1 469 37 is_stmt 0 discriminator 2 view .LVU398
+ 1640 00e6 029B     		ldr	r3, [sp, #8]
+ 1641 00e8 E31A     		subs	r3, r4, r3
+ 1642              		.loc 1 469 31 discriminator 2 view .LVU399
+ 1643 00ea 03FB0383 		mla	r3, r3, r3, r8
+ 1644              		.loc 1 469 4 discriminator 2 view .LVU400
+ 1645 00ee 9B45     		cmp	fp, r3
+ 1646 00f0 A4DC     		bgt	.L83
+ 1647              		.loc 1 469 58 discriminator 1 view .LVU401
+ 1648 00f2 039B     		ldr	r3, [sp, #12]
+ 1649 00f4 A342     		cmp	r3, r4
+ 1650 00f6 DAD8     		bhi	.L85
+ 1651 00f8 A0E7     		b	.L83
+ 1652              	.L89:
+ 470:Src/lcd.c     **** 		}
+ 471:Src/lcd.c     **** 	}
+ 472:Src/lcd.c     **** 	LCD_OpenWindow ( usC-R, usP-R, 2*R, 2*R );
+ 1653              		.loc 1 472 2 is_stmt 1 view .LVU402
+ 1654 00fa 099B     		ldr	r3, [sp, #36]
+ 1655 00fc 5A00     		lsls	r2, r3, #1
+ 1656 00fe 92B2     		uxth	r2, r2
+ 1657 0100 0799     		ldr	r1, [sp, #28]
+ 1658 0102 C81A     		subs	r0, r1, r3
+ 1659 0104 1346     		mov	r3, r2
+ 1660 0106 0899     		ldr	r1, [sp, #32]
+ 1661 0108 80B2     		uxth	r0, r0
+ 1662 010a FFF7FEFF 		bl	LCD_OpenWindow
+ 1663              	.LVL226:
+ 473:Src/lcd.c     **** 	LCD_Write_Cmd ( CMD_SetPixel );
+ 1664              		.loc 1 473 2 view .LVU403
+ 1665 010e 2C20     		movs	r0, #44
+ 1666 0110 FFF7FEFF 		bl	LCD_Write_Cmd
+ 1667              	.LVL227:
+ 1668              	.L81:
+ 474:Src/lcd.c     **** 	
+ 475:Src/lcd.c     **** }
+ 1669              		.loc 1 475 1 is_stmt 0 view .LVU404
+ 1670 0114 0BB0     		add	sp, sp, #44
+ 1671              	.LCFI21:
+ 1672              		.cfi_def_cfa_offset 36
+ 1673              		@ sp needed
+ 1674 0116 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 40
+
+
+ 1675              		.cfi_endproc
+ 1676              	.LFE90:
+ 1678              		.global	ucAscii_1608
+ 1679              		.section	.rodata.ucAscii_1608,"a"
+ 1680              		.align	2
+ 1681              		.set	.LANCHOR0,. + 0
+ 1684              	ucAscii_1608:
+ 1685 0000 00       		.byte	0
+ 1686 0001 00       		.byte	0
+ 1687 0002 00       		.byte	0
+ 1688 0003 00       		.byte	0
+ 1689 0004 00       		.byte	0
+ 1690 0005 00       		.byte	0
+ 1691 0006 00       		.byte	0
+ 1692 0007 00       		.byte	0
+ 1693 0008 00       		.byte	0
+ 1694 0009 00       		.byte	0
+ 1695 000a 00       		.byte	0
+ 1696 000b 00       		.byte	0
+ 1697 000c 00       		.byte	0
+ 1698 000d 00       		.byte	0
+ 1699 000e 00       		.byte	0
+ 1700 000f 00       		.byte	0
+ 1701 0010 00       		.byte	0
+ 1702 0011 00       		.byte	0
+ 1703 0012 00       		.byte	0
+ 1704 0013 18       		.byte	24
+ 1705 0014 3C       		.byte	60
+ 1706 0015 3C       		.byte	60
+ 1707 0016 3C       		.byte	60
+ 1708 0017 18       		.byte	24
+ 1709 0018 18       		.byte	24
+ 1710 0019 00       		.byte	0
+ 1711 001a 18       		.byte	24
+ 1712 001b 18       		.byte	24
+ 1713 001c 00       		.byte	0
+ 1714 001d 00       		.byte	0
+ 1715 001e 00       		.byte	0
+ 1716 001f 00       		.byte	0
+ 1717 0020 00       		.byte	0
+ 1718 0021 00       		.byte	0
+ 1719 0022 00       		.byte	0
+ 1720 0023 66       		.byte	102
+ 1721 0024 66       		.byte	102
+ 1722 0025 66       		.byte	102
+ 1723 0026 00       		.byte	0
+ 1724 0027 00       		.byte	0
+ 1725 0028 00       		.byte	0
+ 1726 0029 00       		.byte	0
+ 1727 002a 00       		.byte	0
+ 1728 002b 00       		.byte	0
+ 1729 002c 00       		.byte	0
+ 1730 002d 00       		.byte	0
+ 1731 002e 00       		.byte	0
+ 1732 002f 00       		.byte	0
+ 1733 0030 00       		.byte	0
+ 1734 0031 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 41
+
+
+ 1735 0032 00       		.byte	0
+ 1736 0033 6C       		.byte	108
+ 1737 0034 6C       		.byte	108
+ 1738 0035 FE       		.byte	-2
+ 1739 0036 6C       		.byte	108
+ 1740 0037 6C       		.byte	108
+ 1741 0038 6C       		.byte	108
+ 1742 0039 FE       		.byte	-2
+ 1743 003a 6C       		.byte	108
+ 1744 003b 6C       		.byte	108
+ 1745 003c 00       		.byte	0
+ 1746 003d 00       		.byte	0
+ 1747 003e 00       		.byte	0
+ 1748 003f 00       		.byte	0
+ 1749 0040 00       		.byte	0
+ 1750 0041 18       		.byte	24
+ 1751 0042 18       		.byte	24
+ 1752 0043 3C       		.byte	60
+ 1753 0044 66       		.byte	102
+ 1754 0045 06       		.byte	6
+ 1755 0046 0C       		.byte	12
+ 1756 0047 18       		.byte	24
+ 1757 0048 30       		.byte	48
+ 1758 0049 60       		.byte	96
+ 1759 004a 66       		.byte	102
+ 1760 004b 3C       		.byte	60
+ 1761 004c 18       		.byte	24
+ 1762 004d 18       		.byte	24
+ 1763 004e 00       		.byte	0
+ 1764 004f 00       		.byte	0
+ 1765 0050 00       		.byte	0
+ 1766 0051 00       		.byte	0
+ 1767 0052 0E       		.byte	14
+ 1768 0053 1B       		.byte	27
+ 1769 0054 5B       		.byte	91
+ 1770 0055 6E       		.byte	110
+ 1771 0056 30       		.byte	48
+ 1772 0057 18       		.byte	24
+ 1773 0058 0C       		.byte	12
+ 1774 0059 76       		.byte	118
+ 1775 005a DA       		.byte	-38
+ 1776 005b D8       		.byte	-40
+ 1777 005c 70       		.byte	112
+ 1778 005d 00       		.byte	0
+ 1779 005e 00       		.byte	0
+ 1780 005f 00       		.byte	0
+ 1781 0060 00       		.byte	0
+ 1782 0061 00       		.byte	0
+ 1783 0062 00       		.byte	0
+ 1784 0063 1C       		.byte	28
+ 1785 0064 36       		.byte	54
+ 1786 0065 36       		.byte	54
+ 1787 0066 1C       		.byte	28
+ 1788 0067 06       		.byte	6
+ 1789 0068 F6       		.byte	-10
+ 1790 0069 66       		.byte	102
+ 1791 006a 66       		.byte	102
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 42
+
+
+ 1792 006b DC       		.byte	-36
+ 1793 006c 00       		.byte	0
+ 1794 006d 00       		.byte	0
+ 1795 006e 00       		.byte	0
+ 1796 006f 00       		.byte	0
+ 1797 0070 00       		.byte	0
+ 1798 0071 00       		.byte	0
+ 1799 0072 00       		.byte	0
+ 1800 0073 18       		.byte	24
+ 1801 0074 18       		.byte	24
+ 1802 0075 18       		.byte	24
+ 1803 0076 00       		.byte	0
+ 1804 0077 00       		.byte	0
+ 1805 0078 00       		.byte	0
+ 1806 0079 00       		.byte	0
+ 1807 007a 00       		.byte	0
+ 1808 007b 00       		.byte	0
+ 1809 007c 00       		.byte	0
+ 1810 007d 00       		.byte	0
+ 1811 007e 00       		.byte	0
+ 1812 007f 00       		.byte	0
+ 1813 0080 00       		.byte	0
+ 1814 0081 00       		.byte	0
+ 1815 0082 00       		.byte	0
+ 1816 0083 30       		.byte	48
+ 1817 0084 18       		.byte	24
+ 1818 0085 18       		.byte	24
+ 1819 0086 0C       		.byte	12
+ 1820 0087 0C       		.byte	12
+ 1821 0088 0C       		.byte	12
+ 1822 0089 0C       		.byte	12
+ 1823 008a 0C       		.byte	12
+ 1824 008b 18       		.byte	24
+ 1825 008c 18       		.byte	24
+ 1826 008d 30       		.byte	48
+ 1827 008e 00       		.byte	0
+ 1828 008f 00       		.byte	0
+ 1829 0090 00       		.byte	0
+ 1830 0091 00       		.byte	0
+ 1831 0092 00       		.byte	0
+ 1832 0093 0C       		.byte	12
+ 1833 0094 18       		.byte	24
+ 1834 0095 18       		.byte	24
+ 1835 0096 30       		.byte	48
+ 1836 0097 30       		.byte	48
+ 1837 0098 30       		.byte	48
+ 1838 0099 30       		.byte	48
+ 1839 009a 30       		.byte	48
+ 1840 009b 18       		.byte	24
+ 1841 009c 18       		.byte	24
+ 1842 009d 0C       		.byte	12
+ 1843 009e 00       		.byte	0
+ 1844 009f 00       		.byte	0
+ 1845 00a0 00       		.byte	0
+ 1846 00a1 00       		.byte	0
+ 1847 00a2 00       		.byte	0
+ 1848 00a3 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 43
+
+
+ 1849 00a4 00       		.byte	0
+ 1850 00a5 6C       		.byte	108
+ 1851 00a6 38       		.byte	56
+ 1852 00a7 FE       		.byte	-2
+ 1853 00a8 38       		.byte	56
+ 1854 00a9 6C       		.byte	108
+ 1855 00aa 00       		.byte	0
+ 1856 00ab 00       		.byte	0
+ 1857 00ac 00       		.byte	0
+ 1858 00ad 00       		.byte	0
+ 1859 00ae 00       		.byte	0
+ 1860 00af 00       		.byte	0
+ 1861 00b0 00       		.byte	0
+ 1862 00b1 00       		.byte	0
+ 1863 00b2 00       		.byte	0
+ 1864 00b3 00       		.byte	0
+ 1865 00b4 00       		.byte	0
+ 1866 00b5 18       		.byte	24
+ 1867 00b6 18       		.byte	24
+ 1868 00b7 7E       		.byte	126
+ 1869 00b8 18       		.byte	24
+ 1870 00b9 18       		.byte	24
+ 1871 00ba 00       		.byte	0
+ 1872 00bb 00       		.byte	0
+ 1873 00bc 00       		.byte	0
+ 1874 00bd 00       		.byte	0
+ 1875 00be 00       		.byte	0
+ 1876 00bf 00       		.byte	0
+ 1877 00c0 00       		.byte	0
+ 1878 00c1 00       		.byte	0
+ 1879 00c2 00       		.byte	0
+ 1880 00c3 00       		.byte	0
+ 1881 00c4 00       		.byte	0
+ 1882 00c5 00       		.byte	0
+ 1883 00c6 00       		.byte	0
+ 1884 00c7 00       		.byte	0
+ 1885 00c8 00       		.byte	0
+ 1886 00c9 00       		.byte	0
+ 1887 00ca 38       		.byte	56
+ 1888 00cb 38       		.byte	56
+ 1889 00cc 30       		.byte	48
+ 1890 00cd 18       		.byte	24
+ 1891 00ce 00       		.byte	0
+ 1892 00cf 00       		.byte	0
+ 1893 00d0 00       		.byte	0
+ 1894 00d1 00       		.byte	0
+ 1895 00d2 00       		.byte	0
+ 1896 00d3 00       		.byte	0
+ 1897 00d4 00       		.byte	0
+ 1898 00d5 00       		.byte	0
+ 1899 00d6 00       		.byte	0
+ 1900 00d7 7E       		.byte	126
+ 1901 00d8 00       		.byte	0
+ 1902 00d9 00       		.byte	0
+ 1903 00da 00       		.byte	0
+ 1904 00db 00       		.byte	0
+ 1905 00dc 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 44
+
+
+ 1906 00dd 00       		.byte	0
+ 1907 00de 00       		.byte	0
+ 1908 00df 00       		.byte	0
+ 1909 00e0 00       		.byte	0
+ 1910 00e1 00       		.byte	0
+ 1911 00e2 00       		.byte	0
+ 1912 00e3 00       		.byte	0
+ 1913 00e4 00       		.byte	0
+ 1914 00e5 00       		.byte	0
+ 1915 00e6 00       		.byte	0
+ 1916 00e7 00       		.byte	0
+ 1917 00e8 00       		.byte	0
+ 1918 00e9 00       		.byte	0
+ 1919 00ea 38       		.byte	56
+ 1920 00eb 38       		.byte	56
+ 1921 00ec 00       		.byte	0
+ 1922 00ed 00       		.byte	0
+ 1923 00ee 00       		.byte	0
+ 1924 00ef 00       		.byte	0
+ 1925 00f0 00       		.byte	0
+ 1926 00f1 00       		.byte	0
+ 1927 00f2 00       		.byte	0
+ 1928 00f3 60       		.byte	96
+ 1929 00f4 60       		.byte	96
+ 1930 00f5 30       		.byte	48
+ 1931 00f6 30       		.byte	48
+ 1932 00f7 18       		.byte	24
+ 1933 00f8 18       		.byte	24
+ 1934 00f9 0C       		.byte	12
+ 1935 00fa 0C       		.byte	12
+ 1936 00fb 06       		.byte	6
+ 1937 00fc 06       		.byte	6
+ 1938 00fd 00       		.byte	0
+ 1939 00fe 00       		.byte	0
+ 1940 00ff 00       		.byte	0
+ 1941 0100 00       		.byte	0
+ 1942 0101 00       		.byte	0
+ 1943 0102 00       		.byte	0
+ 1944 0103 78       		.byte	120
+ 1945 0104 CC       		.byte	-52
+ 1946 0105 EC       		.byte	-20
+ 1947 0106 EC       		.byte	-20
+ 1948 0107 CC       		.byte	-52
+ 1949 0108 DC       		.byte	-36
+ 1950 0109 DC       		.byte	-36
+ 1951 010a CC       		.byte	-52
+ 1952 010b 78       		.byte	120
+ 1953 010c 00       		.byte	0
+ 1954 010d 00       		.byte	0
+ 1955 010e 00       		.byte	0
+ 1956 010f 00       		.byte	0
+ 1957 0110 00       		.byte	0
+ 1958 0111 00       		.byte	0
+ 1959 0112 00       		.byte	0
+ 1960 0113 30       		.byte	48
+ 1961 0114 38       		.byte	56
+ 1962 0115 3E       		.byte	62
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 45
+
+
+ 1963 0116 30       		.byte	48
+ 1964 0117 30       		.byte	48
+ 1965 0118 30       		.byte	48
+ 1966 0119 30       		.byte	48
+ 1967 011a 30       		.byte	48
+ 1968 011b 30       		.byte	48
+ 1969 011c 00       		.byte	0
+ 1970 011d 00       		.byte	0
+ 1971 011e 00       		.byte	0
+ 1972 011f 00       		.byte	0
+ 1973 0120 00       		.byte	0
+ 1974 0121 00       		.byte	0
+ 1975 0122 00       		.byte	0
+ 1976 0123 3C       		.byte	60
+ 1977 0124 66       		.byte	102
+ 1978 0125 66       		.byte	102
+ 1979 0126 60       		.byte	96
+ 1980 0127 30       		.byte	48
+ 1981 0128 18       		.byte	24
+ 1982 0129 0C       		.byte	12
+ 1983 012a 06       		.byte	6
+ 1984 012b 7E       		.byte	126
+ 1985 012c 00       		.byte	0
+ 1986 012d 00       		.byte	0
+ 1987 012e 00       		.byte	0
+ 1988 012f 00       		.byte	0
+ 1989 0130 00       		.byte	0
+ 1990 0131 00       		.byte	0
+ 1991 0132 00       		.byte	0
+ 1992 0133 3C       		.byte	60
+ 1993 0134 66       		.byte	102
+ 1994 0135 66       		.byte	102
+ 1995 0136 60       		.byte	96
+ 1996 0137 38       		.byte	56
+ 1997 0138 60       		.byte	96
+ 1998 0139 66       		.byte	102
+ 1999 013a 66       		.byte	102
+ 2000 013b 3C       		.byte	60
+ 2001 013c 00       		.byte	0
+ 2002 013d 00       		.byte	0
+ 2003 013e 00       		.byte	0
+ 2004 013f 00       		.byte	0
+ 2005 0140 00       		.byte	0
+ 2006 0141 00       		.byte	0
+ 2007 0142 00       		.byte	0
+ 2008 0143 0C       		.byte	12
+ 2009 0144 0C       		.byte	12
+ 2010 0145 6C       		.byte	108
+ 2011 0146 6C       		.byte	108
+ 2012 0147 6C       		.byte	108
+ 2013 0148 66       		.byte	102
+ 2014 0149 FE       		.byte	-2
+ 2015 014a 60       		.byte	96
+ 2016 014b 60       		.byte	96
+ 2017 014c 00       		.byte	0
+ 2018 014d 00       		.byte	0
+ 2019 014e 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 46
+
+
+ 2020 014f 00       		.byte	0
+ 2021 0150 00       		.byte	0
+ 2022 0151 00       		.byte	0
+ 2023 0152 00       		.byte	0
+ 2024 0153 7E       		.byte	126
+ 2025 0154 06       		.byte	6
+ 2026 0155 06       		.byte	6
+ 2027 0156 06       		.byte	6
+ 2028 0157 3E       		.byte	62
+ 2029 0158 60       		.byte	96
+ 2030 0159 60       		.byte	96
+ 2031 015a 30       		.byte	48
+ 2032 015b 1E       		.byte	30
+ 2033 015c 00       		.byte	0
+ 2034 015d 00       		.byte	0
+ 2035 015e 00       		.byte	0
+ 2036 015f 00       		.byte	0
+ 2037 0160 00       		.byte	0
+ 2038 0161 00       		.byte	0
+ 2039 0162 00       		.byte	0
+ 2040 0163 38       		.byte	56
+ 2041 0164 18       		.byte	24
+ 2042 0165 0C       		.byte	12
+ 2043 0166 3E       		.byte	62
+ 2044 0167 66       		.byte	102
+ 2045 0168 66       		.byte	102
+ 2046 0169 66       		.byte	102
+ 2047 016a 66       		.byte	102
+ 2048 016b 3C       		.byte	60
+ 2049 016c 00       		.byte	0
+ 2050 016d 00       		.byte	0
+ 2051 016e 00       		.byte	0
+ 2052 016f 00       		.byte	0
+ 2053 0170 00       		.byte	0
+ 2054 0171 00       		.byte	0
+ 2055 0172 00       		.byte	0
+ 2056 0173 7E       		.byte	126
+ 2057 0174 60       		.byte	96
+ 2058 0175 30       		.byte	48
+ 2059 0176 30       		.byte	48
+ 2060 0177 18       		.byte	24
+ 2061 0178 18       		.byte	24
+ 2062 0179 0C       		.byte	12
+ 2063 017a 0C       		.byte	12
+ 2064 017b 0C       		.byte	12
+ 2065 017c 00       		.byte	0
+ 2066 017d 00       		.byte	0
+ 2067 017e 00       		.byte	0
+ 2068 017f 00       		.byte	0
+ 2069 0180 00       		.byte	0
+ 2070 0181 00       		.byte	0
+ 2071 0182 00       		.byte	0
+ 2072 0183 3C       		.byte	60
+ 2073 0184 66       		.byte	102
+ 2074 0185 66       		.byte	102
+ 2075 0186 6E       		.byte	110
+ 2076 0187 3C       		.byte	60
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 47
+
+
+ 2077 0188 76       		.byte	118
+ 2078 0189 66       		.byte	102
+ 2079 018a 66       		.byte	102
+ 2080 018b 3C       		.byte	60
+ 2081 018c 00       		.byte	0
+ 2082 018d 00       		.byte	0
+ 2083 018e 00       		.byte	0
+ 2084 018f 00       		.byte	0
+ 2085 0190 00       		.byte	0
+ 2086 0191 00       		.byte	0
+ 2087 0192 00       		.byte	0
+ 2088 0193 3C       		.byte	60
+ 2089 0194 66       		.byte	102
+ 2090 0195 66       		.byte	102
+ 2091 0196 66       		.byte	102
+ 2092 0197 66       		.byte	102
+ 2093 0198 7C       		.byte	124
+ 2094 0199 30       		.byte	48
+ 2095 019a 18       		.byte	24
+ 2096 019b 1C       		.byte	28
+ 2097 019c 00       		.byte	0
+ 2098 019d 00       		.byte	0
+ 2099 019e 00       		.byte	0
+ 2100 019f 00       		.byte	0
+ 2101 01a0 00       		.byte	0
+ 2102 01a1 00       		.byte	0
+ 2103 01a2 00       		.byte	0
+ 2104 01a3 00       		.byte	0
+ 2105 01a4 00       		.byte	0
+ 2106 01a5 38       		.byte	56
+ 2107 01a6 38       		.byte	56
+ 2108 01a7 00       		.byte	0
+ 2109 01a8 00       		.byte	0
+ 2110 01a9 00       		.byte	0
+ 2111 01aa 38       		.byte	56
+ 2112 01ab 38       		.byte	56
+ 2113 01ac 00       		.byte	0
+ 2114 01ad 00       		.byte	0
+ 2115 01ae 00       		.byte	0
+ 2116 01af 00       		.byte	0
+ 2117 01b0 00       		.byte	0
+ 2118 01b1 00       		.byte	0
+ 2119 01b2 00       		.byte	0
+ 2120 01b3 00       		.byte	0
+ 2121 01b4 00       		.byte	0
+ 2122 01b5 38       		.byte	56
+ 2123 01b6 38       		.byte	56
+ 2124 01b7 00       		.byte	0
+ 2125 01b8 00       		.byte	0
+ 2126 01b9 00       		.byte	0
+ 2127 01ba 38       		.byte	56
+ 2128 01bb 38       		.byte	56
+ 2129 01bc 30       		.byte	48
+ 2130 01bd 18       		.byte	24
+ 2131 01be 00       		.byte	0
+ 2132 01bf 00       		.byte	0
+ 2133 01c0 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 48
+
+
+ 2134 01c1 00       		.byte	0
+ 2135 01c2 00       		.byte	0
+ 2136 01c3 60       		.byte	96
+ 2137 01c4 30       		.byte	48
+ 2138 01c5 18       		.byte	24
+ 2139 01c6 0C       		.byte	12
+ 2140 01c7 06       		.byte	6
+ 2141 01c8 0C       		.byte	12
+ 2142 01c9 18       		.byte	24
+ 2143 01ca 30       		.byte	48
+ 2144 01cb 60       		.byte	96
+ 2145 01cc 00       		.byte	0
+ 2146 01cd 00       		.byte	0
+ 2147 01ce 00       		.byte	0
+ 2148 01cf 00       		.byte	0
+ 2149 01d0 00       		.byte	0
+ 2150 01d1 00       		.byte	0
+ 2151 01d2 00       		.byte	0
+ 2152 01d3 00       		.byte	0
+ 2153 01d4 00       		.byte	0
+ 2154 01d5 00       		.byte	0
+ 2155 01d6 7E       		.byte	126
+ 2156 01d7 00       		.byte	0
+ 2157 01d8 7E       		.byte	126
+ 2158 01d9 00       		.byte	0
+ 2159 01da 00       		.byte	0
+ 2160 01db 00       		.byte	0
+ 2161 01dc 00       		.byte	0
+ 2162 01dd 00       		.byte	0
+ 2163 01de 00       		.byte	0
+ 2164 01df 00       		.byte	0
+ 2165 01e0 00       		.byte	0
+ 2166 01e1 00       		.byte	0
+ 2167 01e2 00       		.byte	0
+ 2168 01e3 06       		.byte	6
+ 2169 01e4 0C       		.byte	12
+ 2170 01e5 18       		.byte	24
+ 2171 01e6 30       		.byte	48
+ 2172 01e7 60       		.byte	96
+ 2173 01e8 30       		.byte	48
+ 2174 01e9 18       		.byte	24
+ 2175 01ea 0C       		.byte	12
+ 2176 01eb 06       		.byte	6
+ 2177 01ec 00       		.byte	0
+ 2178 01ed 00       		.byte	0
+ 2179 01ee 00       		.byte	0
+ 2180 01ef 00       		.byte	0
+ 2181 01f0 00       		.byte	0
+ 2182 01f1 00       		.byte	0
+ 2183 01f2 00       		.byte	0
+ 2184 01f3 3C       		.byte	60
+ 2185 01f4 66       		.byte	102
+ 2186 01f5 66       		.byte	102
+ 2187 01f6 30       		.byte	48
+ 2188 01f7 18       		.byte	24
+ 2189 01f8 18       		.byte	24
+ 2190 01f9 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 49
+
+
+ 2191 01fa 18       		.byte	24
+ 2192 01fb 18       		.byte	24
+ 2193 01fc 00       		.byte	0
+ 2194 01fd 00       		.byte	0
+ 2195 01fe 00       		.byte	0
+ 2196 01ff 00       		.byte	0
+ 2197 0200 00       		.byte	0
+ 2198 0201 00       		.byte	0
+ 2199 0202 00       		.byte	0
+ 2200 0203 7E       		.byte	126
+ 2201 0204 C3       		.byte	-61
+ 2202 0205 C3       		.byte	-61
+ 2203 0206 F3       		.byte	-13
+ 2204 0207 DB       		.byte	-37
+ 2205 0208 DB       		.byte	-37
+ 2206 0209 F3       		.byte	-13
+ 2207 020a 03       		.byte	3
+ 2208 020b FE       		.byte	-2
+ 2209 020c 00       		.byte	0
+ 2210 020d 00       		.byte	0
+ 2211 020e 00       		.byte	0
+ 2212 020f 00       		.byte	0
+ 2213 0210 00       		.byte	0
+ 2214 0211 00       		.byte	0
+ 2215 0212 00       		.byte	0
+ 2216 0213 18       		.byte	24
+ 2217 0214 3C       		.byte	60
+ 2218 0215 66       		.byte	102
+ 2219 0216 66       		.byte	102
+ 2220 0217 66       		.byte	102
+ 2221 0218 7E       		.byte	126
+ 2222 0219 66       		.byte	102
+ 2223 021a 66       		.byte	102
+ 2224 021b 66       		.byte	102
+ 2225 021c 00       		.byte	0
+ 2226 021d 00       		.byte	0
+ 2227 021e 00       		.byte	0
+ 2228 021f 00       		.byte	0
+ 2229 0220 00       		.byte	0
+ 2230 0221 00       		.byte	0
+ 2231 0222 00       		.byte	0
+ 2232 0223 3E       		.byte	62
+ 2233 0224 66       		.byte	102
+ 2234 0225 66       		.byte	102
+ 2235 0226 66       		.byte	102
+ 2236 0227 3E       		.byte	62
+ 2237 0228 66       		.byte	102
+ 2238 0229 66       		.byte	102
+ 2239 022a 66       		.byte	102
+ 2240 022b 3E       		.byte	62
+ 2241 022c 00       		.byte	0
+ 2242 022d 00       		.byte	0
+ 2243 022e 00       		.byte	0
+ 2244 022f 00       		.byte	0
+ 2245 0230 00       		.byte	0
+ 2246 0231 00       		.byte	0
+ 2247 0232 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 50
+
+
+ 2248 0233 3C       		.byte	60
+ 2249 0234 66       		.byte	102
+ 2250 0235 66       		.byte	102
+ 2251 0236 06       		.byte	6
+ 2252 0237 06       		.byte	6
+ 2253 0238 06       		.byte	6
+ 2254 0239 66       		.byte	102
+ 2255 023a 66       		.byte	102
+ 2256 023b 3C       		.byte	60
+ 2257 023c 00       		.byte	0
+ 2258 023d 00       		.byte	0
+ 2259 023e 00       		.byte	0
+ 2260 023f 00       		.byte	0
+ 2261 0240 00       		.byte	0
+ 2262 0241 00       		.byte	0
+ 2263 0242 00       		.byte	0
+ 2264 0243 1E       		.byte	30
+ 2265 0244 36       		.byte	54
+ 2266 0245 66       		.byte	102
+ 2267 0246 66       		.byte	102
+ 2268 0247 66       		.byte	102
+ 2269 0248 66       		.byte	102
+ 2270 0249 66       		.byte	102
+ 2271 024a 36       		.byte	54
+ 2272 024b 1E       		.byte	30
+ 2273 024c 00       		.byte	0
+ 2274 024d 00       		.byte	0
+ 2275 024e 00       		.byte	0
+ 2276 024f 00       		.byte	0
+ 2277 0250 00       		.byte	0
+ 2278 0251 00       		.byte	0
+ 2279 0252 00       		.byte	0
+ 2280 0253 7E       		.byte	126
+ 2281 0254 06       		.byte	6
+ 2282 0255 06       		.byte	6
+ 2283 0256 06       		.byte	6
+ 2284 0257 3E       		.byte	62
+ 2285 0258 06       		.byte	6
+ 2286 0259 06       		.byte	6
+ 2287 025a 06       		.byte	6
+ 2288 025b 7E       		.byte	126
+ 2289 025c 00       		.byte	0
+ 2290 025d 00       		.byte	0
+ 2291 025e 00       		.byte	0
+ 2292 025f 00       		.byte	0
+ 2293 0260 00       		.byte	0
+ 2294 0261 00       		.byte	0
+ 2295 0262 00       		.byte	0
+ 2296 0263 7E       		.byte	126
+ 2297 0264 06       		.byte	6
+ 2298 0265 06       		.byte	6
+ 2299 0266 06       		.byte	6
+ 2300 0267 3E       		.byte	62
+ 2301 0268 06       		.byte	6
+ 2302 0269 06       		.byte	6
+ 2303 026a 06       		.byte	6
+ 2304 026b 06       		.byte	6
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 51
+
+
+ 2305 026c 00       		.byte	0
+ 2306 026d 00       		.byte	0
+ 2307 026e 00       		.byte	0
+ 2308 026f 00       		.byte	0
+ 2309 0270 00       		.byte	0
+ 2310 0271 00       		.byte	0
+ 2311 0272 00       		.byte	0
+ 2312 0273 3C       		.byte	60
+ 2313 0274 66       		.byte	102
+ 2314 0275 66       		.byte	102
+ 2315 0276 06       		.byte	6
+ 2316 0277 06       		.byte	6
+ 2317 0278 76       		.byte	118
+ 2318 0279 66       		.byte	102
+ 2319 027a 66       		.byte	102
+ 2320 027b 7C       		.byte	124
+ 2321 027c 00       		.byte	0
+ 2322 027d 00       		.byte	0
+ 2323 027e 00       		.byte	0
+ 2324 027f 00       		.byte	0
+ 2325 0280 00       		.byte	0
+ 2326 0281 00       		.byte	0
+ 2327 0282 00       		.byte	0
+ 2328 0283 66       		.byte	102
+ 2329 0284 66       		.byte	102
+ 2330 0285 66       		.byte	102
+ 2331 0286 66       		.byte	102
+ 2332 0287 7E       		.byte	126
+ 2333 0288 66       		.byte	102
+ 2334 0289 66       		.byte	102
+ 2335 028a 66       		.byte	102
+ 2336 028b 66       		.byte	102
+ 2337 028c 00       		.byte	0
+ 2338 028d 00       		.byte	0
+ 2339 028e 00       		.byte	0
+ 2340 028f 00       		.byte	0
+ 2341 0290 00       		.byte	0
+ 2342 0291 00       		.byte	0
+ 2343 0292 00       		.byte	0
+ 2344 0293 3C       		.byte	60
+ 2345 0294 18       		.byte	24
+ 2346 0295 18       		.byte	24
+ 2347 0296 18       		.byte	24
+ 2348 0297 18       		.byte	24
+ 2349 0298 18       		.byte	24
+ 2350 0299 18       		.byte	24
+ 2351 029a 18       		.byte	24
+ 2352 029b 3C       		.byte	60
+ 2353 029c 00       		.byte	0
+ 2354 029d 00       		.byte	0
+ 2355 029e 00       		.byte	0
+ 2356 029f 00       		.byte	0
+ 2357 02a0 00       		.byte	0
+ 2358 02a1 00       		.byte	0
+ 2359 02a2 00       		.byte	0
+ 2360 02a3 60       		.byte	96
+ 2361 02a4 60       		.byte	96
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 52
+
+
+ 2362 02a5 60       		.byte	96
+ 2363 02a6 60       		.byte	96
+ 2364 02a7 60       		.byte	96
+ 2365 02a8 60       		.byte	96
+ 2366 02a9 66       		.byte	102
+ 2367 02aa 66       		.byte	102
+ 2368 02ab 3C       		.byte	60
+ 2369 02ac 00       		.byte	0
+ 2370 02ad 00       		.byte	0
+ 2371 02ae 00       		.byte	0
+ 2372 02af 00       		.byte	0
+ 2373 02b0 00       		.byte	0
+ 2374 02b1 00       		.byte	0
+ 2375 02b2 00       		.byte	0
+ 2376 02b3 66       		.byte	102
+ 2377 02b4 66       		.byte	102
+ 2378 02b5 36       		.byte	54
+ 2379 02b6 36       		.byte	54
+ 2380 02b7 1E       		.byte	30
+ 2381 02b8 36       		.byte	54
+ 2382 02b9 36       		.byte	54
+ 2383 02ba 66       		.byte	102
+ 2384 02bb 66       		.byte	102
+ 2385 02bc 00       		.byte	0
+ 2386 02bd 00       		.byte	0
+ 2387 02be 00       		.byte	0
+ 2388 02bf 00       		.byte	0
+ 2389 02c0 00       		.byte	0
+ 2390 02c1 00       		.byte	0
+ 2391 02c2 00       		.byte	0
+ 2392 02c3 06       		.byte	6
+ 2393 02c4 06       		.byte	6
+ 2394 02c5 06       		.byte	6
+ 2395 02c6 06       		.byte	6
+ 2396 02c7 06       		.byte	6
+ 2397 02c8 06       		.byte	6
+ 2398 02c9 06       		.byte	6
+ 2399 02ca 06       		.byte	6
+ 2400 02cb 7E       		.byte	126
+ 2401 02cc 00       		.byte	0
+ 2402 02cd 00       		.byte	0
+ 2403 02ce 00       		.byte	0
+ 2404 02cf 00       		.byte	0
+ 2405 02d0 00       		.byte	0
+ 2406 02d1 00       		.byte	0
+ 2407 02d2 00       		.byte	0
+ 2408 02d3 C6       		.byte	-58
+ 2409 02d4 C6       		.byte	-58
+ 2410 02d5 EE       		.byte	-18
+ 2411 02d6 D6       		.byte	-42
+ 2412 02d7 D6       		.byte	-42
+ 2413 02d8 D6       		.byte	-42
+ 2414 02d9 C6       		.byte	-58
+ 2415 02da C6       		.byte	-58
+ 2416 02db C6       		.byte	-58
+ 2417 02dc 00       		.byte	0
+ 2418 02dd 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 53
+
+
+ 2419 02de 00       		.byte	0
+ 2420 02df 00       		.byte	0
+ 2421 02e0 00       		.byte	0
+ 2422 02e1 00       		.byte	0
+ 2423 02e2 00       		.byte	0
+ 2424 02e3 C6       		.byte	-58
+ 2425 02e4 C6       		.byte	-58
+ 2426 02e5 CE       		.byte	-50
+ 2427 02e6 DE       		.byte	-34
+ 2428 02e7 F6       		.byte	-10
+ 2429 02e8 E6       		.byte	-26
+ 2430 02e9 C6       		.byte	-58
+ 2431 02ea C6       		.byte	-58
+ 2432 02eb C6       		.byte	-58
+ 2433 02ec 00       		.byte	0
+ 2434 02ed 00       		.byte	0
+ 2435 02ee 00       		.byte	0
+ 2436 02ef 00       		.byte	0
+ 2437 02f0 00       		.byte	0
+ 2438 02f1 00       		.byte	0
+ 2439 02f2 00       		.byte	0
+ 2440 02f3 3C       		.byte	60
+ 2441 02f4 66       		.byte	102
+ 2442 02f5 66       		.byte	102
+ 2443 02f6 66       		.byte	102
+ 2444 02f7 66       		.byte	102
+ 2445 02f8 66       		.byte	102
+ 2446 02f9 66       		.byte	102
+ 2447 02fa 66       		.byte	102
+ 2448 02fb 3C       		.byte	60
+ 2449 02fc 00       		.byte	0
+ 2450 02fd 00       		.byte	0
+ 2451 02fe 00       		.byte	0
+ 2452 02ff 00       		.byte	0
+ 2453 0300 00       		.byte	0
+ 2454 0301 00       		.byte	0
+ 2455 0302 00       		.byte	0
+ 2456 0303 3E       		.byte	62
+ 2457 0304 66       		.byte	102
+ 2458 0305 66       		.byte	102
+ 2459 0306 66       		.byte	102
+ 2460 0307 3E       		.byte	62
+ 2461 0308 06       		.byte	6
+ 2462 0309 06       		.byte	6
+ 2463 030a 06       		.byte	6
+ 2464 030b 06       		.byte	6
+ 2465 030c 00       		.byte	0
+ 2466 030d 00       		.byte	0
+ 2467 030e 00       		.byte	0
+ 2468 030f 00       		.byte	0
+ 2469 0310 00       		.byte	0
+ 2470 0311 00       		.byte	0
+ 2471 0312 00       		.byte	0
+ 2472 0313 3C       		.byte	60
+ 2473 0314 66       		.byte	102
+ 2474 0315 66       		.byte	102
+ 2475 0316 66       		.byte	102
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 54
+
+
+ 2476 0317 66       		.byte	102
+ 2477 0318 66       		.byte	102
+ 2478 0319 66       		.byte	102
+ 2479 031a 66       		.byte	102
+ 2480 031b 3C       		.byte	60
+ 2481 031c 30       		.byte	48
+ 2482 031d 60       		.byte	96
+ 2483 031e 00       		.byte	0
+ 2484 031f 00       		.byte	0
+ 2485 0320 00       		.byte	0
+ 2486 0321 00       		.byte	0
+ 2487 0322 00       		.byte	0
+ 2488 0323 3E       		.byte	62
+ 2489 0324 66       		.byte	102
+ 2490 0325 66       		.byte	102
+ 2491 0326 66       		.byte	102
+ 2492 0327 3E       		.byte	62
+ 2493 0328 36       		.byte	54
+ 2494 0329 66       		.byte	102
+ 2495 032a 66       		.byte	102
+ 2496 032b 66       		.byte	102
+ 2497 032c 00       		.byte	0
+ 2498 032d 00       		.byte	0
+ 2499 032e 00       		.byte	0
+ 2500 032f 00       		.byte	0
+ 2501 0330 00       		.byte	0
+ 2502 0331 00       		.byte	0
+ 2503 0332 00       		.byte	0
+ 2504 0333 3C       		.byte	60
+ 2505 0334 66       		.byte	102
+ 2506 0335 06       		.byte	6
+ 2507 0336 0C       		.byte	12
+ 2508 0337 18       		.byte	24
+ 2509 0338 30       		.byte	48
+ 2510 0339 60       		.byte	96
+ 2511 033a 66       		.byte	102
+ 2512 033b 3C       		.byte	60
+ 2513 033c 00       		.byte	0
+ 2514 033d 00       		.byte	0
+ 2515 033e 00       		.byte	0
+ 2516 033f 00       		.byte	0
+ 2517 0340 00       		.byte	0
+ 2518 0341 00       		.byte	0
+ 2519 0342 00       		.byte	0
+ 2520 0343 7E       		.byte	126
+ 2521 0344 18       		.byte	24
+ 2522 0345 18       		.byte	24
+ 2523 0346 18       		.byte	24
+ 2524 0347 18       		.byte	24
+ 2525 0348 18       		.byte	24
+ 2526 0349 18       		.byte	24
+ 2527 034a 18       		.byte	24
+ 2528 034b 18       		.byte	24
+ 2529 034c 00       		.byte	0
+ 2530 034d 00       		.byte	0
+ 2531 034e 00       		.byte	0
+ 2532 034f 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 55
+
+
+ 2533 0350 00       		.byte	0
+ 2534 0351 00       		.byte	0
+ 2535 0352 00       		.byte	0
+ 2536 0353 66       		.byte	102
+ 2537 0354 66       		.byte	102
+ 2538 0355 66       		.byte	102
+ 2539 0356 66       		.byte	102
+ 2540 0357 66       		.byte	102
+ 2541 0358 66       		.byte	102
+ 2542 0359 66       		.byte	102
+ 2543 035a 66       		.byte	102
+ 2544 035b 3C       		.byte	60
+ 2545 035c 00       		.byte	0
+ 2546 035d 00       		.byte	0
+ 2547 035e 00       		.byte	0
+ 2548 035f 00       		.byte	0
+ 2549 0360 00       		.byte	0
+ 2550 0361 00       		.byte	0
+ 2551 0362 00       		.byte	0
+ 2552 0363 66       		.byte	102
+ 2553 0364 66       		.byte	102
+ 2554 0365 66       		.byte	102
+ 2555 0366 66       		.byte	102
+ 2556 0367 66       		.byte	102
+ 2557 0368 66       		.byte	102
+ 2558 0369 66       		.byte	102
+ 2559 036a 3C       		.byte	60
+ 2560 036b 18       		.byte	24
+ 2561 036c 00       		.byte	0
+ 2562 036d 00       		.byte	0
+ 2563 036e 00       		.byte	0
+ 2564 036f 00       		.byte	0
+ 2565 0370 00       		.byte	0
+ 2566 0371 00       		.byte	0
+ 2567 0372 00       		.byte	0
+ 2568 0373 C6       		.byte	-58
+ 2569 0374 C6       		.byte	-58
+ 2570 0375 C6       		.byte	-58
+ 2571 0376 D6       		.byte	-42
+ 2572 0377 D6       		.byte	-42
+ 2573 0378 D6       		.byte	-42
+ 2574 0379 6C       		.byte	108
+ 2575 037a 6C       		.byte	108
+ 2576 037b 6C       		.byte	108
+ 2577 037c 00       		.byte	0
+ 2578 037d 00       		.byte	0
+ 2579 037e 00       		.byte	0
+ 2580 037f 00       		.byte	0
+ 2581 0380 00       		.byte	0
+ 2582 0381 00       		.byte	0
+ 2583 0382 00       		.byte	0
+ 2584 0383 66       		.byte	102
+ 2585 0384 66       		.byte	102
+ 2586 0385 2C       		.byte	44
+ 2587 0386 18       		.byte	24
+ 2588 0387 18       		.byte	24
+ 2589 0388 34       		.byte	52
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 56
+
+
+ 2590 0389 66       		.byte	102
+ 2591 038a 66       		.byte	102
+ 2592 038b 66       		.byte	102
+ 2593 038c 00       		.byte	0
+ 2594 038d 00       		.byte	0
+ 2595 038e 00       		.byte	0
+ 2596 038f 00       		.byte	0
+ 2597 0390 00       		.byte	0
+ 2598 0391 00       		.byte	0
+ 2599 0392 00       		.byte	0
+ 2600 0393 66       		.byte	102
+ 2601 0394 66       		.byte	102
+ 2602 0395 66       		.byte	102
+ 2603 0396 66       		.byte	102
+ 2604 0397 3C       		.byte	60
+ 2605 0398 18       		.byte	24
+ 2606 0399 18       		.byte	24
+ 2607 039a 18       		.byte	24
+ 2608 039b 18       		.byte	24
+ 2609 039c 00       		.byte	0
+ 2610 039d 00       		.byte	0
+ 2611 039e 00       		.byte	0
+ 2612 039f 00       		.byte	0
+ 2613 03a0 00       		.byte	0
+ 2614 03a1 00       		.byte	0
+ 2615 03a2 00       		.byte	0
+ 2616 03a3 7E       		.byte	126
+ 2617 03a4 60       		.byte	96
+ 2618 03a5 60       		.byte	96
+ 2619 03a6 30       		.byte	48
+ 2620 03a7 18       		.byte	24
+ 2621 03a8 0C       		.byte	12
+ 2622 03a9 06       		.byte	6
+ 2623 03aa 06       		.byte	6
+ 2624 03ab 7E       		.byte	126
+ 2625 03ac 00       		.byte	0
+ 2626 03ad 00       		.byte	0
+ 2627 03ae 00       		.byte	0
+ 2628 03af 00       		.byte	0
+ 2629 03b0 00       		.byte	0
+ 2630 03b1 00       		.byte	0
+ 2631 03b2 00       		.byte	0
+ 2632 03b3 3C       		.byte	60
+ 2633 03b4 0C       		.byte	12
+ 2634 03b5 0C       		.byte	12
+ 2635 03b6 0C       		.byte	12
+ 2636 03b7 0C       		.byte	12
+ 2637 03b8 0C       		.byte	12
+ 2638 03b9 0C       		.byte	12
+ 2639 03ba 0C       		.byte	12
+ 2640 03bb 0C       		.byte	12
+ 2641 03bc 0C       		.byte	12
+ 2642 03bd 0C       		.byte	12
+ 2643 03be 3C       		.byte	60
+ 2644 03bf 00       		.byte	0
+ 2645 03c0 00       		.byte	0
+ 2646 03c1 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 57
+
+
+ 2647 03c2 00       		.byte	0
+ 2648 03c3 06       		.byte	6
+ 2649 03c4 06       		.byte	6
+ 2650 03c5 0C       		.byte	12
+ 2651 03c6 0C       		.byte	12
+ 2652 03c7 18       		.byte	24
+ 2653 03c8 18       		.byte	24
+ 2654 03c9 30       		.byte	48
+ 2655 03ca 30       		.byte	48
+ 2656 03cb 60       		.byte	96
+ 2657 03cc 60       		.byte	96
+ 2658 03cd 00       		.byte	0
+ 2659 03ce 00       		.byte	0
+ 2660 03cf 00       		.byte	0
+ 2661 03d0 00       		.byte	0
+ 2662 03d1 00       		.byte	0
+ 2663 03d2 00       		.byte	0
+ 2664 03d3 3C       		.byte	60
+ 2665 03d4 30       		.byte	48
+ 2666 03d5 30       		.byte	48
+ 2667 03d6 30       		.byte	48
+ 2668 03d7 30       		.byte	48
+ 2669 03d8 30       		.byte	48
+ 2670 03d9 30       		.byte	48
+ 2671 03da 30       		.byte	48
+ 2672 03db 30       		.byte	48
+ 2673 03dc 30       		.byte	48
+ 2674 03dd 30       		.byte	48
+ 2675 03de 3C       		.byte	60
+ 2676 03df 00       		.byte	0
+ 2677 03e0 00       		.byte	0
+ 2678 03e1 18       		.byte	24
+ 2679 03e2 3C       		.byte	60
+ 2680 03e3 66       		.byte	102
+ 2681 03e4 00       		.byte	0
+ 2682 03e5 00       		.byte	0
+ 2683 03e6 00       		.byte	0
+ 2684 03e7 00       		.byte	0
+ 2685 03e8 00       		.byte	0
+ 2686 03e9 00       		.byte	0
+ 2687 03ea 00       		.byte	0
+ 2688 03eb 00       		.byte	0
+ 2689 03ec 00       		.byte	0
+ 2690 03ed 00       		.byte	0
+ 2691 03ee 00       		.byte	0
+ 2692 03ef 00       		.byte	0
+ 2693 03f0 00       		.byte	0
+ 2694 03f1 00       		.byte	0
+ 2695 03f2 00       		.byte	0
+ 2696 03f3 00       		.byte	0
+ 2697 03f4 00       		.byte	0
+ 2698 03f5 00       		.byte	0
+ 2699 03f6 00       		.byte	0
+ 2700 03f7 00       		.byte	0
+ 2701 03f8 00       		.byte	0
+ 2702 03f9 00       		.byte	0
+ 2703 03fa 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 58
+
+
+ 2704 03fb 00       		.byte	0
+ 2705 03fc 00       		.byte	0
+ 2706 03fd 00       		.byte	0
+ 2707 03fe FF       		.byte	-1
+ 2708 03ff 00       		.byte	0
+ 2709 0400 00       		.byte	0
+ 2710 0401 1C       		.byte	28
+ 2711 0402 18       		.byte	24
+ 2712 0403 30       		.byte	48
+ 2713 0404 00       		.byte	0
+ 2714 0405 00       		.byte	0
+ 2715 0406 00       		.byte	0
+ 2716 0407 00       		.byte	0
+ 2717 0408 00       		.byte	0
+ 2718 0409 00       		.byte	0
+ 2719 040a 00       		.byte	0
+ 2720 040b 00       		.byte	0
+ 2721 040c 00       		.byte	0
+ 2722 040d 00       		.byte	0
+ 2723 040e 00       		.byte	0
+ 2724 040f 00       		.byte	0
+ 2725 0410 00       		.byte	0
+ 2726 0411 00       		.byte	0
+ 2727 0412 00       		.byte	0
+ 2728 0413 00       		.byte	0
+ 2729 0414 00       		.byte	0
+ 2730 0415 3C       		.byte	60
+ 2731 0416 60       		.byte	96
+ 2732 0417 60       		.byte	96
+ 2733 0418 7C       		.byte	124
+ 2734 0419 66       		.byte	102
+ 2735 041a 66       		.byte	102
+ 2736 041b 7C       		.byte	124
+ 2737 041c 00       		.byte	0
+ 2738 041d 00       		.byte	0
+ 2739 041e 00       		.byte	0
+ 2740 041f 00       		.byte	0
+ 2741 0420 00       		.byte	0
+ 2742 0421 00       		.byte	0
+ 2743 0422 00       		.byte	0
+ 2744 0423 06       		.byte	6
+ 2745 0424 06       		.byte	6
+ 2746 0425 3E       		.byte	62
+ 2747 0426 66       		.byte	102
+ 2748 0427 66       		.byte	102
+ 2749 0428 66       		.byte	102
+ 2750 0429 66       		.byte	102
+ 2751 042a 66       		.byte	102
+ 2752 042b 3E       		.byte	62
+ 2753 042c 00       		.byte	0
+ 2754 042d 00       		.byte	0
+ 2755 042e 00       		.byte	0
+ 2756 042f 00       		.byte	0
+ 2757 0430 00       		.byte	0
+ 2758 0431 00       		.byte	0
+ 2759 0432 00       		.byte	0
+ 2760 0433 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 59
+
+
+ 2761 0434 00       		.byte	0
+ 2762 0435 3C       		.byte	60
+ 2763 0436 66       		.byte	102
+ 2764 0437 06       		.byte	6
+ 2765 0438 06       		.byte	6
+ 2766 0439 06       		.byte	6
+ 2767 043a 66       		.byte	102
+ 2768 043b 3C       		.byte	60
+ 2769 043c 00       		.byte	0
+ 2770 043d 00       		.byte	0
+ 2771 043e 00       		.byte	0
+ 2772 043f 00       		.byte	0
+ 2773 0440 00       		.byte	0
+ 2774 0441 00       		.byte	0
+ 2775 0442 00       		.byte	0
+ 2776 0443 60       		.byte	96
+ 2777 0444 60       		.byte	96
+ 2778 0445 7C       		.byte	124
+ 2779 0446 66       		.byte	102
+ 2780 0447 66       		.byte	102
+ 2781 0448 66       		.byte	102
+ 2782 0449 66       		.byte	102
+ 2783 044a 66       		.byte	102
+ 2784 044b 7C       		.byte	124
+ 2785 044c 00       		.byte	0
+ 2786 044d 00       		.byte	0
+ 2787 044e 00       		.byte	0
+ 2788 044f 00       		.byte	0
+ 2789 0450 00       		.byte	0
+ 2790 0451 00       		.byte	0
+ 2791 0452 00       		.byte	0
+ 2792 0453 00       		.byte	0
+ 2793 0454 00       		.byte	0
+ 2794 0455 3C       		.byte	60
+ 2795 0456 66       		.byte	102
+ 2796 0457 66       		.byte	102
+ 2797 0458 7E       		.byte	126
+ 2798 0459 06       		.byte	6
+ 2799 045a 06       		.byte	6
+ 2800 045b 3C       		.byte	60
+ 2801 045c 00       		.byte	0
+ 2802 045d 00       		.byte	0
+ 2803 045e 00       		.byte	0
+ 2804 045f 00       		.byte	0
+ 2805 0460 00       		.byte	0
+ 2806 0461 00       		.byte	0
+ 2807 0462 00       		.byte	0
+ 2808 0463 78       		.byte	120
+ 2809 0464 0C       		.byte	12
+ 2810 0465 0C       		.byte	12
+ 2811 0466 0C       		.byte	12
+ 2812 0467 7E       		.byte	126
+ 2813 0468 0C       		.byte	12
+ 2814 0469 0C       		.byte	12
+ 2815 046a 0C       		.byte	12
+ 2816 046b 0C       		.byte	12
+ 2817 046c 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 60
+
+
+ 2818 046d 00       		.byte	0
+ 2819 046e 00       		.byte	0
+ 2820 046f 00       		.byte	0
+ 2821 0470 00       		.byte	0
+ 2822 0471 00       		.byte	0
+ 2823 0472 00       		.byte	0
+ 2824 0473 00       		.byte	0
+ 2825 0474 00       		.byte	0
+ 2826 0475 7C       		.byte	124
+ 2827 0476 66       		.byte	102
+ 2828 0477 66       		.byte	102
+ 2829 0478 66       		.byte	102
+ 2830 0479 66       		.byte	102
+ 2831 047a 66       		.byte	102
+ 2832 047b 7C       		.byte	124
+ 2833 047c 60       		.byte	96
+ 2834 047d 60       		.byte	96
+ 2835 047e 3E       		.byte	62
+ 2836 047f 00       		.byte	0
+ 2837 0480 00       		.byte	0
+ 2838 0481 00       		.byte	0
+ 2839 0482 00       		.byte	0
+ 2840 0483 06       		.byte	6
+ 2841 0484 06       		.byte	6
+ 2842 0485 3E       		.byte	62
+ 2843 0486 66       		.byte	102
+ 2844 0487 66       		.byte	102
+ 2845 0488 66       		.byte	102
+ 2846 0489 66       		.byte	102
+ 2847 048a 66       		.byte	102
+ 2848 048b 66       		.byte	102
+ 2849 048c 00       		.byte	0
+ 2850 048d 00       		.byte	0
+ 2851 048e 00       		.byte	0
+ 2852 048f 00       		.byte	0
+ 2853 0490 00       		.byte	0
+ 2854 0491 00       		.byte	0
+ 2855 0492 18       		.byte	24
+ 2856 0493 18       		.byte	24
+ 2857 0494 00       		.byte	0
+ 2858 0495 1E       		.byte	30
+ 2859 0496 18       		.byte	24
+ 2860 0497 18       		.byte	24
+ 2861 0498 18       		.byte	24
+ 2862 0499 18       		.byte	24
+ 2863 049a 18       		.byte	24
+ 2864 049b 7E       		.byte	126
+ 2865 049c 00       		.byte	0
+ 2866 049d 00       		.byte	0
+ 2867 049e 00       		.byte	0
+ 2868 049f 00       		.byte	0
+ 2869 04a0 00       		.byte	0
+ 2870 04a1 00       		.byte	0
+ 2871 04a2 30       		.byte	48
+ 2872 04a3 30       		.byte	48
+ 2873 04a4 00       		.byte	0
+ 2874 04a5 3C       		.byte	60
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 61
+
+
+ 2875 04a6 30       		.byte	48
+ 2876 04a7 30       		.byte	48
+ 2877 04a8 30       		.byte	48
+ 2878 04a9 30       		.byte	48
+ 2879 04aa 30       		.byte	48
+ 2880 04ab 30       		.byte	48
+ 2881 04ac 30       		.byte	48
+ 2882 04ad 30       		.byte	48
+ 2883 04ae 1E       		.byte	30
+ 2884 04af 00       		.byte	0
+ 2885 04b0 00       		.byte	0
+ 2886 04b1 00       		.byte	0
+ 2887 04b2 00       		.byte	0
+ 2888 04b3 06       		.byte	6
+ 2889 04b4 06       		.byte	6
+ 2890 04b5 66       		.byte	102
+ 2891 04b6 66       		.byte	102
+ 2892 04b7 36       		.byte	54
+ 2893 04b8 1E       		.byte	30
+ 2894 04b9 36       		.byte	54
+ 2895 04ba 66       		.byte	102
+ 2896 04bb 66       		.byte	102
+ 2897 04bc 00       		.byte	0
+ 2898 04bd 00       		.byte	0
+ 2899 04be 00       		.byte	0
+ 2900 04bf 00       		.byte	0
+ 2901 04c0 00       		.byte	0
+ 2902 04c1 00       		.byte	0
+ 2903 04c2 00       		.byte	0
+ 2904 04c3 1E       		.byte	30
+ 2905 04c4 18       		.byte	24
+ 2906 04c5 18       		.byte	24
+ 2907 04c6 18       		.byte	24
+ 2908 04c7 18       		.byte	24
+ 2909 04c8 18       		.byte	24
+ 2910 04c9 18       		.byte	24
+ 2911 04ca 18       		.byte	24
+ 2912 04cb 7E       		.byte	126
+ 2913 04cc 00       		.byte	0
+ 2914 04cd 00       		.byte	0
+ 2915 04ce 00       		.byte	0
+ 2916 04cf 00       		.byte	0
+ 2917 04d0 00       		.byte	0
+ 2918 04d1 00       		.byte	0
+ 2919 04d2 00       		.byte	0
+ 2920 04d3 00       		.byte	0
+ 2921 04d4 00       		.byte	0
+ 2922 04d5 7E       		.byte	126
+ 2923 04d6 D6       		.byte	-42
+ 2924 04d7 D6       		.byte	-42
+ 2925 04d8 D6       		.byte	-42
+ 2926 04d9 D6       		.byte	-42
+ 2927 04da D6       		.byte	-42
+ 2928 04db C6       		.byte	-58
+ 2929 04dc 00       		.byte	0
+ 2930 04dd 00       		.byte	0
+ 2931 04de 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 62
+
+
+ 2932 04df 00       		.byte	0
+ 2933 04e0 00       		.byte	0
+ 2934 04e1 00       		.byte	0
+ 2935 04e2 00       		.byte	0
+ 2936 04e3 00       		.byte	0
+ 2937 04e4 00       		.byte	0
+ 2938 04e5 3E       		.byte	62
+ 2939 04e6 66       		.byte	102
+ 2940 04e7 66       		.byte	102
+ 2941 04e8 66       		.byte	102
+ 2942 04e9 66       		.byte	102
+ 2943 04ea 66       		.byte	102
+ 2944 04eb 66       		.byte	102
+ 2945 04ec 00       		.byte	0
+ 2946 04ed 00       		.byte	0
+ 2947 04ee 00       		.byte	0
+ 2948 04ef 00       		.byte	0
+ 2949 04f0 00       		.byte	0
+ 2950 04f1 00       		.byte	0
+ 2951 04f2 00       		.byte	0
+ 2952 04f3 00       		.byte	0
+ 2953 04f4 00       		.byte	0
+ 2954 04f5 3C       		.byte	60
+ 2955 04f6 66       		.byte	102
+ 2956 04f7 66       		.byte	102
+ 2957 04f8 66       		.byte	102
+ 2958 04f9 66       		.byte	102
+ 2959 04fa 66       		.byte	102
+ 2960 04fb 3C       		.byte	60
+ 2961 04fc 00       		.byte	0
+ 2962 04fd 00       		.byte	0
+ 2963 04fe 00       		.byte	0
+ 2964 04ff 00       		.byte	0
+ 2965 0500 00       		.byte	0
+ 2966 0501 00       		.byte	0
+ 2967 0502 00       		.byte	0
+ 2968 0503 00       		.byte	0
+ 2969 0504 00       		.byte	0
+ 2970 0505 3E       		.byte	62
+ 2971 0506 66       		.byte	102
+ 2972 0507 66       		.byte	102
+ 2973 0508 66       		.byte	102
+ 2974 0509 66       		.byte	102
+ 2975 050a 66       		.byte	102
+ 2976 050b 3E       		.byte	62
+ 2977 050c 06       		.byte	6
+ 2978 050d 06       		.byte	6
+ 2979 050e 06       		.byte	6
+ 2980 050f 00       		.byte	0
+ 2981 0510 00       		.byte	0
+ 2982 0511 00       		.byte	0
+ 2983 0512 00       		.byte	0
+ 2984 0513 00       		.byte	0
+ 2985 0514 00       		.byte	0
+ 2986 0515 7C       		.byte	124
+ 2987 0516 66       		.byte	102
+ 2988 0517 66       		.byte	102
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 63
+
+
+ 2989 0518 66       		.byte	102
+ 2990 0519 66       		.byte	102
+ 2991 051a 66       		.byte	102
+ 2992 051b 7C       		.byte	124
+ 2993 051c 60       		.byte	96
+ 2994 051d 60       		.byte	96
+ 2995 051e 60       		.byte	96
+ 2996 051f 00       		.byte	0
+ 2997 0520 00       		.byte	0
+ 2998 0521 00       		.byte	0
+ 2999 0522 00       		.byte	0
+ 3000 0523 00       		.byte	0
+ 3001 0524 00       		.byte	0
+ 3002 0525 66       		.byte	102
+ 3003 0526 76       		.byte	118
+ 3004 0527 0E       		.byte	14
+ 3005 0528 06       		.byte	6
+ 3006 0529 06       		.byte	6
+ 3007 052a 06       		.byte	6
+ 3008 052b 06       		.byte	6
+ 3009 052c 00       		.byte	0
+ 3010 052d 00       		.byte	0
+ 3011 052e 00       		.byte	0
+ 3012 052f 00       		.byte	0
+ 3013 0530 00       		.byte	0
+ 3014 0531 00       		.byte	0
+ 3015 0532 00       		.byte	0
+ 3016 0533 00       		.byte	0
+ 3017 0534 00       		.byte	0
+ 3018 0535 7C       		.byte	124
+ 3019 0536 06       		.byte	6
+ 3020 0537 06       		.byte	6
+ 3021 0538 3C       		.byte	60
+ 3022 0539 60       		.byte	96
+ 3023 053a 60       		.byte	96
+ 3024 053b 3E       		.byte	62
+ 3025 053c 00       		.byte	0
+ 3026 053d 00       		.byte	0
+ 3027 053e 00       		.byte	0
+ 3028 053f 00       		.byte	0
+ 3029 0540 00       		.byte	0
+ 3030 0541 00       		.byte	0
+ 3031 0542 00       		.byte	0
+ 3032 0543 0C       		.byte	12
+ 3033 0544 0C       		.byte	12
+ 3034 0545 7E       		.byte	126
+ 3035 0546 0C       		.byte	12
+ 3036 0547 0C       		.byte	12
+ 3037 0548 0C       		.byte	12
+ 3038 0549 0C       		.byte	12
+ 3039 054a 0C       		.byte	12
+ 3040 054b 78       		.byte	120
+ 3041 054c 00       		.byte	0
+ 3042 054d 00       		.byte	0
+ 3043 054e 00       		.byte	0
+ 3044 054f 00       		.byte	0
+ 3045 0550 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 64
+
+
+ 3046 0551 00       		.byte	0
+ 3047 0552 00       		.byte	0
+ 3048 0553 00       		.byte	0
+ 3049 0554 00       		.byte	0
+ 3050 0555 66       		.byte	102
+ 3051 0556 66       		.byte	102
+ 3052 0557 66       		.byte	102
+ 3053 0558 66       		.byte	102
+ 3054 0559 66       		.byte	102
+ 3055 055a 66       		.byte	102
+ 3056 055b 7C       		.byte	124
+ 3057 055c 00       		.byte	0
+ 3058 055d 00       		.byte	0
+ 3059 055e 00       		.byte	0
+ 3060 055f 00       		.byte	0
+ 3061 0560 00       		.byte	0
+ 3062 0561 00       		.byte	0
+ 3063 0562 00       		.byte	0
+ 3064 0563 00       		.byte	0
+ 3065 0564 00       		.byte	0
+ 3066 0565 66       		.byte	102
+ 3067 0566 66       		.byte	102
+ 3068 0567 66       		.byte	102
+ 3069 0568 66       		.byte	102
+ 3070 0569 66       		.byte	102
+ 3071 056a 3C       		.byte	60
+ 3072 056b 18       		.byte	24
+ 3073 056c 00       		.byte	0
+ 3074 056d 00       		.byte	0
+ 3075 056e 00       		.byte	0
+ 3076 056f 00       		.byte	0
+ 3077 0570 00       		.byte	0
+ 3078 0571 00       		.byte	0
+ 3079 0572 00       		.byte	0
+ 3080 0573 00       		.byte	0
+ 3081 0574 00       		.byte	0
+ 3082 0575 C6       		.byte	-58
+ 3083 0576 D6       		.byte	-42
+ 3084 0577 D6       		.byte	-42
+ 3085 0578 D6       		.byte	-42
+ 3086 0579 D6       		.byte	-42
+ 3087 057a 6C       		.byte	108
+ 3088 057b 6C       		.byte	108
+ 3089 057c 00       		.byte	0
+ 3090 057d 00       		.byte	0
+ 3091 057e 00       		.byte	0
+ 3092 057f 00       		.byte	0
+ 3093 0580 00       		.byte	0
+ 3094 0581 00       		.byte	0
+ 3095 0582 00       		.byte	0
+ 3096 0583 00       		.byte	0
+ 3097 0584 00       		.byte	0
+ 3098 0585 66       		.byte	102
+ 3099 0586 66       		.byte	102
+ 3100 0587 3C       		.byte	60
+ 3101 0588 18       		.byte	24
+ 3102 0589 3C       		.byte	60
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 65
+
+
+ 3103 058a 66       		.byte	102
+ 3104 058b 66       		.byte	102
+ 3105 058c 00       		.byte	0
+ 3106 058d 00       		.byte	0
+ 3107 058e 00       		.byte	0
+ 3108 058f 00       		.byte	0
+ 3109 0590 00       		.byte	0
+ 3110 0591 00       		.byte	0
+ 3111 0592 00       		.byte	0
+ 3112 0593 00       		.byte	0
+ 3113 0594 00       		.byte	0
+ 3114 0595 66       		.byte	102
+ 3115 0596 66       		.byte	102
+ 3116 0597 66       		.byte	102
+ 3117 0598 66       		.byte	102
+ 3118 0599 66       		.byte	102
+ 3119 059a 66       		.byte	102
+ 3120 059b 3C       		.byte	60
+ 3121 059c 30       		.byte	48
+ 3122 059d 18       		.byte	24
+ 3123 059e 0F       		.byte	15
+ 3124 059f 00       		.byte	0
+ 3125 05a0 00       		.byte	0
+ 3126 05a1 00       		.byte	0
+ 3127 05a2 00       		.byte	0
+ 3128 05a3 00       		.byte	0
+ 3129 05a4 00       		.byte	0
+ 3130 05a5 7E       		.byte	126
+ 3131 05a6 60       		.byte	96
+ 3132 05a7 30       		.byte	48
+ 3133 05a8 18       		.byte	24
+ 3134 05a9 0C       		.byte	12
+ 3135 05aa 06       		.byte	6
+ 3136 05ab 7E       		.byte	126
+ 3137 05ac 00       		.byte	0
+ 3138 05ad 00       		.byte	0
+ 3139 05ae 00       		.byte	0
+ 3140 05af 00       		.byte	0
+ 3141 05b0 00       		.byte	0
+ 3142 05b1 00       		.byte	0
+ 3143 05b2 00       		.byte	0
+ 3144 05b3 30       		.byte	48
+ 3145 05b4 18       		.byte	24
+ 3146 05b5 18       		.byte	24
+ 3147 05b6 18       		.byte	24
+ 3148 05b7 0C       		.byte	12
+ 3149 05b8 06       		.byte	6
+ 3150 05b9 0C       		.byte	12
+ 3151 05ba 18       		.byte	24
+ 3152 05bb 18       		.byte	24
+ 3153 05bc 18       		.byte	24
+ 3154 05bd 30       		.byte	48
+ 3155 05be 00       		.byte	0
+ 3156 05bf 00       		.byte	0
+ 3157 05c0 00       		.byte	0
+ 3158 05c1 00       		.byte	0
+ 3159 05c2 00       		.byte	0
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 66
+
+
+ 3160 05c3 18       		.byte	24
+ 3161 05c4 18       		.byte	24
+ 3162 05c5 18       		.byte	24
+ 3163 05c6 18       		.byte	24
+ 3164 05c7 18       		.byte	24
+ 3165 05c8 18       		.byte	24
+ 3166 05c9 18       		.byte	24
+ 3167 05ca 18       		.byte	24
+ 3168 05cb 18       		.byte	24
+ 3169 05cc 18       		.byte	24
+ 3170 05cd 18       		.byte	24
+ 3171 05ce 18       		.byte	24
+ 3172 05cf 00       		.byte	0
+ 3173 05d0 00       		.byte	0
+ 3174 05d1 00       		.byte	0
+ 3175 05d2 00       		.byte	0
+ 3176 05d3 0C       		.byte	12
+ 3177 05d4 18       		.byte	24
+ 3178 05d5 18       		.byte	24
+ 3179 05d6 18       		.byte	24
+ 3180 05d7 30       		.byte	48
+ 3181 05d8 60       		.byte	96
+ 3182 05d9 30       		.byte	48
+ 3183 05da 18       		.byte	24
+ 3184 05db 18       		.byte	24
+ 3185 05dc 18       		.byte	24
+ 3186 05dd 0C       		.byte	12
+ 3187 05de 00       		.byte	0
+ 3188 05df 00       		.byte	0
+ 3189 05e0 00       		.byte	0
+ 3190 05e1 00       		.byte	0
+ 3191 05e2 00       		.byte	0
+ 3192 05e3 8E       		.byte	-114
+ 3193 05e4 DB       		.byte	-37
+ 3194 05e5 71       		.byte	113
+ 3195 05e6 00       		.byte	0
+ 3196 05e7 00       		.byte	0
+ 3197 05e8 00       		.byte	0
+ 3198 05e9 00       		.byte	0
+ 3199 05ea 00       		.byte	0
+ 3200 05eb 00       		.byte	0
+ 3201 05ec 00       		.byte	0
+ 3202 05ed 00       		.byte	0
+ 3203 05ee 00       		.byte	0
+ 3204 05ef 00       		.byte	0
+ 3205              		.text
+ 3206              	.Letext0:
+ 3207              		.file 2 "D:\\MinGW\\include/stdint.h"
+ 3208              		.file 3 "Drivers/CMSIS/Include/core_cm3.h"
+ 3209              		.file 4 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 3210              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h"
+ 3211              		.file 6 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h"
+ 3212              		.file 7 "D:\\MinGW\\include/stdio.h"
+ 3213              		.file 8 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 3214              		.file 9 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 3215              		.file 10 "Inc/ascii.h"
+ARM GAS  C:\Users\xxy\AppData\Local\Temp\cclSDvod.s 			page 67
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 lcd.c
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:16     .text.Delay:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:24     .text.Delay:00000000 Delay
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:61     .text.LCD_Rst:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:68     .text.LCD_Rst:00000000 LCD_Rst
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:108    .text.LCD_Rst:00000028 $d
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:114    .text.LCD_BackLed_Control:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:121    .text.LCD_BackLed_Control:00000000 LCD_BackLed_Control
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:163    .text.LCD_BackLed_Control:00000020 $d
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:168    .text.LCD_Write_Cmd:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:175    .text.LCD_Write_Cmd:00000000 LCD_Write_Cmd
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:193    .text.LCD_Write_Data:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:200    .text.LCD_Write_Data:00000000 LCD_Write_Data
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:217    .text.LCD_Write_Data:00000008 $d
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:222    .text.LCD_Read_Data:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:229    .text.LCD_Read_Data:00000000 LCD_Read_Data
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:245    .text.LCD_Read_Data:00000008 $d
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:250    .text.LCD_REG_Config:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:257    .text.LCD_REG_Config:00000000 LCD_REG_Config
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:657    .text.LCD_REG_Config:0000022c $d
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:662    .text.LCD_OpenWindow:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:669    .text.LCD_OpenWindow:00000000 LCD_OpenWindow
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:758    .text.LCD_FillColor:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:765    .text.LCD_FillColor:00000000 LCD_FillColor
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:815    .text.LCD_Clear:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:822    .text.LCD_Clear:00000000 LCD_Clear
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:854    .text.LCD_INIT:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:861    .text.LCD_INIT:00000000 LCD_INIT
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:903    .text.LCD_Read_PixelData:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:910    .text.LCD_Read_PixelData:00000000 LCD_Read_PixelData
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:971    .text.LCD_GetPointPixel:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:978    .text.LCD_GetPointPixel:00000000 LCD_GetPointPixel
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1008   .text.LCD_DrawChar:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1015   .text.LCD_DrawChar:00000000 LCD_DrawChar
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1115   .text.LCD_DrawChar:00000050 $d
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1120   .text.LCD_DrawString:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1127   .text.LCD_DrawString:00000000 LCD_DrawString
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1207   .text.LCD_DrawDot:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1214   .text.LCD_DrawDot:00000000 LCD_DrawDot
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1246   .text.LCD_DrawLine:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1253   .text.LCD_DrawLine:00000000 LCD_DrawLine
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1464   .text.LCD_DrawCircle:00000000 $t
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1471   .text.LCD_DrawCircle:00000000 LCD_DrawCircle
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1684   .rodata.ucAscii_1608:00000000 ucAscii_1608
+C:\Users\xxy\AppData\Local\Temp\cclSDvod.s:1680   .rodata.ucAscii_1608:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
