@@ -368,7 +368,7 @@ void LCD_DrawLine ( uint16_t usC1, uint16_t usP1, uint16_t usC2, uint16_t usP2, 
 }   
 
 
-void LCD_DrawChar ( uint16_t usC, uint16_t usP, const char cChar )
+void LCD_DrawChar ( uint16_t usC, uint16_t usP, uint8_t cChar )
 {
 	uint8_t ucTemp, ucRelativePositon, ucPage, ucColumn;
 
@@ -402,7 +402,7 @@ void LCD_DrawChar ( uint16_t usC, uint16_t usP, const char cChar )
 
 
 
-void LCD_DrawString ( uint16_t usC, uint16_t usP, const char * pStr )
+void LCD_DrawString ( uint16_t usC, uint16_t usP, uint8_t * pStr )
 {
 	while ( * pStr != '\0' )
 	{
@@ -435,41 +435,43 @@ void LCD_DrawDot(uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usColor)
 	/*
 	 *  Task 2 : Implement the LCD_DrawDot to turn on a particular dot on the LCD.
 	 */
-	// void 	LCD_OpenWindow ( uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usWidth, uint16_t usHeight )
-	LCD_OpenWindow(usCOLUMN, usPAGE, 1, 1);
-	// void		LCD_FillColor		( uint32_t usPoint, uint16_t usColor );
-	LCD_FillColor(1,usColor);
+
+		
 }
 
 //Task 3
 void LCD_DrawCircle ( uint16_t usC, uint16_t usP, uint16_t R, uint16_t usColor)
-{
+{	
 	/*
 	 *  Task 3 : Implement LCD_DrawCircle by using LCD_DrawDot
 	 */
-	if(usC-R<0 || usC+R>240 || usP-R<0 || usP+R>320) return;
-	uint16_t cit = usC;
-	uint16_t pit = usP-R;
-	while(cit<usC+R)
-	{
-		LCD_DrawDot(cit,pit,usColor);
-		LCD_DrawDot(2*usC-cit,2*usP-pit,usColor);
-		LCD_DrawDot(cit,2*usP-pit,usColor);
-		LCD_DrawDot(2*usC-cit,pit,usColor);
-		if(cit<usC+R)++cit;
-		if((cit-usC)*(cit-usC) + (pit-usP)*(pit-usP)>=R*R)
-		{
-			do
-			{
-				++pit;
-				LCD_DrawDot(cit,pit,usColor);
-				LCD_DrawDot(2*usC-cit,2*usP-pit,usColor);
-				LCD_DrawDot(cit,2*usP-pit,usColor);
-				LCD_DrawDot(2*usC-cit,pit,usColor);
-			}while((cit-usC)*(cit-usC) + (pit-usP)*(pit-usP)>=R*R && pit<usP);
-		}
-	}
-	LCD_OpenWindow ( usC-R, usP-R, 2*R, 2*R );
-	LCD_Write_Cmd ( CMD_SetPixel );
 	
+}
+
+void LCD_Cam_Gram()
+{
+	/* memory access control set */
+	DEBUG_DELAY ();
+	LCD_Write_Cmd ( 0x36 ); 	
+	LCD_Write_Data ( 0x68 );    
+	DEBUG_DELAY ();
+	
+	/* column address control set */
+	LCD_Write_Cmd ( CMD_Set_COLUMN ); 
+	LCD_Write_Data ( 0x00 );
+	LCD_Write_Data ( 0x00 );
+	LCD_Write_Data ( 0x01 );
+	LCD_Write_Data ( 0x3F );
+	
+	/* page address control set */
+	DEBUG_DELAY ();
+	LCD_Write_Cmd ( CMD_Set_PAGE ); 
+	LCD_Write_Data ( 0x00 );
+	LCD_Write_Data ( 0x00 );
+	LCD_Write_Data ( 0x00 );
+	LCD_Write_Data ( 0xEF );
+	
+	LCD_Write_Cmd ( 0x2C );
+
+
 }

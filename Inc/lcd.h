@@ -62,10 +62,11 @@ void            LCD_OpenWindow		( uint16_t usC, uint16_t usP, uint16_t usWidth, 
 void            LCD_Clear		( uint16_t usC, uint16_t usP, uint16_t usWidth, uint16_t usHeight, uint16_t usColor );
 uint16_t        LCD_GetPointPixel	( uint16_t usC , uint16_t usP );
 void            LCD_DrawLine		( uint16_t usC1, uint16_t usP1, uint16_t usC2, uint16_t usP2, uint16_t usColor );
-void            LCD_DrawChar		( uint16_t usC, uint16_t usP, const char cChar);
-void            LCD_DrawString		( uint16_t usC, uint16_t usP, const char * pStr);
+void            LCD_DrawChar		( uint16_t usC, uint16_t usP, uint8_t cChar);
+void            LCD_DrawString		( uint16_t usC, uint16_t usP, uint8_t * pStr);
 void            LCD_DrawDot		( uint16_t usC, uint16_t usP, uint16_t usColor );
 void 		LCD_DrawCircle		( uint16_t usC, uint16_t usP, uint16_t R, uint16_t usColor);
+void				 LCD_Cam_Gram(void);
 
 #endif 
 
