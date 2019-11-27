@@ -36,6 +36,8 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Src/bsp_ov7725.c \
+Src/bsp_sccb.c \
 Src/lcd.c \
 Src/main.c \
 Src/fatfs.c \
