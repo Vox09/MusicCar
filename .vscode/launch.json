@@ -17,7 +17,7 @@
                 "target/stm32f1x.cfg"
             ],
             "preLaunchTask": "Build",
-            "rtos": "FreeRTOS",
+            // "rtos": "FreeRTOS",
             "svdFile": "STM32F103.svd"
         }
     ]

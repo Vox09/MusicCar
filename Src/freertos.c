@@ -26,6 +26,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
+#include "fatfs.h"
+#include "sdio.h"
+#include "lcd.h"
 // for OpenOCD to debug with FreeRTOS   
 #ifdef __GNUC__
 #define USED __attribute__((used))
@@ -117,6 +120,29 @@ void StartDefaultTask(void const * argument)
   MX_FATFS_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
+  LCD_INIT();
+  LCD_DrawString(10, 10, "Hello world!\0"); 
+	FATFS myFATFS;
+	// FIL myFILE;
+	// UINT numberofbytes;
+	// char myPath[] = "TEST.TXT\0";
+	// char myData[] = "Hello World\0";
+	FRESULT res=FR_OK;
+
+  res = f_mount(&myFATFS,SDPath,1);
+	if (res == FR_OK)
+	{
+    LCD_DrawString(10, 10, "SD card mount successfully\0");
+	// 	f_open(&myFILE, myPath, FA_WRITE |FA_CREATE_ALWAYS);
+	// 	f_write(&myFILE, myData, sizeof(myData), &numberofbytes);
+	// 	f_close(&myFILE);
+	// 	HAL_Delay(1000);
+ 	}	
+	else
+	{
+    LCD_DrawString(10, 10, "SD card mount error!\0");
+	}
+
   /* Infinite loop */
   for(;;)
   {

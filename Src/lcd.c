@@ -368,7 +368,7 @@ void LCD_DrawLine ( uint16_t usC1, uint16_t usP1, uint16_t usC2, uint16_t usP2, 
 }   
 
 
-void LCD_DrawChar ( uint16_t usC, uint16_t usP, uint8_t cChar )
+void LCD_DrawChar ( uint16_t usC, uint16_t usP, const char cChar )
 {
 	uint8_t ucTemp, ucRelativePositon, ucPage, ucColumn;
 
@@ -402,7 +402,7 @@ void LCD_DrawChar ( uint16_t usC, uint16_t usP, uint8_t cChar )
 
 
 
-void LCD_DrawString ( uint16_t usC, uint16_t usP, uint8_t * pStr )
+void LCD_DrawString ( uint16_t usC, uint16_t usP, const char * pStr )
 {
 	while ( * pStr != '\0' )
 	{

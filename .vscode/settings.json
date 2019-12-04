@@ -1,6 +1,12 @@
 {
     "files.associations": {
         "freertos.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "dac.h": "c",
+        "fatfs.h": "c",
+        "ff_gen_drv.h": "c",
+        "ff.h": "c",
+        "sd_diskio.h": "c",
+        "stm32f1xx_it.h": "c"
     }
 }
