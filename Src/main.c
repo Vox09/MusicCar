@@ -23,6 +23,7 @@
 #include "cmsis_os.h"
 #include "adc.h"
 #include "dac.h"
+#include "dma.h"
 #include "fatfs.h"
 #include "sdio.h"
 #include "tim.h"
@@ -33,6 +34,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lcd.h"
+#include "fatfs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,8 +110,9 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   MX_TIM8_Init();
+  MX_DMA_Init();
   /* USER CODE BEGIN 2 */
-
+  LCD_INIT();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

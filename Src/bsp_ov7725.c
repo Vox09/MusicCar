@@ -106,8 +106,6 @@ Reg_Info Sensor_Config[] =
 
 uint8_t OV7725_REG_NUM = sizeof(Sensor_Config)/sizeof(Sensor_Config[0]);	  
 
-volatile uint8_t Ov7725_vsync ;	 
-
 
 
 /************************************************

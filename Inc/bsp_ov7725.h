@@ -191,6 +191,7 @@
 
 ErrorStatus Ov7725_Init(void);
 void ImagDisp(void);
+volatile uint8_t Ov7725_vsync ;	 
 
 #endif
 

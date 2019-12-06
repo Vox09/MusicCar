@@ -27,7 +27,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
 #include "fatfs.h"
-#include "sdio.h"
+#include "bsp_ov7725.h"
+#include "bsp_sccb.h"
 #include "lcd.h"
 // for OpenOCD to debug with FreeRTOS   
 #ifdef __GNUC__
@@ -59,6 +60,7 @@ const int USED uxTopUsedPriority = configMAX_PRIORITIES - 1;
 
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
+osThreadId cameraTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -66,9 +68,39 @@ osThreadId defaultTaskHandle;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
+void StartCameraTask(void const * argument);
 
 extern void MX_FATFS_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+
+/* Hook prototypes */
+void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName);
+void vApplicationMallocFailedHook(void);
+
+/* USER CODE BEGIN 4 */
+__weak void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName)
+{
+   /* Run time stack overflow checking is performed if
+   configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2. This hook function is
+   called if a stack overflow is detected. */
+}
+/* USER CODE END 4 */
+
+/* USER CODE BEGIN 5 */
+__weak void vApplicationMallocFailedHook(void)
+{
+   /* vApplicationMallocFailedHook() will only be called if
+   configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h. It is a hook
+   function that will get called if a call to pvPortMalloc() fails.
+   pvPortMalloc() is called internally by the kernel whenever a task, queue,
+   timer or semaphore is created. It is also called by various parts of the
+   demo application. If heap_1.c or heap_2.c are used, then the size of the
+   heap available to pvPortMalloc() is defined by configTOTAL_HEAP_SIZE in
+   FreeRTOSConfig.h, and the xPortGetFreeHeapSize() API function can be used
+   to query the size of free heap space that remains (although it does not
+   provide information on how the remaining heap might be fragmented). */
+}
+/* USER CODE END 5 */
 
 /**
   * @brief  FreeRTOS initialization
@@ -98,11 +130,13 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 4096);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  osThreadDef(cameraTask, StartCameraTask, osPriorityNormal, 0, 1024);
+  cameraTaskHandle = osThreadCreate(osThread(cameraTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -120,23 +154,21 @@ void StartDefaultTask(void const * argument)
   MX_FATFS_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
-  LCD_INIT();
-  LCD_DrawString(10, 10, "Hello world!\0"); 
+  osDelay(1000);
 	FATFS myFATFS;
-	// FIL myFILE;
-	// UINT numberofbytes;
-	// char myPath[] = "TEST.TXT\0";
-	// char myData[] = "Hello World\0";
-	FRESULT res=FR_OK;
+	FIL myFILE;
+	UINT numberofbytes;
+	char myPath[] = "TEST.TXT\0";
+	char myData[] = "Hello World\0";
+	FRESULT res;
 
   res = f_mount(&myFATFS,SDPath,1);
 	if (res == FR_OK)
 	{
     LCD_DrawString(10, 10, "SD card mount successfully\0");
-	// 	f_open(&myFILE, myPath, FA_WRITE |FA_CREATE_ALWAYS);
-	// 	f_write(&myFILE, myData, sizeof(myData), &numberofbytes);
-	// 	f_close(&myFILE);
-	// 	HAL_Delay(1000);
+		f_open(&myFILE, myPath, FA_WRITE |FA_CREATE_ALWAYS);
+		f_write(&myFILE, myData, sizeof(myData), &numberofbytes);
+		f_close(&myFILE);
  	}	
 	else
 	{
@@ -153,7 +185,22 @@ void StartDefaultTask(void const * argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-     
+void StartCameraTask(void const * argument)
+{
+	while(Ov7725_Init() != SUCCESS);
+	Ov7725_vsync = 0;
+	
+  while (1)
+  {
+		if (Ov7725_vsync == 2)
+		{
+			FIFO_PREPARE;
+			ImagDisp();			
+			Ov7725_vsync = 0;
+		}
+  }
+}		
+
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
