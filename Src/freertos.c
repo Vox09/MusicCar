@@ -27,9 +27,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
 #include "fatfs.h"
+#include "lcd.h"
 #include "bsp_ov7725.h"
 #include "bsp_sccb.h"
-#include "lcd.h"
 // for OpenOCD to debug with FreeRTOS   
 #ifdef __GNUC__
 #define USED __attribute__((used))
@@ -57,18 +57,20 @@ const int USED uxTopUsedPriority = configMAX_PRIORITIES - 1;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+osThreadId motorTaskHandle;
+osThreadId cameraTaskHandle;
 
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
-osThreadId cameraTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+void StartCameraTask(void const * argument);
+void StartMotorTask(void const * argument);
    
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
-void StartCameraTask(void const * argument);
 
 extern void MX_FATFS_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -130,13 +132,15 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 4096);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 2048);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   osThreadDef(cameraTask, StartCameraTask, osPriorityNormal, 0, 1024);
   cameraTaskHandle = osThreadCreate(osThread(cameraTask), NULL);
+  osThreadDef(motorTask, StartMotorTask, osPriorityNormal, 0, 256);
+  motorTaskHandle = osThreadCreate(osThread(motorTask), NULL);
   /* USER CODE END RTOS_THREADS */
 
 }

@@ -8,6 +8,8 @@
         "ff.h": "c",
         "sd_diskio.h": "c",
         "stm32f1xx_it.h": "c",
-        "sdio.h": "c"
+        "sdio.h": "c",
+        "motor.h": "c",
+        "arm_math.h": "c"
     }
 }
