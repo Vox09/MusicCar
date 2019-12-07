@@ -36,6 +36,7 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Src/sd_card.c \
 Src/motor.c \
 Src/bsp_ov7725.c \
 Src/bsp_sccb.c \

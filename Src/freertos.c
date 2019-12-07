@@ -26,7 +26,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
-#include "fatfs.h"
 #include "lcd.h"
 #include "bsp_ov7725.h"
 #include "bsp_sccb.h"
@@ -59,6 +58,7 @@ const int USED uxTopUsedPriority = configMAX_PRIORITIES - 1;
 /* USER CODE BEGIN Variables */
 osThreadId motorTaskHandle;
 osThreadId cameraTaskHandle;
+osThreadId sdCardTaskHandle;
 
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
@@ -67,6 +67,7 @@ osThreadId defaultTaskHandle;
 /* USER CODE BEGIN FunctionPrototypes */
 void StartCameraTask(void const * argument);
 void StartMotorTask(void const * argument);
+void StartSDCardTask(void const * argument);
    
 /* USER CODE END FunctionPrototypes */
 
@@ -132,13 +133,17 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 2048);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  osThreadDef(sdCardTask, StartSDCardTask, osPriorityNormal, 0, 2048);
+  sdCardTaskHandle = osThreadCreate(osThread(sdCardTask), NULL);
+  
   osThreadDef(cameraTask, StartCameraTask, osPriorityNormal, 0, 1024);
   cameraTaskHandle = osThreadCreate(osThread(cameraTask), NULL);
+
   osThreadDef(motorTask, StartMotorTask, osPriorityNormal, 0, 256);
   motorTaskHandle = osThreadCreate(osThread(motorTask), NULL);
   /* USER CODE END RTOS_THREADS */
@@ -155,34 +160,16 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for FATFS */
-  MX_FATFS_Init();
+  // MX_FATFS_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
-  osDelay(1000);
-	FATFS myFATFS;
-	FIL myFILE;
-	UINT numberofbytes;
-	char myPath[] = "TEST.TXT\0";
-	char myData[] = "Hello World\0";
-	FRESULT res;
-
-  res = f_mount(&myFATFS,SDPath,1);
-	if (res == FR_OK)
-	{
-    LCD_DrawString(10, 10, "SD card mount successfully\0");
-		f_open(&myFILE, myPath, FA_WRITE |FA_CREATE_ALWAYS);
-		f_write(&myFILE, myData, sizeof(myData), &numberofbytes);
-		f_close(&myFILE);
- 	}	
-	else
-	{
-    LCD_DrawString(10, 10, "SD card mount error!\0");
-	}
-
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    LCD_Clear(230, 310, 5 ,5 , GREEN);
+    osDelay(250);
+    LCD_Clear(230, 310, 5 ,5 , WHITE);
+    osDelay(250);
   }
   /* USER CODE END StartDefaultTask */
 }
