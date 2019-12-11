@@ -107,10 +107,11 @@ int main(void)
   MX_DAC_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
-  MX_USART1_UART_Init();
   MX_TIM2_Init();
   MX_TIM8_Init();
   MX_DMA_Init();
+  MX_USART1_UART_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   LCD_INIT();
   /* USER CODE END 2 */

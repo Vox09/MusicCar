@@ -27,6 +27,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
 #include "lcd.h"
+#include "usart.h"
 #include "bsp_ov7725.h"
 #include "bsp_sccb.h"
 // for OpenOCD to debug with FreeRTOS   
@@ -60,6 +61,7 @@ osThreadId motorTaskHandle;
 osThreadId cameraTaskHandle;
 osThreadId sdCardTaskHandle;
 
+uint8_t rv,gv,bv,cursor;
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 
@@ -68,7 +70,6 @@ osThreadId defaultTaskHandle;
 void StartCameraTask(void const * argument);
 void StartMotorTask(void const * argument);
 void StartSDCardTask(void const * argument);
-   
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
@@ -138,14 +139,15 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-  osThreadDef(sdCardTask, StartSDCardTask, osPriorityNormal, 0, 2048);
-  sdCardTaskHandle = osThreadCreate(osThread(sdCardTask), NULL);
+  // osThreadDef(sdCardTask, StartSDCardTask, osPriorityNormal, 0, 4096);
+  // sdCardTaskHandle = osThreadCreate(osThread(sdCardTask), NULL);
   
-  osThreadDef(cameraTask, StartCameraTask, osPriorityNormal, 0, 1024);
-  cameraTaskHandle = osThreadCreate(osThread(cameraTask), NULL);
+  // osThreadDef(cameraTask, StartCameraTask, osPriorityNormal, 0, 1024);
+  // cameraTaskHandle = osThreadCreate(osThread(cameraTask), NULL);
 
-  osThreadDef(motorTask, StartMotorTask, osPriorityNormal, 0, 256);
+  osThreadDef(motorTask, StartMotorTask, osPriorityNormal+1, 0, 256);
   motorTaskHandle = osThreadCreate(osThread(motorTask), NULL);
+
   /* USER CODE END RTOS_THREADS */
 
 }
@@ -160,16 +162,30 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for FATFS */
-  // MX_FATFS_Init();
+  MX_FATFS_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
+
+  cursor = 0;
+  rv = 0x1f;
+  gv = 0x3f;
+  bv = 0x1f;
+  char str[20];
   /* Infinite loop */
   for(;;)
   {
-    LCD_Clear(230, 310, 5 ,5 , GREEN);
-    osDelay(250);
-    LCD_Clear(230, 310, 5 ,5 , WHITE);
-    osDelay(250);
+    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, 1);
+    osDelay(1);
+    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, 0);
+    us_flag = 1;
+    sprintf(str, "Distance : %d ", us_dst);
+    LCD_DrawString(10,200, str);
+
+    rv = (rv-1) & (0x1f);
+    gv = (gv+1) & (0x3f);
+    bv = (bv-1) & (0x1f);
+    LCD_DrawDot(cursor++%240,300,(rv<<11)|(gv<<6)|(bv));
+    osDelay(49);
   }
   /* USER CODE END StartDefaultTask */
 }

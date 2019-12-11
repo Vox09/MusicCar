@@ -11,6 +11,12 @@
         "sdio.h": "c",
         "motor.h": "c",
         "arm_math.h": "c",
-        "lcd.h": "c"
+        "lcd.h": "c",
+        "wifi.h": "c",
+        "usart.h": "c",
+        "stm32f1xx_hal.h": "c",
+        "math.h": "c",
+        "stdint.h": "c",
+        "cmsis_os.h": "c"
     }
 }

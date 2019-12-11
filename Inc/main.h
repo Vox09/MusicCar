@@ -59,7 +59,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define R_BACK_Pin GPIO_PIN_5
+#define R_BACK_GPIO_Port GPIOA
+#define L_BACK_Pin GPIO_PIN_6
+#define L_BACK_GPIO_Port GPIOA
+#define B_BACK_Pin GPIO_PIN_0
+#define B_BACK_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
+uint8_t us_flag;
+uint16_t us_dst;
 
 /* USER CODE END Private defines */
 

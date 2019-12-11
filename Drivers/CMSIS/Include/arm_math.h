@@ -1,3 +1,4 @@
+#define ARM_MATH_CM3
 /* ----------------------------------------------------------------------
 * Copyright (C) 2010-2015 ARM Limited. All rights reserved.
 *
