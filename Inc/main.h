@@ -65,10 +65,9 @@ void Error_Handler(void);
 #define L_BACK_GPIO_Port GPIOA
 #define B_BACK_Pin GPIO_PIN_0
 #define B_BACK_GPIO_Port GPIOB
-
 /* USER CODE BEGIN Private defines */
-uint8_t us_flag;
-uint16_t us_dst;
+//uint8_t us_flag;
+//uint16_t us_dst;
 
 /* USER CODE END Private defines */
 

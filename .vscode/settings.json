@@ -17,6 +17,11 @@
         "stm32f1xx_hal.h": "c",
         "math.h": "c",
         "stdint.h": "c",
-        "cmsis_os.h": "c"
+        "cmsis_os.h": "c",
+        "bsp_ov7725.h": "c",
+        "camera.h": "c",
+        "sd_card.h": "c",
+        "bmp.h": "c",
+        "tim.h": "c"
     }
 }

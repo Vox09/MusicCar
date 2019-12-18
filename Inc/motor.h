@@ -15,7 +15,7 @@ extern "C" {
 #define CHESSIS_RADIUS 10.5
 #define SQRT3 1.7320508
 
-uint8_t vel;
+
 
 // LEFT: Encoder tim4, PWM tim1 CH1(PA8 ), BACK PA6
 // RIGHT:Encoder tim3, PWM tim5 CH2(PA1), BACK PA5
@@ -43,6 +43,7 @@ typedef struct PID_Controller{
 // Public Functions
 // positive means forward negative means backward
 // void carMove(float deg, float cm);
+void carBrake(void);
 void carMoveVel(float deg, float cm_s);
 // positive means counterclockwise
 // void carTurn(float deg);
@@ -57,8 +58,13 @@ void encoderRightOverflowHandler(void);
 void encoderLeftOverflowHandler(void);
 // PID param seter
 void setPIDParam(PID_Controller_t* p, float kp, float ki, float kd, float iMax);
+
 void servoUp(void);
 void servoDown(void);
+void carSpeedUp(void);
+void carSpeedDown(void);
+
+void setWheelVel(Wheel_LR dir, int16_t cmd);
 
 #ifdef __cplusplus
 }

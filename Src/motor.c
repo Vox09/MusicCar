@@ -3,7 +3,7 @@
 
 // For Debug
 #include "lcd.h"
-char dbg[32]={0};
+char dbg[8]={0};
 
 PID_Controller_t vel_pid[3] = {0};
 PID_Controller_t pos_pid[3] = {0};
@@ -15,10 +15,13 @@ static float vel_cmd[3] = {0};
 uint8_t vel = 30;
 
 static void encoderUpdate(void);
-static void setWheelVel(Wheel_LR dir, int16_t cmd);
+void setWheelVel(Wheel_LR dir, int16_t cmd);
 static int16_t velPIDControl(Wheel_LR dir, float target);
 // static float posPIDControl(Wheel_LR dir);
 // static void pidDoubleControl(Wheel_LR dir);
+extern float arm_cos_f32(float);
+extern float arm_sin_f32(float);
+
 
 void StartMotorTask(void const * argument)
 {
@@ -38,17 +41,24 @@ void StartMotorTask(void const * argument)
     TIM3->CNT = 0x7fff;
     TIM4->CNT = 0x7fff;
 
-    setPIDParam(&vel_pid[WHEEL_LEFT] , 10, 0.1, 0.01, 10000.0);
-    setPIDParam(&vel_pid[WHEEL_RIGHT], 10, 0.1, 0.01, 10000.0);
-    setPIDParam(&vel_pid[WHEEL_BACK] , 10, 0.1, 0.01, 10000.0);
+    setPIDParam(&vel_pid[WHEEL_LEFT] , 20, 1, 2, 10000.0);
+    setPIDParam(&vel_pid[WHEEL_RIGHT], 20, 1, 2, 10000.0);
+    setPIDParam(&vel_pid[WHEEL_BACK] , 20, 1, 2, 10000.0);
 
     // setPIDParam(&pos_pid[WHEEL_LEFT] , 1, 0.1, 0.01, 300.0);
     // setPIDParam(&pos_pid[WHEEL_RIGHT], 1, 0.1, 0.01, 300.0);
     // setPIDParam(&pos_pid[WHEEL_BACK] , 1, 0.1, 0.01, 300.0);
 
     // Command should be used outside the loop. e.g.
-    // carMove(10.0);
-    carTurnVel(0.0); // IMPORTANT!!
+    // carTurnVel(0.0);
+    LCD_DrawString(10,200, "turn speed deg/s: ");
+    LCD_DrawString(10,220, "LEFT enc: ");
+    LCD_DrawString(10,240, "RIGHT enc: ");
+    LCD_DrawString(10,260, "BACK enc: %d ");
+    LCD_DrawString(150, 220, "cmd: ");
+    LCD_DrawString(150, 240, "cmd: ");
+    LCD_DrawString(150, 260, "cmd: ");
+    carBrake();
     for(;;)
     {
         encoderUpdate();
@@ -64,15 +74,18 @@ void StartMotorTask(void const * argument)
             setWheelVel(WHEEL_RIGHT,velPIDControl(WHEEL_RIGHT,vel_cmd[WHEEL_RIGHT]));
             setWheelVel(WHEEL_BACK,velPIDControl(WHEEL_BACK,vel_cmd[WHEEL_BACK]));
         // }
-        
-        sprintf(dbg,"LEFT enc: %d ", encoders[WHEEL_LEFT].current-0x7fff);
-        LCD_DrawString(10,20, dbg);
 
-        sprintf(dbg,"RIGHT enc: %d ", encoders[WHEEL_RIGHT].current-0x7fff);
-        LCD_DrawString(10,40, dbg);
+        sprintf(dbg,"%d ", vel);
+        LCD_DrawString(10+18*8,200, dbg);
 
-        sprintf(dbg,"BACK enc: %d ", encoders[WHEEL_BACK].current-0x7fff);
-        LCD_DrawString(10,60, dbg);
+        sprintf(dbg,"%d ", encoders[WHEEL_LEFT].current-0x7fff);
+        LCD_DrawString(10+10*8,220, dbg);
+
+        sprintf(dbg,"%d ", encoders[WHEEL_RIGHT].current-0x7fff);
+        LCD_DrawString(10+11*8,240, dbg);
+
+        sprintf(dbg,"%d ", encoders[WHEEL_BACK].current-0x7fff);
+        LCD_DrawString(10+10*8,260, dbg);
 
 
         osDelay(1000/MOTOR_TASK_FREQ);
@@ -113,30 +126,30 @@ static void encoderUpdate()
     encoders[WHEEL_BACK].current = TIM2->CNT;
 }
 
-static void setWheelVel(Wheel_LR dir, int16_t cmd)
+void setWheelVel(Wheel_LR dir, int16_t cmd)
 {
     if(dir==WHEEL_LEFT)
     {
         TIM1->CCR1=(int16_t)cmd>0?cmd:-cmd;
         HAL_GPIO_WritePin(L_BACK_GPIO_Port, L_BACK_Pin, !(cmd>0));
-        sprintf(dbg,"cmd: %d ", cmd);
-        LCD_DrawString(150, 20, dbg);
+        sprintf(dbg,"%d ", cmd);
+        LCD_DrawString(150+5*8, 220, dbg);
         return;
     }
     if(dir==WHEEL_RIGHT)
     {
         TIM1->CCR4=(int16_t)cmd>0?cmd:-cmd;
         HAL_GPIO_WritePin(R_BACK_GPIO_Port, R_BACK_Pin, !(cmd>0));
-        sprintf(dbg,"cmd: %d ", cmd);
-        LCD_DrawString(150, 40, dbg);
+        sprintf(dbg,"%d ", cmd);
+        LCD_DrawString(150+5*8, 240, dbg);
         return;
     }
     if(dir==WHEEL_BACK)
     {
         TIM5->CCR2=(int16_t)cmd>0?cmd:-cmd;
         HAL_GPIO_WritePin(B_BACK_GPIO_Port, B_BACK_Pin, !(cmd>0));
-        sprintf(dbg,"cmd: %d ", cmd);
-        LCD_DrawString(150, 60, dbg);
+        sprintf(dbg,"%d ", cmd);
+        LCD_DrawString(150+5*8, 260, dbg);
         return;
     }
 }
@@ -232,7 +245,7 @@ void carMoveVel(float deg, float cm_s)
     float cos = arm_cos_f32(rad);
     float sin = arm_sin_f32(rad);
     float back_ang = cm_s * cos / WHEEL_ONE_CIRCLE_CM * 360.0f;
-    float left_ang = cm_s * (cos/2 + sin*SQRT3/2) / WHEEL_ONE_CIRCLE_CM * 360.0f;
+    float left_ang = cm_s * (-cos/2 - sin*SQRT3/2) / WHEEL_ONE_CIRCLE_CM * 360.0f;
     float right_ang = cm_s * (-cos/2 + sin*SQRT3/2)/ WHEEL_ONE_CIRCLE_CM * 360.0f;
     vel_cmd[WHEEL_LEFT] = left_ang;
     vel_cmd[WHEEL_RIGHT] = right_ang;
@@ -248,6 +261,14 @@ void carTurnVel(float deg_s)
     vel_cmd[WHEEL_BACK] = ang;
 }
 
+void carBrake()
+{
+    encoderUpdate();
+    vel_cmd[WHEEL_LEFT] = 0.0;
+    vel_cmd[WHEEL_RIGHT] = 0.0;
+    vel_cmd[WHEEL_BACK] = 0.0;
+}
+
 void servoUp()
 {
     if(servo_deg != 105)
@@ -259,3 +280,7 @@ void servoDown()
     if(servo_deg != 0)
     TIM8->CCR1 = (20000-500 - (--servo_deg) * 10);
 }
+
+void carSpeedUp() {vel = vel<125?vel+5:vel;}
+void carSpeedDown() {vel = vel>5?vel-5:vel;}
+

@@ -3,9 +3,9 @@
 #define DEV_ADR  ADDR_OV7725 			 
 
 
-static void SCCB_delay(void)
+static volatile void SCCB_delay(void)
 {	
-   uint16_t i = 400; 
+   volatile uint16_t i = 400; 
    while(i) 
    { 
      i--; 
@@ -15,15 +15,20 @@ static void SCCB_delay(void)
 
 static int SCCB_Start(void)
 {
-	SDA_H;
-	SCL_H;
+	SDA_SCL_H;
 	SCCB_delay();
 	if(!SDA_read)
-	return DISABLE;	
+	{
+		HAL_Delay(1);
+		return DISABLE;
+	}	
 	SDA_L;
 	SCCB_delay();
 	if(SDA_read) 
-	return DISABLE;	
+	{
+		HAL_Delay(1);
+		return DISABLE;
+	}
 	SDA_L;
 	SCCB_delay();
 	return ENABLE;
@@ -134,11 +139,13 @@ int SCCB_WriteByte( uint16_t WriteAddress , uint8_t SendByte )
 {		
     if(!SCCB_Start())
 	{
+		HAL_Delay(1);
 	    return DISABLE;
 	}
     SCCB_SendByte( DEV_ADR );                
     if( !SCCB_WaitAck() )
 	{
+		HAL_Delay(1);
 		SCCB_Stop(); 
 		return DISABLE;
 	}

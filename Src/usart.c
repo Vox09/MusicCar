@@ -23,6 +23,9 @@
 /* USER CODE BEGIN 0 */
 #include "motor.h"
 #include "lcd.h"
+#include "bsp_ov7725.h"
+#include "bsp_sccb.h"
+#include "sd_card.h"
 
 /* USER CODE END 0 */
 
@@ -116,8 +119,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   rcv_char = READ_REG(huart->Instance->DR);
   switch (rcv_char)
   {
-  case 'Z': carTurnVel(0.0);
-    break;
   case 'A': carMoveVel(90,vel);
     break;
   case 'B': carMoveVel(45,vel);
@@ -134,15 +135,31 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     break;
   case 'H': carMoveVel(135,vel);
     break;
-  case 'X': {vel = vel<125?vel+5:vel;}
+  case 'X': carSpeedUp(); 
     break;
-  case 'Y': {vel = vel>5?vel-5:vel;}
+  case 'Y': carSpeedDown();
     break;
-  case 'c': servoUp();
+  case 'a': setWheelVel(WHEEL_LEFT, 10000);
+    break;
+  case 'b': setWheelVel(WHEEL_RIGHT, 10000);
+    break;
+  case 'c': setWheelVel(WHEEL_BACK, 10000);
     break;
   case 'd': servoDown();
     break;
-  default:
+  case 'e': servoUp();
+    break;
+  case 'f': carTurnVel(vel);
+    break;
+  case 'g': carTurnVel(-vel);
+    break;
+  case 'h': startTakePicture();
+    break;
+  case 'i': startDisplay();
+    break;
+  case 'z': {setWheelVel(0,0);setWheelVel(1,0);setWheelVel(2,0);};
+    break;
+  default: carBrake();
     break;
   }
 }

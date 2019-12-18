@@ -6,8 +6,10 @@
 #define SCL_H         GPIOC -> BSRR = GPIO_PIN_6 
 #define SCL_L         GPIOC -> BRR = GPIO_PIN_6 
    
-#define SDA_H         GPIOC -> BSRR = GPIO_PIN_7 
+#define SDA_H         GPIOC -> BSRR = GPIO_PIN_7
 #define SDA_L         GPIOC -> BRR = GPIO_PIN_7  
+
+#define SDA_SCL_H         GPIOC -> BSRR = GPIO_PIN_7 | GPIO_PIN_6
 
 #define SCL_read      HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6)
 #define SDA_read      HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) 

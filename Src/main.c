@@ -35,6 +35,8 @@
 /* USER CODE BEGIN Includes */
 #include "lcd.h"
 #include "fatfs.h"
+#include "bsp_ov7725.h"
+#include "bsp_sccb.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +46,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+uint8_t us_flag;
+uint16_t us_dst;
+extern uint8_t Ov7725_vsync;
+char rcv_char;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -114,10 +119,13 @@ int main(void)
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   LCD_INIT();
+	HAL_Delay(1000);
+  while(Ov7725_Init() != SUCCESS);
+	Ov7725_vsync = 0;
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init();
+  MX_FREERTOS_Init(); 
 
   /* Start scheduler */
   osKernelStart();

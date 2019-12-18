@@ -2,6 +2,9 @@
 #include "bsp_sccb.h"
 #include "lcd.h"
 
+volatile uint8_t Ov7725_vsync = 0;	 
+
+
 typedef struct Reg
 {
 	uint8_t Address;			       
@@ -118,27 +121,30 @@ ErrorStatus Ov7725_Init(void)
 	
 	if( 0 == SCCB_WriteByte ( 0x12, 0x80 ) ) /*reset sensor */
 	{
+		HAL_Delay(1);
 		return ERROR ;
 	}	
-
 	if( 0 == SCCB_ReadByte( &Sensor_IDCode, 1, 0x0b ) )	 /* read sensor ID*/
 	{
+		HAL_Delay(1);
 		return ERROR;
 	}
-	//DEBUG("Sensor ID is 0x%x", Sensor_IDCode);	
+
 	
 	if(Sensor_IDCode == OV7725_ID)
 	{
 		for( i = 0 ; i < OV7725_REG_NUM ; i++ )
 		{
 			if( 0 == SCCB_WriteByte(Sensor_Config[i].Address, Sensor_Config[i].Value) )
-			{                
+			{
+				HAL_Delay(1);                
 				return ERROR;
 			}
 		}
 	}
 	else
 	{
+		HAL_Delay(1);
 		return ERROR;
 	}
 	
@@ -160,5 +166,4 @@ void ImagDisp(void)
 			LCD_Write_Data(Camera_Data);
 		}
 	}
-	HAL_Delay(1000);
 }

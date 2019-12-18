@@ -7,6 +7,10 @@ extern "C" {
 
 #include "fatfs.h"
 
+void startTakePicture(void);
+void startDisplay(void);
+void TakePicture(void);
+
 #ifdef __cplusplus
 }
 #endif

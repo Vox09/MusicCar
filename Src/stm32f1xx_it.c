@@ -21,12 +21,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f1xx_it.h"
-#include "cmsis_os.h"
+#include "FreeRTOS.h"
+#include "task.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usart.h"
 #include "bsp_ov7725.h"
 #include "motor.h"
+#include "sd_card.h"
 
 /* USER CODE END Includes */
 
@@ -66,11 +68,18 @@ extern SD_HandleTypeDef hsd;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim7;
 extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN EV */
-
+extern uint8_t us_flag;
+extern uint8_t vel;
+extern uint8_t take_flag;
+extern uint16_t us_dst;
+extern uint8_t Ov7725_vsync;
+extern char rcv_char;
+extern uint8_t vel;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -218,7 +227,11 @@ void EXTI9_5_IRQHandler(void)
     us_flag = 0;
   }
   else
-    us_dst = ((TIM8->CNT + 20000 - start)%20000)/58;
+  {
+    int16_t tmp = TIM8->CNT - start;
+    if(tmp > 0) us_dst = tmp / 58;
+    else us_dst = (tmp + 20000)/58;
+  }
 
   /* USER CODE END EXTI9_5_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_6);
@@ -312,6 +325,20 @@ void TIM6_IRQHandler(void)
   /* USER CODE BEGIN TIM6_IRQn 1 */
 
   /* USER CODE END TIM6_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global interrupt.
+  */
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+  
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
+  /* USER CODE END TIM7_IRQn 1 */
 }
 
 /**

@@ -33,7 +33,13 @@
 extern UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN Private defines */
-char rcv_char;
+extern uint8_t us_flag;
+extern uint16_t us_dst;
+extern uint8_t Ov7725_vsync;
+extern char rcv_char;
+extern uint8_t vel;
+extern uint8_t take_flag;
+
 /* USER CODE END Private defines */
 
 void MX_USART1_UART_Init(void);
